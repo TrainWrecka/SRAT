@@ -37,14 +37,17 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 	public ErrorPlot Errorplot = new ErrorPlot("ERROR");
 
 	
-	private StepresponsePanel DefaultStepresponsePanel = new StepresponsePanel();
-	private JPanel DefaultZeroesPanel = new ZeroesPanel();
-	private JPanel DefaultErrorPanel = new ErrorPanel();
 	private JPanel DefaultVariablePanel = new VariablePanel();
 
 	private StepresponsePanel StepresponsePanel = new StepresponsePanel();
 	private ZeroesPanel ZeroesPanel = new ZeroesPanel();
 	private ErrorPanel ErrorPanel = new ErrorPanel();
+	
+	
+	private ErrorPlot ErrorPlot = new ErrorPlot("Error");
+	private StepResponsePlot StepresponsePlot = new StepResponsePlot("Stepresponse");
+	private ZeroesPlot ZeroesPlot = new ZeroesPlot("Zereos");
+	
 	
 	
 	private JPanel TabStepresponsePanel=new JPanel(new GridBagLayout());
@@ -59,44 +62,31 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 	public OutputPanel() {
 		super(new GridBagLayout());	
 		setFont(myFont);
-//		DefaultPanel.add(DefaultStepresponsePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//		
-//		DefaultPanel.add(DefaultZeroesPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//		
-//		DefaultPanel.add(DefaultErrorPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
-//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-//		
-//		DefaultPanel.add(DefaultVariablePanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
-//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+
 		
 		
-		DefaultPanel.add(StepresponsePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-		DefaultPanel.add(ZeroesPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHEAST,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+//		DefaultPanel.add(StepresponsePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST,
+//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+//		DefaultPanel.add(ZeroesPanel, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHEAST,
+//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+//		
+//		DefaultPanel.add(ErrorPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTHWEST,	// Wenn y ausdehnung 0.0 in 4k screen nicht symetrisch und wenn full hd dasselbe wenn y ausdehnung 1.0
+//				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		
-		DefaultPanel.add(ErrorPanel, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTHWEST,	// Wenn y ausdehnung 0.0 in 4k screen nicht symetrisch und wenn full hd dasselbe wenn y ausdehnung 1.0
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		DefaultPanel.add(StepresponsePlot, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.BOTH, new Insets(10, 5, 5, 5), 0, 0));
+		DefaultPanel.add(ZeroesPlot, new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHEAST,
+				GridBagConstraints.BOTH, new Insets(10, 5, 5, 5), 0, 0));
+		DefaultPanel.add(ErrorPlot, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTHWEST,	// Wenn y ausdehnung 0.0 in 4k screen nicht symetrisch und wenn full hd dasselbe wenn y ausdehnung 1.0
+				GridBagConstraints.BOTH, new Insets(5, 5, 10, 5), 0, 0));
 		
 		
 		
 		DefaultVariablePanel.setMinimumSize(StepresponsePanel.StepResponseplot.getMinimumSize());
 		DefaultPanel.add(DefaultVariablePanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				GridBagConstraints.BOTH, new Insets(5, 5, 10, 5), 0, 0));
 		
 		
-//		DefaultPanel.add(lbk, new GridBagConstraints( 0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		DefaultPanel.add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		DefaultPanel.add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		DefaultPanel.add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		DefaultPanel.add(lbError, new GridBagConstraints( 0, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));	
 		
 		
 		
