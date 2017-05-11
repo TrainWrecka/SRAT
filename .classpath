@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/nimrodlfj16.jar"/>
+	<classpathentry kind="lib" path="lib/napkinlaf-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/napkinlaf-swingset-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-math3-3.6/commons-math3-3.6-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/commons-math3-3.6/commons-math3-3.6.jar" sourcepath="lib/commons-math3-3.6/docs"/>
+	<classpathentry kind="lib" path="lib/opencsv-3.9.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.19/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
