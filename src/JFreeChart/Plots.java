@@ -108,6 +108,8 @@ public class Plots extends JPanel {
 			add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));
 			XYPlot plot = (XYPlot) chart.getPlot();
+			zeroesChartPanel.setMouseWheelEnabled(true);
+			zeroesChartPanel.setMouseZoomable(true);
 			plot.setBackgroundPaint(Color.WHITE);
 			plot.setDomainGridlinePaint(Color.black);
 			plot.setRangeGridlinePaint(Color.black);
