@@ -98,9 +98,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		// Label und Texfield für k platzieren
 		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+				GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 		add(tfK, new GridBagConstraints(1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 		lbK.setEnabled(false);
 		tfK.setEnabled(false);
 		
@@ -109,9 +109,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
 			tfwp[i] = new JTextField();
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-					GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 
 			lbwp[i].setEnabled(false);
 			tfwp[i].setEnabled(false);
@@ -122,9 +122,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
 			tfqp[i] = new JTextField();
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-					GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 			lbqp[i].setEnabled(false);
 			tfqp[i].setEnabled(false);
 			qpPlacement = qpPlacement + 2;
@@ -137,9 +137,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		// Label und Textfeld Sigma platzieren
 		add(lbSigma, new GridBagConstraints(0, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
+				new Insets(20, 0, 0, 0), 0, 0));
 		add(tfSigma, new GridBagConstraints(1, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
-				new Insets(0, 0, 0, 0), 0, 0));
+				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
 		//		cbOrdnungsauswahl.setPreferredSize(new Dimension(50, 20));
