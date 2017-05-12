@@ -33,6 +33,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	// Buttons
 	public JButton btLoad = new JButton("Load");
 	private JButton btRun = new JButton("Run");
+	private JButton btCancel = new JButton("Cancel");
+	
 	private JRadioButton rbtAutomatically = new JRadioButton("Automatically");
 	private JRadioButton rbtManually = new JRadioButton("Manually");
 	// Buttongroup
@@ -86,7 +88,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		add(rbtManually, new GridBagConstraints(0, 2, 2, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 10), 0, 0));
 
-		add(btRun, new GridBagConstraints(0, 26, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+		add(btRun, new GridBagConstraints(0, 26, 2, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+				new Insets(10, 5, 0, 10), 0, 0));
+		add(btCancel, new GridBagConstraints(0, 27, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 5, 0, 10), 0, 0));
 
 		// add Labels to Panel	
