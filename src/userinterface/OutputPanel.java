@@ -14,6 +14,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayoutInfo;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 
 import JFreeChart.ErrorPlot;
@@ -28,7 +29,10 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class OutputPanel extends JPanel implements ActionListener, ChangeListener, MouseWheelListener {
+import org.jfree.chart.ChartMouseEvent;
+import org.jfree.chart.ChartMouseListener;
+
+public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
 
 	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 	
@@ -82,7 +86,7 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 		
 		
 		
-//		DefaultVariablePanel.setMinimumSize(StepresponsePanel.StepResponseplot.getMinimumSize());
+		DefaultVariablePanel.setMinimumSize(StepresponsePlot.getMinimumSize());
 		DefaultPanel.add(DefaultVariablePanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.BOTH, new Insets(5, 5, 10, 5), 0, 0));
 		
@@ -105,9 +109,9 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 				new Insets(0, 0, 0, 0), 0, 0));
 		
 		tabpane.addChangeListener(this);
-		StepresponsePanel.addMouseWheelListener(this);
-		ZeroesPanel.addMouseWheelListener(this);
-		ErrorPanel.addMouseWheelListener(this);
+//		StepresponsePanel.addMouseWheelListener(this);
+//		ZeroesPanel.addMouseWheelListener(this);
+//		ErrorPanel.addMouseWheelListener(this);
 	}
 	
 	
@@ -176,34 +180,38 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 
 
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		
-		
-		if(e.getSource()==StepresponsePanel){
-			if(e.getWheelRotation()<0){
-				Plots.zoomChartAxis(StepresponsePlot.stepresponseChartPanel, true);
-			}else{
-				Plots.zoomChartAxis(StepresponsePlot.stepresponseChartPanel, false);				
-			}
-		}
-		
-		if(e.getSource()==ZeroesPanel){
-			if(e.getWheelRotation()<0){
-				Plots.zoomChartAxis(ZeroesPlot.zeroesChartPanel, true);
-			}else{
-				Plots.zoomChartAxis(ZeroesPlot.zeroesChartPanel, false);
-			}
-		}
+//	@Override
+//	public void mouseWheelMoved(MouseWheelEvent e) {
+//		Point zoomPoint= e.getPoint();
+//		
+//		
+//		
+//		if(e.getSource()==StepresponsePanel){
+//			if(e.getWheelRotation()<0){
+//				Plots.zoomChartAxis(StepresponsePlot.stepresponseChartPanel, true, zoomPoint);
+//			}else{
+//				Plots.zoomChartAxis(StepresponsePlot.stepresponseChartPanel, false, zoomPoint);				
+//			}
+//		}
+//		
+//		if(e.getSource()==ZeroesPanel){
+//			if(e.getWheelRotation()<0){
+//				Plots.zoomChartAxis(ZeroesPlot.zeroesChartPanel, true, zoomPoint);
+//			}else{
+//				Plots.zoomChartAxis(ZeroesPlot.zeroesChartPanel, false, zoomPoint);
+//			}
+//		}
+//
+//		if(e.getSource()==ErrorPanel){
+//			if(e.getWheelRotation()<0){
+//				Plots.zoomChartAxis(ErrorPlot.errorChartPanel, true, zoomPoint);
+//			}else{
+//				Plots.zoomChartAxis(ErrorPlot.errorChartPanel, false, zoomPoint);
+//			}
+//		}
+//	}
 
-		if(e.getSource()==ErrorPanel){
-			if(e.getWheelRotation()<0){
-				Plots.zoomChartAxis(ErrorPlot.errorChartPanel, true);
-			}else{
-				Plots.zoomChartAxis(ErrorPlot.errorChartPanel, false);
-			}
-		}
-	}
+
 
 
 

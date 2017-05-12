@@ -27,18 +27,13 @@ public class VariablePanel extends JPanel implements ActionListener{
     private JLabel lbError=new JLabel("Error:");
     
     
-    public JLabel lbkanzeige =new JLabel("aaaaaaaaaa");
-    public JLabel lbwpanzeige = new JLabel("aaaaaaaaaa");
-    public JLabel lbqpanzeige = new JLabel("aaaaaaaaaa");
-    public JLabel lbSigmaanzeige = new JLabel("aaaaaaaaaa");
-    public JLabel lbErroranzeige = new JLabel("aaaaaaaaaa");
+    public JLabel lbkShowValues =new JLabel();
+    public JLabel lbwpShowValues = new JLabel();
+    public JLabel lbqpShowValues = new JLabel();
+    public JLabel lbSigmaShowValues = new JLabel();
+    public JLabel lbErrorShowValues = new JLabel();
     
-    private JTextField tfk = new JTextField();
-    private JTextField tfwp = new JTextField();
-    private JTextField tfqp = new JTextField();
-    private JTextField tfSigma = new JTextField();
-    private JTextField tfError = new JTextField();
-    
+
     
 //    private Font myfont= new Font("myFont",1,100);
     
@@ -74,20 +69,18 @@ public class VariablePanel extends JPanel implements ActionListener{
 //		tfk.setEditable(false);
 		
 		
-		add(lbkanzeige, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+		add(lbkShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 50, 30, 0), 0, 0));
-		add(lbwpanzeige,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+		add(lbwpShowValues,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 50, 30, 0), 0, 0));
-		add(lbqpanzeige, new GridBagConstraints( 1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+		add(lbqpShowValues, new GridBagConstraints( 1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 50, 30, 0), 0, 0));
-		add(lbSigmaanzeige, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+		add(lbSigmaShowValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 50, 30, 0), 0, 0));
-		add(lbErroranzeige, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+		add(lbErrorShowValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 50, 10, 0), 0, 0));	
 		
-		
-		
-		
+				
 		
 		
 		
