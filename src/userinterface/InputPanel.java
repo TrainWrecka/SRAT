@@ -172,15 +172,17 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
 		} else if (e.getSource() == rbtManually) {
-			lbwp[0].setEnabled(true);
-			lbqp[0].setEnabled(true);
-			tfwp[0].setEnabled(true);
-			tfqp[0].setEnabled(true);
-			lbwp[1].setEnabled(true);
-			lbqp[1].setEnabled(true);
-			tfwp[1].setEnabled(true);
-			tfqp[1].setEnabled(true);
-
+			
+			Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
+			Ordnung1 = Double.parseDouble(Ordnung);
+			
+			for (int i = 0; i < Ordnung1; i++) {
+			lbwp[i].setEnabled(true);
+			lbqp[i].setEnabled(true);
+			tfwp[i].setEnabled(true);
+			tfqp[i].setEnabled(true);
+			
+			}
 		}
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
