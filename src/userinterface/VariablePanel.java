@@ -20,14 +20,14 @@ import javax.swing.JLabel;
 
 public class VariablePanel extends JPanel implements ActionListener{
 	
-	private JLabel lbk =new JLabel("K:");
+	private JLabel lbK =new JLabel("K:");
     private JLabel lbwp = new JLabel("\u03C9p:");
     private JLabel lbqp = new JLabel("qp:");
     private JLabel lbSigma=new JLabel("\u03C3:");
     private JLabel lbError=new JLabel("Error:");
     
     
-    public JLabel lbkShowValues =new JLabel();
+    public JLabel lbKShowValues =new JLabel();
     public JLabel lbwpShowValues = new JLabel();
     public JLabel lbqpShowValues = new JLabel();
     public JLabel lbSigmaShowValues = new JLabel();
@@ -44,7 +44,7 @@ public class VariablePanel extends JPanel implements ActionListener{
 		super(new GridBagLayout());
 				
 //		setFont(myfont);
-		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbK, new GridBagConstraints( 0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 0, 30, 0), 0, 0));
 		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 0, 30, 0), 0, 0));
@@ -69,7 +69,7 @@ public class VariablePanel extends JPanel implements ActionListener{
 //		tfk.setEditable(false);
 		
 		
-		add(lbkShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbKShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 50, 30, 0), 0, 0));
 		add(lbwpShowValues,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 50, 30, 0), 0, 0));
