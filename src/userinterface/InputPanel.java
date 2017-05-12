@@ -42,8 +42,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
 	// Labels
 
-	private JLabel[] lbwp = new JLabel[10];
-	private JLabel[] lbqp = new JLabel[10];
+	private JLabel[] lbwp = new JLabel[5];
+	private JLabel[] lbqp = new JLabel[5];
 
 	private JLabel lbK = new JLabel("K:");
 	private JLabel lbOrdnung = new JLabel("Ordnung:");
@@ -105,7 +105,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		tfK.setEnabled(false);
 		
 		// Array für wp Labels und Textfelder erzeugen & platzieren
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
 			tfwp[i] = new JTextField();
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -118,7 +118,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			wpPlacement = wpPlacement + 2;
 		}
 		// Array für qp Labels und Textfelder erzeugen & platzieren
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
 			tfqp[i] = new JTextField();
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -179,7 +179,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbK.setEnabled(false);
 			tfK.setEnabled(false);
 			
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 5; i++) {
 				lbwp[i].setEnabled(false);
 				lbqp[i].setEnabled(false);
 				tfwp[i].setEnabled(false);
@@ -191,13 +191,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbK.setEnabled(true);
 			tfK.setEnabled(true);
 			
-			for (int i = 0; i < Ordnung1; i++) {
-			lbwp[i].setEnabled(true);
-			lbqp[i].setEnabled(true);
-			tfwp[i].setEnabled(true);
-			tfqp[i].setEnabled(true);
 			
-			}
+			for (int i = 0; i < Math.floor(Ordnung1/2); i++) {
+				lbwp[i].setEnabled(true);
+				lbqp[i].setEnabled(true);
+				tfwp[i].setEnabled(true);
+				tfqp[i].setEnabled(true);
+			}			
 			if(Ordnung1%2==1){
 				lbSigma.setEnabled(true);
 				tfSigma.setEnabled(true);
@@ -220,10 +220,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		Ordnung = "0";
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
+		
+		for (int i = 0; i < 5; i++) {
 
-		for (int i = 0; i < 10; i++) {
-
-			if (i < Ordnung1 & rbtAutomatically.isSelected() == false) {
+			if (i < Math.floor(Ordnung1/2) & rbtAutomatically.isSelected() == false) {
 				lbwp[i].setEnabled(true);
 				lbqp[i].setEnabled(true);
 				tfwp[i].setEnabled(true);
