@@ -42,7 +42,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JLabel lbShowFilteredSignal=new JLabel("Show filtered Signal");
 	
 	private JLabel lbFill=new JLabel("");
-	private JLabel lbFill1=new JLabel("");
 	
 	
 	private JTextField tfLaguerre=new JTextField();
@@ -62,8 +61,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private ButtonGroup groupShowFilteredSignal=new ButtonGroup();
 	
 	private JButton btApply=new JButton("Apply");
-	private JButton btOk=new JButton("OK");
-	private JButton btCancel=new JButton("Cancel");
 	private JButton btDefaults=new JButton("Defaults");
 	
 	
@@ -122,12 +119,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		add(btApply, new GridBagConstraints(2, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 		
-		add(lbFill1, new GridBagConstraints(0, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
-		add(btOk, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
-		add(btCancel, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
 		
 //		setBorder(MyBorderFactory.createMyBorder("Settings"));
 

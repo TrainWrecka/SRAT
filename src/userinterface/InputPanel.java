@@ -28,8 +28,8 @@ import java.util.Observable;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
-	private int wpPlacement = 4;
-	private int qpPlacement = 5;
+	private int wpPlacement = 5;
+	private int qpPlacement = 6;
 	// Buttons
 	public JButton btLoad = new JButton("Load");
 	private JButton btRun = new JButton("Run");
@@ -42,9 +42,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
 	// Labels
 
-	private JLabel[] lbwp = new JLabel[10];
-	private JLabel[] lbqp = new JLabel[10];
+	private JLabel[] lbwp = new JLabel[5];
+	private JLabel[] lbqp = new JLabel[5];
 
+	private JLabel lbK = new JLabel("K:");
 	private JLabel lbOrdnung = new JLabel("Ordnung:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
@@ -52,7 +53,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	// Textfields
 	private JTextField[] tfwp = new JTextField[10];
 	private JTextField[] tfqp = new JTextField[10];
+	
 	private JTextField tfSigma = new JTextField();
+	private JTextField tfK = new JTextField();
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -83,7 +86,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		add(rbtManually, new GridBagConstraints(0, 2, 2, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 10), 0, 0));
 
-		add(btRun, new GridBagConstraints(0, 25, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+		add(btRun, new GridBagConstraints(0, 26, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 5, 0, 10), 0, 0));
 
 		// add Labels to Panel	
@@ -93,8 +96,16 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		//add action listener
 		btLoad.addActionListener(this);
 
+		// Label und Texfield für k platzieren
+		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		add(tfK, new GridBagConstraints(1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		lbK.setEnabled(false);
+		tfK.setEnabled(false);
+		
 		// Array für wp Labels und Textfelder erzeugen & platzieren
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
 			tfwp[i] = new JTextField();
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -107,7 +118,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			wpPlacement = wpPlacement + 2;
 		}
 		// Array für qp Labels und Textfelder erzeugen & platzieren
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
 			tfqp[i] = new JTextField();
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -125,9 +136,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		lbOrdnung.setEnabled(true);
 
 		// Label und Textfeld Sigma platzieren
-		add(lbSigma, new GridBagConstraints(0, 24, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+		add(lbSigma, new GridBagConstraints(0, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
-		add(tfSigma, new GridBagConstraints(1, 24, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
+		add(tfSigma, new GridBagConstraints(1, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
@@ -162,8 +173,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	// Ausgrauen von allen Textfeldern, Labels, Ordnungsauswahl und Combobox bei entsprechender Aktion
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
+		Ordnung1 = Double.parseDouble(Ordnung);
 		if (e.getSource() == rbtAutomatically) {
-			for (int i = 0; i < 10; i++) {
+			lbK.setEnabled(false);
+			tfK.setEnabled(false);
+			
+			for (int i = 0; i < 5; i++) {
 				lbwp[i].setEnabled(false);
 				lbqp[i].setEnabled(false);
 				tfwp[i].setEnabled(false);
@@ -172,15 +188,20 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
 		} else if (e.getSource() == rbtManually) {
-			lbwp[0].setEnabled(true);
-			lbqp[0].setEnabled(true);
-			tfwp[0].setEnabled(true);
-			tfqp[0].setEnabled(true);
-			lbwp[1].setEnabled(true);
-			lbqp[1].setEnabled(true);
-			tfwp[1].setEnabled(true);
-			tfqp[1].setEnabled(true);
-
+			lbK.setEnabled(true);
+			tfK.setEnabled(true);
+			
+			
+			for (int i = 0; i < Math.floor(Ordnung1/2); i++) {
+				lbwp[i].setEnabled(true);
+				lbqp[i].setEnabled(true);
+				tfwp[i].setEnabled(true);
+				tfqp[i].setEnabled(true);
+			}			
+			if(Ordnung1%2==1){
+				lbSigma.setEnabled(true);
+				tfSigma.setEnabled(true);
+			}
 		}
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
@@ -199,10 +220,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		Ordnung = "0";
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
+		
+		for (int i = 0; i < 5; i++) {
 
-		for (int i = 0; i < 10; i++) {
-
-			if (i < Ordnung1 & rbtAutomatically.isSelected() == false) {
+			if (i < Math.floor(Ordnung1/2) & rbtAutomatically.isSelected() == false) {
 				lbwp[i].setEnabled(true);
 				lbqp[i].setEnabled(true);
 				tfwp[i].setEnabled(true);

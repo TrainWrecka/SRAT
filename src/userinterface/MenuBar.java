@@ -82,7 +82,6 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			settingsFrameHeight=50;			
 		}
 		
-		
 	}
 
 	public void update(Observable o, Object obj) {}

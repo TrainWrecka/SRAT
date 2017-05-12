@@ -48,7 +48,7 @@ public class StepResponsePlot extends JPanel{
 		}
 		
 		
-		JFreeChart chart = ChartFactory.createXYLineChart("Input Data", "t [s]", "U [V]", dataset);
+		JFreeChart chart = ChartFactory.createXYLineChart(type, "t [s]", "U [V]", dataset);
 		StepresponseChartPanel = new ChartPanel(chart);
 		add(StepresponseChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
