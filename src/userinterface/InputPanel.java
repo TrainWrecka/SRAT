@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.math3.complex.Complex;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -19,6 +20,7 @@ import org.jfree.chart.plot.XYPlot;
 
 import com.opencsv.CSVReader;
 
+import matlabfunctions.Matlab;
 import model.Model;
 
 import java.awt.*;
@@ -187,14 +189,33 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
 				controller.setMeasurement(readCSV());
-			}			
-		}
-		
-		if(e.getSource() == btRun){
-			controller.setOrder(Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem()));
-			controller.approximateMeasurement();
+			}
 		}
 
+		if (e.getSource() == btRun) {
+			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
+			controller.setOrder(order);
+			if (rbtManually.isSelected() == true) {
+				double[] wp = new double[(order / 2)];
+				double[] qp = new double[wp.length];
+				double sigma = 0;
+				double K = 0;
+				for (int i = 0; i < wp.length; i++) {
+					wp[i] = Double.parseDouble(tfwp[i].getText());
+					qp[i] = Double.parseDouble(tfqp[i].getText());
+				}
+				
+				if (order % 2 == 0) {
+					sigma = 0;
+				} else {
+					sigma = Double.parseDouble(tfSigma.getText());
+				}
+				
+				//controller.setValues(new Object[]{K, wp, qp, sigma});
+			}
+			
+			controller.approximateMeasurement();
+		}
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion

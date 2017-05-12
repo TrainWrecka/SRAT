@@ -55,6 +55,10 @@ public class Model extends Observable {
 		return measurement.inputExisting();
 	}
 	
+	public void setValues(Object[] val){
+		measurement.setValues(val);
+	}
+	
 	
 	
 	public void notifyObservers() {

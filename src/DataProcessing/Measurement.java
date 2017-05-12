@@ -176,7 +176,7 @@ public class Measurement {
 		polesPlotData.setPlotData(new Object[][] { { polesData[0], "-" }, { polesData[1], "Poles" } });
 
 		
-		setValues(polesComplex);
+		calcValues(polesComplex);
 	}
 
 	public void setSettings(Object[] settings) {
@@ -448,14 +448,7 @@ public class Measurement {
 		this.order = order;
 	}
 
-	public static void main(String[] args) {
 
-	}
-
-	//	nort=30*175; %Zeitnormierungsfaktor
-	//	faktt=norm(t);
-	//	t=t./faktt;
-	//	t=t.*nort;
 
 	private Complex[] getPoles(double[] A) {
 
@@ -479,7 +472,7 @@ public class Measurement {
 		return polesData;
 	}
 
-	private void setValues(Complex[] poles) {
+	private void calcValues(Complex[] poles) {
 		sigma = "-";
 		wp = new String[(int) Math.floor(poles.length / 2)];
 		qp = new String[wp.length];
@@ -505,4 +498,33 @@ public class Measurement {
 	private Object[] getValues(){
 		return new Object[] {K, wp, qp, sigma, meanError};
 	}
+	
+	public void setValues(Object[] val){
+		setPoles(val);
+	}
+	
+	private double[] setPoles(Object[] val){
+		double K = (double)val[0];
+		double[] wp = (double[])val[1];
+		double[] qp = (double[])val[2];
+		double sigma = (double)val[3];
+		
+		double[] poles = new double[order*2+order%2];
+		
+		for(int i = 0; i < order;){
+			poles[i++] = -((wp[i]/qp[i])+(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+			poles[i++] = -((wp[i]/qp[i])-(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+		}
+		
+		if(order % 2 == 1){
+			poles[poles.length] = sigma;
+		}
+		
+		return poles;
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+
 }

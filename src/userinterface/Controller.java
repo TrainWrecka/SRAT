@@ -33,14 +33,10 @@ public class Controller {
 		model.setSettings(settings);
 	}
 	
-	/*public List<String[]> getMeasurementList(){
-		return model.getMeasurementList();
-	}*/
-	
-//	public double [][] getMeasurement(){
-//		return model.getMeasurement();
-//	}
-	
+	public void setValues(Object[] val){
+		model.setValues(val);
+	}
+
 	public void setOrder(int order){
 		model.setOrder(order);
 	}
