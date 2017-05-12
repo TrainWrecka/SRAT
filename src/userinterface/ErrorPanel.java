@@ -16,6 +16,9 @@ import JFreeChart.ErrorPlot;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import org.jfree.data.xy.XYSeries;
+
 import javax.swing.JLabel;
 
 public class ErrorPanel extends JPanel implements ActionListener{
@@ -42,6 +45,14 @@ public class ErrorPanel extends JPanel implements ActionListener{
 				new Insets(0, 0, 0, 0), 0, 0));
 		
 		setBorder(MyBorderFactory.createMyBorder("Error"));
+	}
+	
+	public void clearErrorData(){
+		Errorplot.clearSeries();
+	}
+
+	public void addErrorData(XYSeries seriesError) {
+		Errorplot.addSeries(seriesError);
 	}
 	
 	

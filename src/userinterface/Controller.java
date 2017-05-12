@@ -25,6 +25,14 @@ public class Controller {
 		model.setMeasurement(measurementList);
 	}
 	
+	public void approximateMeasurement(){
+		model.approximateMeasurement();
+	}
+	
+	public void setSettings(Object[] settings){
+		model.setSettings(settings);
+	}
+	
 	/*public List<String[]> getMeasurementList(){
 		return model.getMeasurementList();
 	}*/

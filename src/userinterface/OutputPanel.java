@@ -27,6 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jfree.data.xy.XYSeries;
+
 public class OutputPanel extends JPanel implements ActionListener, ChangeListener, MouseWheelListener {
 
 	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -124,14 +126,30 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	public void update(Observable obs, Object obj) {
 		Model model = (Model) obs;
-		
 
 		StepresponsePanel.clearStepresponseData();
-		StepresponsePanel.addStepresponseData(model.getStepresponseData()[0]);
-		StepresponsePanel.addStepresponseData(model.getStepresponseData()[1]);
-		if(model.inputExisting()){
-			StepresponsePanel.addStepresponseData(model.getStepresponseData()[2]);
+		ErrorPanel.clearErrorData();
+		ZeroesPanel.clearStepresponseData();
+		
+		if(model.getErrorData() != null){
+			for(int i = 0; i < model.getErrorData().length; i++){
+				ErrorPanel.addErrorData(model.getErrorData()[i]);
+			}
 		}
+		
+		if(model.getPolesData() != null){
+			for(int i = 0; i < model.getPolesData().length; i++){
+				ZeroesPanel.addStepresponseData(model.getPolesData()[i]);
+			}
+		}
+		
+		
+		
+		
+		for(int i = 0; i < model.getStepresponseData().length; i++){
+			StepresponsePanel.addStepresponseData(model.getStepresponseData()[i]);
+		}
+	
 	}
 
 

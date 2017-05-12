@@ -41,16 +41,36 @@ public class Measurement {
 	private double[] timeDataConditioned;
 
 	private double[] approxData;
+	private double[] errorData;
+
+	private double tNorm;
+	private double nor = (175 * 30);
+	double offset = 0;
+
+	String K;
+	String[] wp;
+	String[] qp;
+	String sigma;
+	String meanError;
+	
 
 	//private List<String[]> measurementList;
 
-	private PlotData plotData = new PlotData();
+	private PlotData stepPlotData = new PlotData();
+	private PlotData errorPlotData = new PlotData();
+	private PlotData polesPlotData = new PlotData();
 
 	private boolean input = false;
 
 	int stepIndex = 0;
+	int order = 2;
 
-	int order = 1;
+	double laguerreAcc = 1e-10;
+	double[] simplexOpt = { 1e-24, 1e-24 };
+	double nelderSteps = 0.0001;
+	int maxEval = 5000;
+	boolean filter = true;
+	boolean showConditioned = true;
 
 	public Measurement() {
 
@@ -59,11 +79,23 @@ public class Measurement {
 	public void setMeasurement(List<String[]> measurementList) {
 		//this.measurementList = measurementList;
 
-		int unitStepLocation = 0;
-		double offset = 0;
-
 		extractData(convertList(measurementList));
 
+		//stepPlotData.removeStepresponseData();
+
+		if (input) {
+			stepPlotData.setPlotData(
+					new Object[][] { { timeData, "Time" }, { inputData, "Input" }, new Object[] { stepData, "Step" } });
+		} else {
+			stepPlotData.setPlotData(new Object[][] { { timeData, "Time" }, new Object[] { stepData, "Step" } });
+		}
+
+	}
+
+	public void approximateMeasurement() {
+
+		int unitStepLocation = 0;
+		
 		if (input) {
 			unitStepLocation = getStepLocation(inputData);
 		} else {
@@ -97,29 +129,66 @@ public class Measurement {
 			inputDataConditioned = removeDeadTime(removeOffset(inputData, getOffset(inputData, unitStepLocation)),
 					new int[] { stepIndex, inputData.length });
 		}
-		
+
 		normTime();
 
 		timeDataConditioned = removeDeadTime(timeData, new int[] { 0, timeData.length - stepIndex });
 
-		
+		Object[] approxRet;
+		approxRet = Approximation.approximate(timeDataConditioned, stepDataConditioned, order, nelderSteps, simplexOpt,
+				maxEval);
 
-		approxData = Approximation.approximate(timeDataConditioned, stepDataConditioned, order);
+		approxData = (double[]) approxRet[0];
+		double[] A = (double[]) approxRet[2];
 
-		plotData.removeStepresponseData();
+		stepPlotData.removeStepresponseData();
 
 		if (input) {
-			plotData.setPlotData(new Object[][] {{ timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
-					new Object[] { stepDataConditioned, "Step" },{approxData, "Approximation"}});
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepDataConditioned, "Step" }, { approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepData, "Step" }, { approxData, "Approximation" } });
+			}
+
 		} else {
-			plotData.setPlotData(new Object[][] {{ timeDataConditioned, "Time" },
-				new Object[] { stepDataConditioned, "Step" },{approxData, "Approximation"}});
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepDataConditioned, "Step" },
+						{ approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepData, "Step" },
+						{ approxData, "Approximation" } });
+			}
+
 		}
-	}
-	
-	public void approximateMeasurement(){
+		errorData = new double[timeDataConditioned.length];
+
+		for (int i = 0; i < timeDataConditioned.length; i++) {
+			errorData[i] = stepDataConditioned[i] - approxData[i];
+		}
+
+		errorPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { errorData, "Error" } });
+
+		Complex[] polesComplex = getPoles(A);
+		double[][] polesData = convPoles(polesComplex);
+
+		polesPlotData.setPlotData(new Object[][] { { polesData[0], "-" }, { polesData[1], "Poles" } });
+
 		
+		setValues(polesComplex);
 	}
+
+	public void setSettings(Object[] settings) {
+		Matlab.laguerreAcc = (double) settings[0];
+		this.simplexOpt = (double[]) settings[1];
+		this.nelderSteps = (double) settings[2];
+		this.maxEval = (int) settings[3];
+		this.filter = (boolean) settings[4];
+		this.showConditioned = (boolean) settings[5];
+	}
+
+	
 
 	//	public double[][] getMeasurement() {
 	//		return measurement;
@@ -130,7 +199,15 @@ public class Measurement {
 		}*/
 
 	public XYSeries[] getStepresponseData() {
-		return plotData.getStepresponseData();
+		return stepPlotData.getData();
+	}
+
+	public XYSeries[] getErrorData() {
+		return errorPlotData.getData();
+	}
+
+	public XYSeries[] getPolesData() {
+		return polesPlotData.getData();
 	}
 
 	/*
@@ -360,8 +437,7 @@ public class Measurement {
 	 * norms the time axis
 	 */
 	private void normTime() {
-		double nor = (175 * 30);
-		double tNorm = Matlab.norm(timeData);
+		tNorm = Matlab.norm(timeData);
 
 		for (int i = 0; i < timeData.length; i++) {
 			timeData[i] = timeData[i] / tNorm * nor;
@@ -376,4 +452,57 @@ public class Measurement {
 
 	}
 
+	//	nort=30*175; %Zeitnormierungsfaktor
+	//	faktt=norm(t);
+	//	t=t./faktt;
+	//	t=t.*nort;
+
+	private Complex[] getPoles(double[] A) {
+
+		Complex[] poles = Matlab.roots(A);
+
+		for (int i = 0; i < poles.length; i++) {
+			poles[i] = poles[i].divide(tNorm).multiply(nor);
+		}
+
+		return poles;
+	}
+	
+	private double[][] convPoles(Complex[] poles){
+		double[][] polesData = new double[2][poles.length];
+
+		for (int i = 0; i < poles.length; i++) {
+			polesData[0][i] = poles[i].getReal();
+			polesData[1][i] = poles[i].getImaginary();
+		}
+		
+		return polesData;
+	}
+
+	private void setValues(Complex[] poles) {
+		sigma = "-";
+		wp = new String[(int) Math.floor(poles.length / 2)];
+		qp = new String[wp.length];
+
+		for (int i = 0; i < wp.length; i++) {
+			wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
+			double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
+			double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
+			qp[i] = Double.toString(-(temp1/temp2));
+		}
+
+		if (poles.length % 2 == 0) {
+			sigma = "-";
+		} else {
+			sigma = Double.toString(poles[poles.length-1].getReal());
+		}
+		
+		meanError = Double.toString(Matlab.mean(errorData));
+		
+		K = Double.toString(approxData[approxData.length-1]-offset);
+	}
+	
+	private Object[] getValues(){
+		return new Object[] {K, wp, qp, sigma, meanError};
+	}
 }

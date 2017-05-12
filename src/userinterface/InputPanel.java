@@ -92,6 +92,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		//add action listener
 		btLoad.addActionListener(this);
+		btRun.addActionListener(this);
 
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 10; i++) {
@@ -136,7 +137,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 
@@ -184,11 +186,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		}
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
-				controller.setOrder(Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem()));
 				controller.setMeasurement(readCSV());
-			}
-
-			
+			}			
+		}
+		
+		if(e.getSource() == btRun){
+			controller.setOrder(Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem()));
+			controller.approximateMeasurement();
 		}
 
 	}

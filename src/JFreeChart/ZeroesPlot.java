@@ -37,27 +37,28 @@ public class ZeroesPlot extends JPanel{
 	public static ChartPanel ZeroesChartPanel;
 	private static int count=0;
 	
+	
 	public ZeroesPlot(String type) {
 		this.setLayout(new GridBagLayout());
-		XYSeries series3 = new XYSeries("Third");
-    	series3.add(17.0, 4.0);
-//    	series3.add(18.0, 3.0);
-//    	series3.add(19.0, 2.0);
-//    	series3.add(20.0, -3.0);
-//    	series3.add(21.0, 6.0);
-//    	series3.add(22.0, 3.0);
-    	series3.add(23.0, -4.0);
-    	series3.add(24.0, 3.0);
-		
-		XYSeriesCollection dataset1=new XYSeriesCollection();
-		dataset1.addSeries(series3);
-		
-		
-		
-		
+//		XYSeries series3 = new XYSeries("Third");
+//    	series3.add(17.0, 4.0);
+////    	series3.add(18.0, 3.0);
+////    	series3.add(19.0, 2.0);
+////    	series3.add(20.0, -3.0);
+////    	series3.add(21.0, 6.0);
+////    	series3.add(22.0, 3.0);
+//    	series3.add(23.0, -4.0);
+//    	series3.add(24.0, 3.0);
+//		
+//		XYSeriesCollection dataset1=new XYSeriesCollection();
+//		dataset1.addSeries(series3);
+//		
+//		
 		
 		
-		JFreeChart chart = ChartFactory.createScatterPlot(type, "Real", "Imaginary", dataset1);
+		
+		
+		JFreeChart chart = ChartFactory.createScatterPlot(type, "Real", "Imaginary", dataset);
 		ZeroesChartPanel = new ChartPanel(chart);
 		add(ZeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));

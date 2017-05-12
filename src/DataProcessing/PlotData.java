@@ -4,7 +4,7 @@ import org.jfree.data.xy.XYSeries;
 
 public class PlotData {
 
-	private XYSeries[] seriesStepresponse = new XYSeries[3];
+	private XYSeries[] seriesStepresponse;
 
 	public PlotData() {}
 
@@ -29,32 +29,42 @@ public class PlotData {
 
 	public void setPlotData(Object[][] data) {
 		double[] timeAxis = (double[]) data[0][0];
-		double[] data1Points = (double[]) data[1][0];
-		double[] data2Points = (double[]) data[2][0];
+		double[] data1Points;
+		double[] data2Points;
 		double[] data3Points;
 
-		String data1Name = (String) data[1][1];
-		String data2Name = (String) data[2][1];
+		String data1Name;
+		String data2Name;
 		String data3Name;
 
-		seriesStepresponse[0] = new XYSeries(data1Name);
-		for (int i = 0; i < data1Points.length; i++) {
-			seriesStepresponse[0].add(timeAxis[i], data1Points[i]);
-		}
+		seriesStepresponse = new XYSeries[data.length - 1];
 
-		seriesStepresponse[1] = new XYSeries(data2Name);
-		for (int i = 0; i < data1Points.length; i++) {
-			seriesStepresponse[1].add(timeAxis[i], data2Points[i]);
-		}
+		switch (data.length) {
+			case 4:
+				data3Points = (double[]) data[3][0];
+				data3Name = (String) data[3][1];
 
-		if (data.length == 4) {
-			data3Points = (double[]) data[3][0];
-			data3Name = (String) data[3][1];
+				seriesStepresponse[2] = new XYSeries(data3Name);
+				for (int i = 0; i < timeAxis.length; i++) {
+					seriesStepresponse[2].add(timeAxis[i], data3Points[i]);
+				}
+			case 3:
+				data2Points = (double[]) data[2][0];
+				data2Name = (String) data[2][1];
 
-			seriesStepresponse[2] = new XYSeries(data3Name);
-			for (int i = 0; i < data1Points.length; i++) {
-				seriesStepresponse[2].add(timeAxis[i], data3Points[i]);
-			}
+				seriesStepresponse[1] = new XYSeries(data2Name);
+				for (int i = 0; i < timeAxis.length; i++) {
+					seriesStepresponse[1].add(timeAxis[i], data2Points[i]);
+				}
+
+			case 2:
+				data1Points = (double[]) data[1][0];
+				data1Name = (String) data[1][1];
+
+				seriesStepresponse[0] = new XYSeries(data1Name);
+				for (int i = 0; i < timeAxis.length; i++) {
+					seriesStepresponse[0].add(timeAxis[i], data1Points[i]);
+				}
 		}
 	}
 
@@ -66,17 +76,25 @@ public class PlotData {
 		}
 	}
 
-	public XYSeries[] getStepresponseData() {
+	public XYSeries[] getData() {
+		//Object[] ret;
+		//ret[0] = seriesStepresponse;
+		//ret[1] = 
 		return seriesStepresponse;
 	}
 
 	public void removeStepresponseData() {
-		if (seriesStepresponse[0] != null) {
+		for (int i = 0; i < seriesStepresponse.length; i++) {
+			if (seriesStepresponse[i] != null) {
+				seriesStepresponse[i].clear();
+			}	
+		} /*
+			if (seriesStepresponse[0] != null) {
 			seriesStepresponse[0].clear();
-		}
-		if (seriesStepresponse[1] != null) {
+			}
+			if (seriesStepresponse[1] != null) {
 			seriesStepresponse[1].clear();
-		}
+			}*/
 
 	}
 

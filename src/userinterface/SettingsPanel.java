@@ -68,8 +68,10 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	
 	
 	
-	public SettingsPanel() {
+	public SettingsPanel(Controller controller) {
 		super(new GridBagLayout());
+		
+		this.controller = controller;
 		
 		groupFilterSignal.add(rbtFilterSignalYes);
 		groupFilterSignal.add(rbtFilterSignalNo);
@@ -124,14 +126,19 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		
 		add(lbFill1, new GridBagConstraints(0, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		add(btOk, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
-		add(btCancel, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
+//		add(btOk, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+//				new Insets(10, 0, 0, 10), 0, 0));
+//		add(btCancel, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+//				new Insets(10, 0, 0, 10), 0, 0));
 		
 //		setBorder(MyBorderFactory.createMyBorder("Settings"));
 
+		btApply.addActionListener(this);
+		btOk.addActionListener(this);
+		btCancel.addActionListener(this);
+		btDefaults.addActionListener(this);
 		
+		initFields();
 		}
 	
 	
@@ -146,14 +153,37 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	}
 
 	
-	public void setController(Controller controller) {
-		this.controller = controller;
-	}
+//	public void setController(Controller controller) {
+//		this.controller = controller;
+//	}
 
 	// Ausgrauen von allen Textfeldern, Labels, Ordnungsauswahl und Combobox bei entsprechender Aktion
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == btDefaults){
+			initFields();
+		}
 		
+		if(e.getSource() == btApply){
+			double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
+			double[] simplexOpt = {Double.parseDouble(tfSimplexOptimizerRelative.getText()), Double.parseDouble(tfSimplexOptimizerAbsolute.getText())};
+			double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
+			int maxEval = Integer.parseInt(tfMaxEval.getText());
+			boolean filter = rbtFilterSignalYes.isSelected();
+			boolean showConditioned = rbtShowFilteredSignalYes.isSelected();
+			
+			controller.setSettings(new Object[]{LaguerreAcc, simplexOpt, nelderSteps, maxEval, filter, showConditioned});
+		}
+	}
+
+	private void initFields() {
+		tfLaguerre.setText("1e-6");
+		tfSimplexOptimizerRelative.setText("1e-24");
+		tfSimplexOptimizerAbsolute.setText("1e-24");
+		tfNelderMeadSimplexSteps.setText("0.0001");
+		tfMaxEval.setText("5000");
+		rbtFilterSignalYes.setSelected(true);
+		rbtShowFilteredSignalYes.setSelected(true);
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion

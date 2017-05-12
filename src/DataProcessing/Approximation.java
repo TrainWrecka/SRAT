@@ -382,7 +382,7 @@ public class Approximation {
 		ret[0] = step[0];
 		ret[1] = step[1];
 		//ret = Arrays.copyOfRange(step, 0, 1);
-		ret[2] = A;
+		ret[2] = doubleA;
 
 		return ret;
 	}
@@ -422,7 +422,7 @@ public class Approximation {
 			
 			final double[] poles = variables;
 			//final double y = variables[1];
-			double error = Approximation.errorFunction(t, y_soll, poles, order);
+			double error = errorFunction(t, y_soll, poles, order);
 			
 			evals++;
 			System.out.println("Evals: "+evals);
@@ -435,7 +435,7 @@ public class Approximation {
 		}
 	}
 	
-	public static double[] approximate(double[] timeData, double[]stepData, int order) {
+	public static Object[] approximate(double[] timeData, double[]stepData, int order, double nelderSteps, double[] simplexOpt, int maxEval) {
 		Filter filt = FilterFactory.createButter(order, 1.0);
 
 		Object[] resi = Matlab.residue(filt.B, filt.A);
@@ -451,54 +451,25 @@ public class Approximation {
 		double[] nelderValues = new double[order+1];
 		
 		for(int i = 0; i < nelderValues.length; i++){
-			nelderValues[i] = 0.0001;
+			nelderValues[i] = nelderSteps;
 		}
 		
-		SimplexOptimizer optimizer = new SimplexOptimizer(1e-24, 1e-24);
+		SimplexOptimizer optimizer = new SimplexOptimizer(simplexOpt[0], simplexOpt[1]);
 		Target target = new Target(timeData, stepData, order);
 		PointValuePair optimum = null;
 		double[] approxPoles = null;
-		boolean flag = false;
 		
 		try {
-			 optimum = optimizer.optimize(new MaxEval(1000*P.length), new ObjectiveFunction(target), GoalType.MINIMIZE,
+			 optimum = optimizer.optimize(new MaxEval(maxEval), new ObjectiveFunction(target), GoalType.MINIMIZE,
 					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
+			 approxPoles = optimum.getPoint();
 		} catch (TooManyEvaluationsException e) {
 			approxPoles = target.poles;
-			flag = true;
 		}
-		
 	
-		if(flag == false){
-			approxPoles = optimum.getPoint();
-		}
 		 		
 		Object[] result = Approximation.schritt(approxPoles, timeData, order);
 		
-		return (double[]) result[0];
-		
-
+		return result;
 	}
-	/*
-	public static approximationOptions setOptions(int maxEval, double relOpt, double absOpt){
-		return new approximationOptions(maxEval, relOpt, absOpt);
-	}
-	
-	
-	
-	public static class approximationOptions{
-		int maxEval;
-		double relOpt;
-		double absOpt;
-		
-		public approximationOptions(int maxEval, double relOpt, double absOpt){
-			this.maxEval = maxEval;
-			this.relOpt = relOpt;
-			this.absOpt = absOpt;
-		}
-		
-//		public double getOptions() {			
-//			
-//		}
-	}*/
 }

@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.apache.commons.math3.complex.Complex;
+import org.jfree.data.xy.XYSeries;
 
 import javax.swing.JLabel;
 
@@ -55,6 +56,14 @@ public class ZeroesPanel extends JPanel implements ActionListener{
 		
 		
 		
+	}
+	
+	public void clearStepresponseData(){
+		Zeroesplot.clearSeries();
+	}
+
+	public void addStepresponseData(XYSeries seriesStepresponse) {
+		Zeroesplot.addSeries(seriesStepresponse);
 	}
 	
 	

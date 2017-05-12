@@ -26,7 +26,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	JFrame frame;
 	Controller controller;
 	public JFrame settingsFrame;
-	private SettingsPanel settingsPanel=new SettingsPanel();
+	private SettingsPanel settingsPanel;
 	private double xPosition;
 	private int settingsFrameWidth;
 	private int settingsFrameHeight;
@@ -82,7 +82,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			settingsFrameHeight=50;			
 		}
 		
-		
+		settingsPanel = new SettingsPanel(controller);
 	}
 
 	public void update(Observable o, Object obj) {}
