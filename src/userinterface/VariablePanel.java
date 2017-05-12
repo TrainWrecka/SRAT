@@ -15,6 +15,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 public class VariablePanel extends JPanel implements ActionListener{
@@ -25,36 +26,71 @@ public class VariablePanel extends JPanel implements ActionListener{
     private JLabel lbSigma=new JLabel("\u03C3:");
     private JLabel lbError=new JLabel("Error:");
     
+    
+    public JLabel lbkanzeige =new JLabel("aaaaaaaaaa");
+    public JLabel lbwpanzeige = new JLabel("aaaaaaaaaa");
+    public JLabel lbqpanzeige = new JLabel("aaaaaaaaaa");
+    public JLabel lbSigmaanzeige = new JLabel("aaaaaaaaaa");
+    public JLabel lbErroranzeige = new JLabel("aaaaaaaaaa");
+    
+    private JTextField tfk = new JTextField();
+    private JTextField tfwp = new JTextField();
+    private JTextField tfqp = new JTextField();
+    private JTextField tfSigma = new JTextField();
+    private JTextField tfError = new JTextField();
+    
+    
 //    private Font myfont= new Font("myFont",1,100);
     
-    private int Height;
-    private Dimension SizeLabels;
+//    private int Height;
+//    private Dimension SizeLabels;
 	
 	public VariablePanel(){
 		super(new GridBagLayout());
 				
 //		setFont(myfont);
-		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 0, 30, 0), 0, 0));
-		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 0, 30, 0), 0, 0));
-		add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 0, 30, 0), 0, 0));
-		add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 0, 30, 0), 0, 0));
-		add(lbError, new GridBagConstraints( 0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbError, new GridBagConstraints( 0, 4, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(30, 0, 10, 0), 0, 0));	
 		
-//		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//		add(tfk, new GridBagConstraints( 1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
 //				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//		add(tfwp,new GridBagConstraints( 1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
 //				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//		add(tfqp, new GridBagConstraints( 1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
 //				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//		add(tfSigma, new GridBagConstraints( 1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
 //				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbError, new GridBagConstraints( 0, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//		add(tfError, new GridBagConstraints( 1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
 //				new Insets(0, 0, 0, 0), 0, 0));	
+//		
+//		tfk.setEditable(false);
+		
+		
+		add(lbkanzeige, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+				new Insets(10, 50, 30, 0), 0, 0));
+		add(lbwpanzeige,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+				new Insets(30, 50, 30, 0), 0, 0));
+		add(lbqpanzeige, new GridBagConstraints( 1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+				new Insets(30, 50, 30, 0), 0, 0));
+		add(lbSigmaanzeige, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+				new Insets(30, 50, 30, 0), 0, 0));
+		add(lbErroranzeige, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,  
+				new Insets(30, 50, 10, 0), 0, 0));	
+		
+		
+		
+		
+		
+		
+		
 		
 		
 //		SizeLabels=new Dimension(getWidth(), getHeight());

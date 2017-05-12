@@ -57,7 +57,7 @@ public class ZeroesPlot extends JPanel{
 		
 		
 		
-		JFreeChart chart = ChartFactory.createScatterPlot(type, "Real", "Imaginary", dataset1);
+		JFreeChart chart = ChartFactory.createScatterPlot(type, "Real", "Imaginary", dataset);
 		ZeroesChartPanel = new ChartPanel(chart);
 		add(ZeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
