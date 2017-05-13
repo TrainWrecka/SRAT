@@ -34,11 +34,11 @@ public class DataPanel extends JPanel implements ActionListener {
 		setBorder(MyBorderFactory.createMyBorder(""));
 	}
 	
-	public void clearStepresponseData(Plots plot){
+	public void clearData(Plots plot){
 		plot.clearSeries();
 	}
 
-	public void addStepresponseData(XYSeries seriesStepresponse, Plots plot) {
+	public void addData(XYSeries seriesStepresponse, Plots plot) {
 		plot.addSeries(seriesStepresponse);
 	}
 

@@ -125,7 +125,7 @@ public class Approximation {
 
 		return new Object[] { x0, k };
 	}
-	
+	/*
 	public static final Object[] schritt(double[] poles, double[] t, int Ordnung) {
 		double[] B = new double[1];
 		B[0] = poles[0];
@@ -401,274 +401,275 @@ public class Approximation {
 		ret[0] = step[0];
 		ret[1] = step[1];
 		//ret = Arrays.copyOfRange(step, 0, 1);
-		ret[2] = PolesNenner;
+		ret[2] = doublePolesNenner;
+		//ret[2] = doubleA;
+
+		return ret;
+	}*/
+
+
+
+
+	public static final Object[] schritt(double[] poles, double[] t, int Ordnung) {
+		double[] B = new double[1];
+		B[0] = poles[0];
+
+		Complex[] A = new Complex[Ordnung];
+		Complex p1 = new Complex(poles[1], poles[2]);
+		Complex p2 = p1.conjugate();
+		Complex p3;
+		Complex p4;
+		Complex p5;
+		Complex p6;
+		Complex p7;
+		Complex p8;
+		Complex p9;
+		Complex p10;
+		Complex[] A1 = new Complex[2];
+		Complex[] A2 = new Complex[2];
+		Complex[] A3 = new Complex[2];
+		Complex[] A4 = new Complex[2];
+		Complex[] A5 = new Complex[2];
+		Complex[] A6 = new Complex[2];
+		Complex[] A7 = new Complex[2];
+		Complex[] A8 = new Complex[2];
+		Complex[] A9 = new Complex[2];
+		Complex[] A10 = new Complex[2];
+
+		A1[0] = new Complex(1, 0);
+		A1[1] = p1.multiply(-1);
+
+		A2[0] = new Complex(1, 0);
+		A2[1] = p2.multiply(-1);
+
+		Complex[] AA = Matlab.conv(A1, A2);
+		Complex[] AAA;
+		Complex[] AAAA;
+		Complex[] AAAAA;
+		Complex[] AAAAAA;
+
+		switch (Ordnung) {
+			case 2:
+				A = AA;
+				break;
+			case 3:
+				p3 = new Complex(poles[3], 0);
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A = Matlab.conv(AA, A3);
+				break;
+			case 4:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				A = Matlab.conv(AA, AAA);
+				break;
+			case 5:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[4], 0);
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(AAA, AA);
+
+				A = Matlab.conv(AAAA, A5);
+				break;
+			case 6:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[5], poles[6]);
+				p6 = p5.conjugate();
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				A6[0] = new Complex(1, 0);
+				A6[1] = p6.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(A5, A6);
+				A = Matlab.conv(AAAA, Matlab.conv(AA, AAA));
+
+				break;
+			case 7:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[5], poles[6]);
+				p6 = p5.conjugate();
+				p7 = new Complex(poles[6], 0);
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				A6[0] = new Complex(1, 0);
+				A6[1] = p6.multiply(-1);
+
+				A7[0] = new Complex(1, 0);
+				A7[1] = p7.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(A5, A6);
+
+				A = Matlab.conv(Matlab.conv(AAAA, Matlab.conv(AA, AAA)), A7);
+				break;
+			case 8:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[5], poles[6]);
+				p6 = p5.conjugate();
+				p7 = new Complex(poles[7], poles[8]);
+				p8 = p7.conjugate();
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				A6[0] = new Complex(1, 0);
+				A6[1] = p6.multiply(-1);
+
+				A7[0] = new Complex(1, 0);
+				A7[1] = p7.multiply(-1);
+
+				A8[0] = new Complex(1, 0);
+				A8[1] = p8.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(A5, A6);
+				AAAAA = Matlab.conv(A7, A8);
+
+				A = Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA));
+				break;
+			case 9:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[5], poles[6]);
+				p6 = p5.conjugate();
+				p7 = new Complex(poles[7], poles[8]);
+				p8 = p7.conjugate();
+				p9 = new Complex(poles[9], 0);
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				A6[0] = new Complex(1, 0);
+				A6[1] = p6.multiply(-1);
+
+				A7[0] = new Complex(1, 0);
+				A7[1] = p7.multiply(-1);
+
+				A8[0] = new Complex(1, 0);
+				A8[1] = p8.multiply(-1);
+
+				A9[0] = new Complex(1, 0);
+				A9[1] = p9.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(A5, A6);
+				AAAAA = Matlab.conv(A7, A8);
+
+				A = Matlab.conv(Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA)), A9);
+
+				break;
+			case 10:
+				p3 = new Complex(poles[3], poles[4]);
+				p4 = p3.conjugate();
+				p5 = new Complex(poles[5], poles[6]);
+				p6 = p5.conjugate();
+				p7 = new Complex(poles[7], poles[8]);
+				p8 = p7.conjugate();
+				p9 = new Complex(poles[9], poles[10]);
+				p10 = p9.conjugate();
+
+				A3[0] = new Complex(1, 0);
+				A3[1] = p3.multiply(-1);
+
+				A4[0] = new Complex(1, 0);
+				A4[1] = p4.multiply(-1);
+
+				A5[0] = new Complex(1, 0);
+				A5[1] = p5.multiply(-1);
+
+				A6[0] = new Complex(1, 0);
+				A6[1] = p6.multiply(-1);
+
+				A7[0] = new Complex(1, 0);
+				A7[1] = p7.multiply(-1);
+
+				A8[0] = new Complex(1, 0);
+				A8[1] = p8.multiply(-1);
+
+				A9[0] = new Complex(1, 0);
+				A9[1] = p9.multiply(-1);
+
+				A10[0] = new Complex(1, 0);
+				A10[1] = p10.multiply(-1);
+
+				AAA = Matlab.conv(A3, A4);
+				AAAA = Matlab.conv(A5, A6);
+				AAAAA = Matlab.conv(A7, A8);
+				AAAAAA = Matlab.conv(A9, A10);
+
+				A = Matlab.conv(Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA)), AAAAAA);
+				break;
+		}
+
+		double[] doubleA = new double[A.length];
+
+		for (int i = 0; i < A.length; i++) {
+			doubleA[i] = A[i].getReal();
+		}
+
+		Object[] ret = new Object[3];
+		Object[] step = SVTools.step(B, doubleA, t);
+
+		ret[0] = step[0];
+		ret[1] = step[1];
+		//ret = Arrays.copyOfRange(step, 0, 1);
+		ret[2] = doubleA;
 
 		return ret;
 	}
-
-
-
-
-//	public static final Object[] schritt(double[] poles, double[] t, int Ordnung) {
-//		double[] B = new double[1];
-//		B[0] = poles[0];
-//
-//		Complex[] A = new Complex[Ordnung];
-//		Complex p1 = new Complex(poles[1], poles[2]);
-//		Complex p2 = p1.conjugate();
-//		Complex p3;
-//		Complex p4;
-//		Complex p5;
-//		Complex p6;
-//		Complex p7;
-//		Complex p8;
-//		Complex p9;
-//		Complex p10;
-//		Complex[] A1 = new Complex[2];
-//		Complex[] A2 = new Complex[2];
-//		Complex[] A3 = new Complex[2];
-//		Complex[] A4 = new Complex[2];
-//		Complex[] A5 = new Complex[2];
-//		Complex[] A6 = new Complex[2];
-//		Complex[] A7 = new Complex[2];
-//		Complex[] A8 = new Complex[2];
-//		Complex[] A9 = new Complex[2];
-//		Complex[] A10 = new Complex[2];
-//
-//		A1[0] = new Complex(1, 0);
-//		A1[1] = p1.multiply(-1);
-//
-//		A2[0] = new Complex(1, 0);
-//		A2[1] = p2.multiply(-1);
-//
-//		Complex[] AA = Matlab.conv(A1, A2);
-//		Complex[] AAA;
-//		Complex[] AAAA;
-//		Complex[] AAAAA;
-//		Complex[] AAAAAA;
-//
-//		switch (Ordnung) {
-//			case 2:
-//				A = AA;
-//				break;
-//			case 3:
-//				p3 = new Complex(poles[3], 0);
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A = Matlab.conv(AA, A3);
-//				break;
-//			case 4:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				A = Matlab.conv(AA, AAA);
-//				break;
-//			case 5:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[4], 0);
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(AAA, AA);
-//
-//				A = Matlab.conv(AAAA, A5);
-//				break;
-//			case 6:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[5], poles[6]);
-//				p6 = p5.conjugate();
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				A6[0] = new Complex(1, 0);
-//				A6[1] = p6.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(A5, A6);
-//				A = Matlab.conv(AAAA, Matlab.conv(AA, AAA));
-//
-//				break;
-//			case 7:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[5], poles[6]);
-//				p6 = p5.conjugate();
-//				p7 = new Complex(poles[6], 0);
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				A6[0] = new Complex(1, 0);
-//				A6[1] = p6.multiply(-1);
-//
-//				A7[0] = new Complex(1, 0);
-//				A7[1] = p7.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(A5, A6);
-//
-//				A = Matlab.conv(Matlab.conv(AAAA, Matlab.conv(AA, AAA)), A7);
-//				break;
-//			case 8:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[5], poles[6]);
-//				p6 = p5.conjugate();
-//				p7 = new Complex(poles[7], poles[8]);
-//				p8 = p7.conjugate();
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				A6[0] = new Complex(1, 0);
-//				A6[1] = p6.multiply(-1);
-//
-//				A7[0] = new Complex(1, 0);
-//				A7[1] = p7.multiply(-1);
-//
-//				A8[0] = new Complex(1, 0);
-//				A8[1] = p8.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(A5, A6);
-//				AAAAA = Matlab.conv(A7, A8);
-//
-//				A = Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA));
-//				break;
-//			case 9:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[5], poles[6]);
-//				p6 = p5.conjugate();
-//				p7 = new Complex(poles[7], poles[8]);
-//				p8 = p7.conjugate();
-//				p9 = new Complex(poles[9], 0);
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				A6[0] = new Complex(1, 0);
-//				A6[1] = p6.multiply(-1);
-//
-//				A7[0] = new Complex(1, 0);
-//				A7[1] = p7.multiply(-1);
-//
-//				A8[0] = new Complex(1, 0);
-//				A8[1] = p8.multiply(-1);
-//
-//				A9[0] = new Complex(1, 0);
-//				A9[1] = p9.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(A5, A6);
-//				AAAAA = Matlab.conv(A7, A8);
-//
-//				A = Matlab.conv(Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA)), A9);
-//
-//				break;
-//			case 10:
-//				p3 = new Complex(poles[3], poles[4]);
-//				p4 = p3.conjugate();
-//				p5 = new Complex(poles[5], poles[6]);
-//				p6 = p5.conjugate();
-//				p7 = new Complex(poles[7], poles[8]);
-//				p8 = p7.conjugate();
-//				p9 = new Complex(poles[9], poles[10]);
-//				p10 = p9.conjugate();
-//
-//				A3[0] = new Complex(1, 0);
-//				A3[1] = p3.multiply(-1);
-//
-//				A4[0] = new Complex(1, 0);
-//				A4[1] = p4.multiply(-1);
-//
-//				A5[0] = new Complex(1, 0);
-//				A5[1] = p5.multiply(-1);
-//
-//				A6[0] = new Complex(1, 0);
-//				A6[1] = p6.multiply(-1);
-//
-//				A7[0] = new Complex(1, 0);
-//				A7[1] = p7.multiply(-1);
-//
-//				A8[0] = new Complex(1, 0);
-//				A8[1] = p8.multiply(-1);
-//
-//				A9[0] = new Complex(1, 0);
-//				A9[1] = p9.multiply(-1);
-//
-//				A10[0] = new Complex(1, 0);
-//				A10[1] = p10.multiply(-1);
-//
-//				AAA = Matlab.conv(A3, A4);
-//				AAAA = Matlab.conv(A5, A6);
-//				AAAAA = Matlab.conv(A7, A8);
-//				AAAAAA = Matlab.conv(A9, A10);
-//
-//				A = Matlab.conv(Matlab.conv(Matlab.conv(AA, AAA), Matlab.conv(AAAA, AAAAA)), AAAAAA);
-//				break;
-//		}
-//
-//		double[] doubleA = new double[A.length];
-//
-//		for (int i = 0; i < A.length; i++) {
-//			doubleA[i] = A[i].getReal();
-//		}
-//
-//		Object[] ret = new Object[3];
-//		Object[] step = SVTools.step(B, doubleA, t);
-//
-//		ret[0] = step[0];
-//		ret[1] = step[1];
-//		//ret = Arrays.copyOfRange(step, 0, 1);
-//		ret[2] = A;
-//
-//		return ret;
-//	}
 
 	//t, y_soll, x,N
 	public static double errorFunction(double[] t, double[] y_soll, double[] poles, int order) {
@@ -705,7 +706,7 @@ public class Approximation {
 			
 			final double[] poles = variables;
 			//final double y = variables[1];
-			double error = Approximation.errorFunction(t, y_soll, poles, order);
+			double error = errorFunction(t, y_soll, poles, order);
 			
 			evals++;
 			System.out.println("Evals: "+evals);
@@ -718,7 +719,7 @@ public class Approximation {
 		}
 	}
 	
-	public static double[] approximate(double[] timeData, double[]stepData, int order) {
+	public static Object[] approximate(double[] timeData, double[]stepData, int order, double nelderSteps, double[] simplexOpt, int maxEval) {
 		Filter filt = FilterFactory.createButter(order, 1.0);
 
 		Object[] resi = Matlab.residue(filt.B, filt.A);
@@ -734,54 +735,25 @@ public class Approximation {
 		double[] nelderValues = new double[order+1];
 		
 		for(int i = 0; i < nelderValues.length; i++){
-			nelderValues[i] = 0.0001;
+			nelderValues[i] = nelderSteps;
 		}
 		
-		SimplexOptimizer optimizer = new SimplexOptimizer(1e-24, 1e-24);
+		SimplexOptimizer optimizer = new SimplexOptimizer(simplexOpt[0], simplexOpt[1]);
 		Target target = new Target(timeData, stepData, order);
 		PointValuePair optimum = null;
 		double[] approxPoles = null;
-		boolean flag = false;
 		
 		try {
-			 optimum = optimizer.optimize(new MaxEval(1000*P.length), new ObjectiveFunction(target), GoalType.MINIMIZE,
+			 optimum = optimizer.optimize(new MaxEval(maxEval), new ObjectiveFunction(target), GoalType.MINIMIZE,
 					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
+			 approxPoles = optimum.getPoint();
 		} catch (TooManyEvaluationsException e) {
 			approxPoles = target.poles;
-			flag = true;
 		}
-		
 	
-		if(flag == false){
-			approxPoles = optimum.getPoint();
-		}
 		 		
 		Object[] result = Approximation.schritt(approxPoles, timeData, order);
 		
-		return (double[]) result[0];
-		
-
+		return result;
 	}
-	/*
-	public static approximationOptions setOptions(int maxEval, double relOpt, double absOpt){
-		return new approximationOptions(maxEval, relOpt, absOpt);
-	}
-	
-	
-	
-	public static class approximationOptions{
-		int maxEval;
-		double relOpt;
-		double absOpt;
-		
-		public approximationOptions(int maxEval, double relOpt, double absOpt){
-			this.maxEval = maxEval;
-			this.relOpt = relOpt;
-			this.absOpt = absOpt;
-		}
-		
-//		public double getOptions() {			
-//			
-//		}
-	}*/
 }

@@ -25,14 +25,18 @@ public class Controller {
 		model.setMeasurement(measurementList);
 	}
 	
-	/*public List<String[]> getMeasurementList(){
-		return model.getMeasurementList();
-	}*/
+	public void approximateMeasurement(){
+		model.approximateMeasurement();
+	}
 	
-//	public double [][] getMeasurement(){
-//		return model.getMeasurement();
-//	}
+	public void setSettings(Object[] settings){
+		model.setSettings(settings);
+	}
 	
+	public void setValues(Object[] val){
+		model.setValues(val);
+	}
+
 	public void setOrder(int order){
 		model.setOrder(order);
 	}

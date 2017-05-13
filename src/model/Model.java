@@ -21,6 +21,15 @@ public class Model extends Observable {
 		notifyObservers();
 	}
 	
+	public void approximateMeasurement(){
+		measurement.approximateMeasurement();
+		notifyObservers();
+	}
+	
+	public void setSettings(Object[] settings){
+		measurement.setSettings(settings);
+	}
+	
 //	public double[][] getMeasurement(){
 //		return measurement.getMeasurement();
 //	}
@@ -33,8 +42,21 @@ public class Model extends Observable {
 		return measurement.getStepresponseData();
 	}
 	
+	public XYSeries[] getErrorData(){
+		return measurement.getErrorData();
+	}
+	
+	public XYSeries[] getPolesData(){
+		return measurement.getPolesData();
+	}
+	
+	
 	public boolean inputExisting(){
 		return measurement.inputExisting();
+	}
+	
+	public void setValues(Object[] val){
+		measurement.setValues(val);
 	}
 	
 	
