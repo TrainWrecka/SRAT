@@ -125,6 +125,290 @@ public class Approximation {
 
 		return new Object[] { x0, k };
 	}
+	/*
+	public static final Object[] schritt(double[] poles, double[] t, int Ordnung) {
+		double[] B = new double[1];
+		B[0] = poles[0];
+
+		Complex Help = new Complex(1,0);
+
+		Complex[] A1 = new Complex[2];
+		Complex[] A2 = new Complex[2];
+		Complex[] A3 = new Complex[2];
+		Complex[] A4 = new Complex[2];
+		Complex[] A5 = new Complex[2];
+		Complex[] A6 = new Complex[2];
+		Complex[] A7 = new Complex[2];
+		Complex[] A8 = new Complex[2];
+		Complex[] A9 = new Complex[2];
+		Complex[] A10 = new Complex[2];	
+
+		Complex[] A12;
+		Complex[] A34;
+		Complex[] A56;
+		Complex[] A78;
+		Complex[] A910;	
+		
+
+		Complex[] PolesNenner = new Complex[Ordnung];
+		Complex[][] AHelp = new Complex[Ordnung][Ordnung];
+		Complex[] Poles = new Complex[Ordnung];
+
+		for(int k=0;k<Ordnung/2;k++){
+			Poles[k*2]=new Complex((-1)*Math.sqrt(Math.pow(poles[k*2+1],2)),poles[k*2+2]);
+			Poles[k*2+1]=Poles[k*2].conjugate();	
+		}
+
+		switch(Ordnung){
+			
+		case 2:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			
+			A12 = Matlab.conv(A1,A2);
+			
+			PolesNenner = A12;
+			break;	
+		case 3:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+			
+			A12 = Matlab.conv(A1,A2);
+			
+			PolesNenner = Matlab.conv(A12,A3);
+			break;
+		case 4:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+			
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+		
+			PolesNenner = Matlab.conv(A12,A34);
+			break;
+		case 5:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			
+			PolesNenner = Matlab.conv(Matlab.conv(A12,A34), A5);
+			break;
+		case 6:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A6[0] = Help;
+			A6[1] = Poles[5].multiply(-1);	
+
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			A56 = Matlab.conv(A5,A6);
+
+			PolesNenner = Matlab.conv(Matlab.conv(A12, A34), A56);
+			break;
+		case 7:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A6[0] = Help;
+			A6[1] = Poles[5].multiply(-1);
+
+			A7[0] = Help;
+			A7[1] = Poles[6].multiply(-1);
+		
+			
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			A56 = Matlab.conv(A5,A6);	
+			
+			PolesNenner = Matlab.conv(Matlab.conv(A12, A34), Matlab.conv(A56, A7)); 
+			break;
+		case 8:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A6[0] = Help;
+			A6[1] = Poles[5].multiply(-1);
+
+			A7[0] = Help;
+			A7[1] = Poles[6].multiply(-1);
+
+			A8[0] = Help;
+			A8[1] = Poles[7].multiply(-1);	
+
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			A56 = Matlab.conv(A5,A6);
+			A78 = Matlab.conv(A7,A8);
+
+			PolesNenner = Matlab.conv(Matlab.conv(A12, A34), Matlab.conv(A56, A78));
+			break;
+
+		case 9: 
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A6[0] = Help;
+			A6[1] = Poles[5].multiply(-1);
+
+			A7[0] = Help;
+			A7[1] = Poles[6].multiply(-1);
+
+			A8[0] = Help;
+			A8[1] = Poles[7].multiply(-1);
+
+			A9[0] = Help;
+			A9[1] = Poles[8].multiply(-1);
+				
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			A56 = Matlab.conv(A5,A6);
+			A78 = Matlab.conv(A7,A8);
+
+			PolesNenner = Matlab.conv(Matlab.conv(Matlab.conv(A12, A34), Matlab.conv(A56, A78)), A9);
+			break;
+		case 10:
+			A1[0] = Help;
+			A1[1] = Poles[0].multiply(-1);
+
+			A2[0] = Help;
+			A2[1] = Poles[1].multiply(-1);
+
+			A3[0] = Help;
+			A3[1] = Poles[2].multiply(-1);
+
+			A4[0] = Help;
+			A4[1] = Poles[3].multiply(-1);
+
+			A5[0] = Help;
+			A5[1] = Poles[4].multiply(-1);
+
+			A6[0] = Help;
+			A6[1] = Poles[5].multiply(-1);
+
+			A7[0] = Help;
+			A7[1] = Poles[6].multiply(-1);
+
+			A8[0] = Help;
+			A8[1] = Poles[7].multiply(-1);
+
+			A9[0] = Help;
+			A9[1] = Poles[8].multiply(-1);
+
+			A10[0] = Help;
+			A10[1] = Poles[9].multiply(-1);
+
+			A12 = Matlab.conv(A1,A2);
+			A34 = Matlab.conv(A3,A4);
+			A56 = Matlab.conv(A5,A6);
+			A78 = Matlab.conv(A7,A8);
+			A910 = Matlab.conv(A9,A10);
+				
+			PolesNenner = Matlab.conv(Matlab.conv(Matlab.conv(A12,A34), Matlab.conv(A56,A78)), A910);
+			break;
+}
+
+		double[] doublePolesNenner = new double[PolesNenner.length];
+
+		for (int i = 0; i < PolesNenner.length; i++) {
+			doublePolesNenner[i] = PolesNenner[i].getReal();
+		}
+
+		Object[] ret = new Object[3];
+		Object[] step = SVTools.step(B, doublePolesNenner, t);
+
+		ret[0] = step[0];
+		ret[1] = step[1];
+		//ret = Arrays.copyOfRange(step, 0, 1);
+		ret[2] = doublePolesNenner;
+		//ret[2] = doubleA;
+
+		return ret;
+	}*/
+
+
+
 
 	public static final Object[] schritt(double[] poles, double[] t, int Ordnung) {
 		double[] B = new double[1];
