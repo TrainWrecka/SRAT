@@ -180,7 +180,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfLaguerre.setText("1e-6");
 		tfSimplexOptimizerRelative.setText("1e-24");
 		tfSimplexOptimizerAbsolute.setText("1e-24");
-		tfNelderMeadSimplexSteps.setText("0.0001");
+		tfNelderMeadSimplexSteps.setText("0.01");
 		tfMaxEval.setText("5000");
 		rbtFilterSignalYes.setSelected(true);
 		rbtShowFilteredSignalYes.setSelected(true);

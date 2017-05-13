@@ -67,7 +67,7 @@ public class Measurement {
 
 	double laguerreAcc = 1e-10;
 	double[] simplexOpt = { 1e-24, 1e-24 };
-	double nelderSteps = 0.0001;
+	double nelderSteps = 0.01;
 	int maxEval = 5000;
 	boolean filter = true;
 	boolean showConditioned = true;
