@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.math3.complex.Complex;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -19,6 +20,7 @@ import org.jfree.chart.plot.XYPlot;
 
 import com.opencsv.CSVReader;
 
+import matlabfunctions.Matlab;
 import model.Model;
 
 import java.awt.*;
@@ -99,6 +101,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		//add action listener
 		btLoad.addActionListener(this);
+		btRun.addActionListener(this);
 
 		// Label und Texfield für k platzieren
 		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -151,7 +154,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 
@@ -209,13 +213,34 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		}
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
-				controller.setOrder(Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem()));
 				controller.setMeasurement(readCSV());
 			}
-
-			
 		}
 
+		if (e.getSource() == btRun) {
+			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
+			controller.setOrder(order);
+			if (rbtManually.isSelected() == true) {
+				double[] wp = new double[(order / 2)];
+				double[] qp = new double[wp.length];
+				double sigma = 0;
+				double K = 0;
+				for (int i = 0; i < wp.length; i++) {
+					wp[i] = Double.parseDouble(tfwp[i].getText());
+					qp[i] = Double.parseDouble(tfqp[i].getText());
+				}
+				
+				if (order % 2 == 0) {
+					sigma = 0;
+				} else {
+					sigma = Double.parseDouble(tfSigma.getText());
+				}
+				
+				//controller.setValues(new Object[]{K, wp, qp, sigma});
+			}
+			
+			controller.approximateMeasurement();
+		}
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion

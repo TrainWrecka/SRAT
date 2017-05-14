@@ -2,6 +2,8 @@ package matlabfunctions;
 
 import org.apache.commons.math3.complex.Complex;
 
+import DataProcessing.Approximation;
+
 public class Polynom {
 
 	public double[] p;
@@ -61,7 +63,7 @@ public class Polynom {
 	public Complex[] roots() {
 		return Matlab.roots(p);
 	}
-
+	
 	public Polynom subtract(Polynom b) {
 		double[] res;
 		double[] p1 = p, p2 = b.p;

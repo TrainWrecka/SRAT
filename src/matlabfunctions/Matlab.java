@@ -17,6 +17,8 @@ public class Matlab {
 	static final FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
 	static final SplineInterpolator interpolator = new SplineInterpolator();
 
+	public static double laguerreAcc = 1e-6;
+	
 	public static double acosh(double x) {
 		return Math.log(x + Math.sqrt(x * x - 1.0));
 	}
@@ -484,7 +486,7 @@ public class Matlab {
 	}
 
 	public static final Complex[] roots(double[] poly) {
-		final LaguerreSolver solver = new LaguerreSolver(/*1e-16*/1e-10);
+		final LaguerreSolver solver = new LaguerreSolver(laguerreAcc/*1e-16,1e-10*/);
 		double[] p = new double[poly.length];
 
 		// Koeffizient der höchsten Potenz auf durch Multiplikation mit einer

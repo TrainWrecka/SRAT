@@ -56,18 +56,18 @@ public class Plots extends JPanel {
 	public Plots(String title, String xylineOderscatter, String xAchse, String yAchse) {
 		this.setLayout(new GridBagLayout());
 		
-		XYSeries series3 = new XYSeries("Third");
-    	series3.add(17.0, 4.0);
-//    	series3.add(18.0, 3.0);
-//    	series3.add(19.0, 2.0);
-//    	series3.add(20.0, -3.0);
-//    	series3.add(21.0, 6.0);
-//    	series3.add(22.0, 3.0);
-    	series3.add(23.0, -4.0);
-    	series3.add(24.0, 3.0);
+//		XYSeries series3 = new XYSeries("Third");
+//    	series3.add(17.0, 4.0);
+////    	series3.add(18.0, 3.0);
+////    	series3.add(19.0, 2.0);
+////    	series3.add(20.0, -3.0);
+////    	series3.add(21.0, 6.0);
+////    	series3.add(22.0, 3.0);
+//    	series3.add(23.0, -4.0);
+//    	series3.add(24.0, 3.0);
 		
-		XYSeriesCollection dataset1=new XYSeriesCollection();
-		dataset1.addSeries(series3);
+	//	XYSeriesCollection dataset1=new XYSeriesCollection();
+	//	dataset1.addSeries(series3);
 		
 		
 			
@@ -103,7 +103,7 @@ public class Plots extends JPanel {
 //			plot.setRangeGridlinePaint(Color.black);
 		}
 		else if(xylineOderscatter.toLowerCase()=="scatter"){
-			JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset1);
+			JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset);
 			zeroesChartPanel = new ChartPanel(chart);
 			add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));
