@@ -21,21 +21,16 @@ import javax.swing.JLabel;
 public class VariablePanel extends JPanel implements ActionListener{
 	
 	private JLabel lbK =new JLabel("K:");
-//    private JLabel lbwp = new JLabel("\u03C9p:");
-//    private JLabel lbqp = new JLabel("qp:");
     private JLabel lbSigma=new JLabel("\u03C3:");
     private JLabel lbError=new JLabel("Error:");
-    
-    
     private JLabel[] lbwp = new JLabel[5];
     private JLabel[] lbqp = new JLabel[5];
     
-    public JLabel lbKShowValues =new JLabel();
-    public JLabel lbwpShowValues = new JLabel();
-    public JLabel lbqpShowValues = new JLabel();
-    public JLabel lbSigmaShowValues = new JLabel();
-    public JLabel lbErrorShowValues = new JLabel();
     
+    
+    public JLabel lbKValues =new JLabel();
+    public JLabel lbSigmaValues = new JLabel();
+    public JLabel lbErrorValues = new JLabel();
     public JLabel[] lbwpValues = new JLabel[5];
     public JLabel[] lbqpValues = new JLabel[5];
     
@@ -77,7 +72,7 @@ public class VariablePanel extends JPanel implements ActionListener{
 		
 		
 		
-		add(lbKShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbKValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 50, 0, 0), 0, 0));
 		
 		for(int i=0; i<lbwp.length;i++){
@@ -92,9 +87,9 @@ public class VariablePanel extends JPanel implements ActionListener{
 				new Insets(0, 50, 0, 0), 0, 0));
 		}
 		
-		add(lbSigmaShowValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbSigmaValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbErrorShowValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbErrorValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 10, 0), 0, 0));	
 		
 		
