@@ -75,6 +75,7 @@ public class Plots extends JPanel {
 		if(xylineOderscatter.toLowerCase()=="xyline"){
 			if(title.toLowerCase()=="stepresponse"){
 				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
+				JFreeChartDPIFix.applyChartTheme(chart);
 				stepresponseChartPanel = new ChartPanel(chart);
 				add(stepresponseChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
 					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -88,6 +89,7 @@ public class Plots extends JPanel {
 			else if(title.toLowerCase()=="error"){
 				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
 				errorChartPanel = new ChartPanel(chart);
+				JFreeChartDPIFix.applyChartTheme(chart);
 				add(errorChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
 						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 				errorChartPanel.setMouseWheelEnabled(true);
@@ -104,6 +106,7 @@ public class Plots extends JPanel {
 		}
 		else if(xylineOderscatter.toLowerCase()=="scatter"){
 			JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset);
+			JFreeChartDPIFix.applyChartTheme(chart);
 			zeroesChartPanel = new ChartPanel(chart);
 			add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));

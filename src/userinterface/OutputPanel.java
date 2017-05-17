@@ -49,7 +49,7 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	private Plots ErrorPlot = new Plots("error", "xyline", "time", "In/Out");
 	private Plots StepresponsePlot = new Plots("stepresponse", "xyline", "time", "In/Out");
-	private Plots ZeroesPlot = new Plots("zereos", "scatter", "", "");
+	private Plots ZeroesPlot = new Plots("poles", "scatter", "", "");
 
 	private JPanel TabStepresponsePanel = new JPanel(new GridBagLayout());
 	private JPanel TabErrorPanel = new JPanel(new GridBagLayout());

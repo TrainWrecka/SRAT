@@ -41,8 +41,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JLabel lbFilterSignal=new JLabel("Filter Signal");
 	private JLabel lbShowFilteredSignal=new JLabel("Show filtered Signal");
 	
-	private JLabel lbFill=new JLabel("");
-	
+	private JLabel lbFill
+	=new JLabel("");
+	private JLabel lbFilter=new JLabel("Filter accuracy");
 	
 	private JTextField tfLaguerre=new JTextField();
 	private JTextField tfSimplexOptimizerRelative=new JTextField();
@@ -63,12 +64,21 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JButton btApply=new JButton("Apply");
 	private JButton btDefaults=new JButton("Defaults");
 	
+	static final int SlideValueMin = 0;
+	static final int SlideValueMax = 100;
+	static final int SlideValueInit = 100;
 	
+	private JSlider Filter=new JSlider(JSlider.HORIZONTAL,SlideValueMin, SlideValueMax, SlideValueInit);
 	
 	public SettingsPanel(Controller controller) {
 		super(new GridBagLayout());
-		
 		this.controller = controller;
+		
+		Filter.setMajorTickSpacing(20);
+		Filter.setMinorTickSpacing(5);
+		Filter.setPaintTicks(true);
+		Filter.setPaintLabels(true);	
+		
 		
 		groupFilterSignal.add(rbtFilterSignalYes);
 		groupFilterSignal.add(rbtFilterSignalNo);
@@ -112,18 +122,17 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 				new Insets(10, 0, 0, 10), 0, 0));
 		
 		
-		add(lbFill, new GridBagConstraints(0, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(lbFill, new GridBagConstraints(0, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		add(btDefaults, new GridBagConstraints(1, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(btDefaults, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 		btApply.setPreferredSize(btDefaults.getMinimumSize());
 		
-		add(btApply, new GridBagConstraints(2, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(btApply, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 		
 
-		add(lbFill, new GridBagConstraints(0, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
+		
 //		add(btOk, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 //				new Insets(10, 0, 0, 10), 0, 0));
 //		add(btCancel, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
@@ -131,6 +140,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		
 //		setBorder(MyBorderFactory.createMyBorder("Settings"));
 
+		add(lbFilter, new GridBagConstraints(0, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(10, 10, 0, 20), 0, 0));
+		add(Filter, new GridBagConstraints(1, 8, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(10, 0, 0, 10), 0, 0));
+		
 		btApply.addActionListener(this);
 //		btOk.addActionListener(this);
 //		btCancel.addActionListener(this);
@@ -182,6 +196,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfMaxEval.setText("5000");
 		rbtFilterSignalYes.setSelected(true);
 		rbtShowFilteredSignalYes.setSelected(true);
+		Filter.setValue(100);
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion

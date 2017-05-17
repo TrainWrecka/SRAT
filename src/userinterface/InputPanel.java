@@ -33,7 +33,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private int wpPlacement = 5;
 	private int qpPlacement = 6;
 	// Buttons
-	public JButton btLoad = new JButton("Load");
+	private JButton btLoad = new JButton("Load");
 	private JButton btRun = new JButton("Run");
 	private JButton btCancel = new JButton("Cancel");
 	
@@ -44,6 +44,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	// JCombobox
 	private String comboBoxListe[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
+	
+
+
+	
 	// Labels
 
 	private JLabel[] lbwp = new JLabel[5];
