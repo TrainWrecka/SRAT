@@ -151,6 +151,17 @@ public class VariablePanel extends JPanel implements ActionListener{
 		setBorder(MyBorderFactory.createMyBorder("Variables"));
 	}
 	
+	public void setValues(Object[] values){
+		 //Object[] {K, wp, qp, sigma, meanError};
+		 
+		
+		lbKShowValues.setText((String) values[0]);
+		 
+		 
+		 lbSigmaShowValues.setText((String) values[3]);
+		 lbErrorShowValues.setText((String) values[4]);
+	}
+	
 	
 	public void update(Observable obs, Object obj) {}
 	

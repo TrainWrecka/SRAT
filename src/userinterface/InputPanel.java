@@ -228,7 +228,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				double[] wp = new double[(order / 2)];
 				double[] qp = new double[wp.length];
 				double sigma = 0;
-				double K = 0;
+				double K = Double.parseDouble(tfK.getText());
 				for (int i = 0; i < wp.length; i++) {
 					wp[i] = Double.parseDouble(tfwp[i].getText());
 					qp[i] = Double.parseDouble(tfqp[i].getText());
@@ -240,7 +240,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					sigma = Double.parseDouble(tfSigma.getText());
 				}
 				
-				//controller.setValues(new Object[]{K, wp, qp, sigma});
+				controller.setValues(new Object[]{K, wp, qp, sigma});
 			}
 			
 			controller.approximateMeasurement();
