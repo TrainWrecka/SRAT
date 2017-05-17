@@ -43,7 +43,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	
 	private JLabel lbFill
 	=new JLabel("");
-	private JLabel lbFilter=new JLabel("Filter accuracy");
+	private JLabel lbFilter=new JLabel("Filter accuracy in %");
 	
 	private JTextField tfLaguerre=new JTextField();
 	private JTextField tfSimplexOptimizerRelative=new JTextField();
@@ -78,6 +78,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		Filter.setMinorTickSpacing(5);
 		Filter.setPaintTicks(true);
 		Filter.setPaintLabels(true);	
+	
 		
 		
 		groupFilterSignal.add(rbtFilterSignalYes);
