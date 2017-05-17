@@ -20,11 +20,13 @@ import org.apache.commons.math3.util.FastMath;
 import org.jfree.data.xy.XYSeries;
 
 import com.sun.org.apache.bcel.internal.generic.FMUL;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import matlabfunctions.Filter;
 import matlabfunctions.FilterFactory;
 import matlabfunctions.Filtfilt;
 import matlabfunctions.Matlab;
+import matlabfunctions.Polynom;
 import matlabfunctions.SVTools;
 import userinterface.StatusBar;
 
@@ -43,6 +45,8 @@ public class Measurement {
 	private double[] approxData;
 	private double[] errorData;
 
+	private Complex[] poles;
+
 	private double tNorm;
 	private double nor = (175 * 30);
 	double offset = 0;
@@ -52,7 +56,6 @@ public class Measurement {
 	String[] qp;
 	String sigma;
 	String meanError;
-	
 
 	//private List<String[]> measurementList;
 
@@ -95,7 +98,7 @@ public class Measurement {
 	public void approximateMeasurement() {
 
 		int unitStepLocation = 0;
-		
+
 		if (input) {
 			unitStepLocation = getStepLocation(inputData);
 		} else {
@@ -175,7 +178,6 @@ public class Measurement {
 
 		polesPlotData.setPlotData(new Object[][] { { polesData[0], "-" }, { polesData[1], "Poles" } });
 
-		
 		calcValues(polesComplex);
 	}
 
@@ -187,8 +189,6 @@ public class Measurement {
 		this.filter = (boolean) settings[4];
 		this.showConditioned = (boolean) settings[5];
 	}
-
-	
 
 	//	public double[][] getMeasurement() {
 	//		return measurement;
@@ -448,8 +448,6 @@ public class Measurement {
 		this.order = order;
 	}
 
-
-
 	private Complex[] getPoles(double[] A) {
 
 		Complex[] poles = Matlab.roots(A);
@@ -460,15 +458,15 @@ public class Measurement {
 
 		return poles;
 	}
-	
-	private double[][] convPoles(Complex[] poles){
+
+	private double[][] convPoles(Complex[] poles) {
 		double[][] polesData = new double[2][poles.length];
 
 		for (int i = 0; i < poles.length; i++) {
 			polesData[0][i] = poles[i].getReal();
 			polesData[1][i] = poles[i].getImaginary();
 		}
-		
+
 		return polesData;
 	}
 
@@ -481,50 +479,112 @@ public class Measurement {
 			wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
 			double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
 			double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
-			qp[i] = Double.toString(-(temp1/temp2));
+			qp[i] = Double.toString(-(temp1 / temp2));
 		}
 
 		if (poles.length % 2 == 0) {
 			sigma = "-";
 		} else {
-			sigma = Double.toString(poles[poles.length-1].getReal());
+			sigma = Double.toString(poles[poles.length - 1].getReal());
 		}
-		
+
 		meanError = Double.toString(Matlab.mean(errorData));
+
+		K = Double.toString(approxData[approxData.length - 1] - offset);
+	}
+
+	public Object[] getValues() {
+		return new Object[] { K, wp, qp, sigma, meanError };
+	}
+
+	public void setValues(Object[] val) {
+		stepData = setPoles(val);
 		
-		K = Double.toString(approxData[approxData.length-1]-offset);
+		if (input) {
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepDataConditioned, "Step" }, { approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepData, "Step" }, { approxData, "Approximation" } });
+			}
+
+		} else {
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepDataConditioned, "Step" },
+						{ approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepData, "Step" },
+						{ approxData, "Approximation" } });
+			}
+
+		}
 	}
-	
-	private Object[] getValues(){
-		return new Object[] {K, wp, qp, sigma, meanError};
-	}
-	
-	public void setValues(Object[] val){
-		setPoles(val);
-	}
+
+/*	private Complex[] setPoles(Object[] val) {
+		double K = (double) val[0]; //???
+		double[] wp = (double[]) val[1];
+		double[] qp = (double[]) val[2];
+		double sigma = (double) val[3];
+
+		//double[] poles = new double[order*2+order%2];
+		Complex[] poles = new Complex[order];
+
+		for (int i = 0; i < order; i += 2) {
+			Complex temp = new Complex(Math.pow(wp[i] / qp[i], 2) - 4 * Math.pow(wp[i], 2)).sqrt();
+			//temp = temp.sqrt().divide(2);
+			poles[i] = new Complex((-1) * ((wp[i] / qp[i]) + temp.getReal()) / 2, (-1) * temp.getImaginary() / 2);
+			poles[i + 1] = new Complex(-((wp[i] / qp[i]) - temp.getReal()) / 2, -temp.getImaginary() / 2);
+
+			//			poles[i++] = -((wp[i]/qp[i])+(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+			//			poles[i++] = -((wp[i]/qp[i])-(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+		}
+
+		if (order % 2 == 1) {
+			poles[poles.length] = new Complex(sigma);
+		}
+
+		return poles;
+	}*/
 	
 	private double[] setPoles(Object[] val){
-		double K = (double)val[0];
-		double[] wp = (double[])val[1];
-		double[] qp = (double[])val[2];
-		double sigma = (double)val[3];
+		double K = (double) val[0]; //???
+		double[] wp = (double[]) val[1];
+		double[] qp = (double[]) val[2];
+		double sigma = (double) val[3];
+		double[] denom = new double[1];
+		denom[0] = 1;
 		
-		double[] poles = new double[order*2+order%2];
+		double[] B = new double[1];
+		B[0] = K;
 		
-		for(int i = 0; i < order;){
-			poles[i++] = -((wp[i]/qp[i])+(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
-			poles[i++] = -((wp[i]/qp[i])-(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+		for(int i = 0; i < wp.length; i++){
+			B[0] *= Math.pow(wp[i], 2);
 		}
 		
-		if(order % 2 == 1){
-			poles[poles.length] = sigma;
+		for(int i = 0; i < order/2; i++){
+			double[] poly = {1, wp[i]/qp[i], Math.pow(wp[i], 2)};
+			denom = Matlab.conv(poly, denom);
 		}
 		
-		return poles;
+		if(order%2 == 1){
+			denom = Matlab.conv(denom, new double[]{1, (-1)*sigma});
+		}
+		
+		Complex[] A = Matlab.roots(denom);
+		
+		double[] doubleA = new double[A.length];
+
+		for (int i = 0; i < A.length; i++) {
+			doubleA[i] = A[i].getReal();
+		}
+		
+		return (double[]) SVTools.step(B, doubleA, timeData)[0];
 	}
-	
-	public static void main(String[] args) {
 		
+
+	public static void main(String[] args) {
+
 	}
 
 }

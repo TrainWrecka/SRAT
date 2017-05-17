@@ -41,7 +41,7 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	public ErrorPlot Errorplot = new ErrorPlot("ERROR");
 
-	private JPanel DefaultVariablePanel = new VariablePanel();
+	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
 	private DataPanel StepresponsePanel = new DataPanel();
 	private DataPanel ZeroesPanel = new DataPanel();
@@ -118,6 +118,8 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 		for(int i = 0; i < model.getStepresponseData().length; i++){
 			StepresponsePanel.addData(model.getStepresponseData()[i], StepresponsePlot);
 		}
+		
+		DefaultVariablePanel.setValues(model.getValues());
 	
 	}
 

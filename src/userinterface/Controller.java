@@ -36,6 +36,10 @@ public class Controller {
 	public void setValues(Object[] val){
 		model.setValues(val);
 	}
+	
+	public Object[] getValues(){
+		return model.getValues();
+	}
 
 	public void setOrder(int order){
 		model.setOrder(order);
