@@ -228,7 +228,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				double[] wp = new double[(order / 2)];
 				double[] qp = new double[wp.length];
 				double sigma = 0;
-				double K = 0;
+				double K = Double.parseDouble(tfK.getText());
 				for (int i = 0; i < wp.length; i++) {
 					wp[i] = Double.parseDouble(tfwp[i].getText());
 					qp[i] = Double.parseDouble(tfqp[i].getText());
@@ -240,10 +240,12 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					sigma = Double.parseDouble(tfSigma.getText());
 				}
 				
-				//controller.setValues(new Object[]{K, wp, qp, sigma});
+				controller.setValues(new Object[]{K, wp, qp, sigma});
+			} else {
+				controller.approximateMeasurement();
 			}
 			
-			controller.approximateMeasurement();
+			
 		}
 	}
 
@@ -275,180 +277,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
 		}
-		//		switch (Ordnung) {
-		//			case "1":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 1) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(true);
-		//				tfSigma.setEditable(true);
-		//				break;
-		//
-		//			case "2":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 2) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(false);
-		//				tfSigma.setEditable(false);
-		//				break;
-		//
-		//			case "3":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 3) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(true);
-		//				tfSigma.setEditable(true);
-		//				break;
-		//
-		//			case "4":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 4) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(false);
-		//				tfSigma.setEditable(false);
-		//				break;
-		//
-		//			case "5":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 5) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(true);
-		//				tfSigma.setEditable(true);
-		//				break;
-		//
-		//			case "6":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 6) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(false);
-		//				tfSigma.setEditable(false);
-		//				break;
-		//
-		//			case "7":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 7) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(true);
-		//				tfSigma.setEditable(true);
-		//				break;
-		//
-		//			case "8":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 8) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(false);
-		//				tfSigma.setEditable(false);
-		//				break;
-		//
-		//			case "9":
-		//				for (int i = 0; i < 10; i++) {
-		//					if (i < 9) {
-		//						lbwp[i].setEnabled(true);
-		//						lbqp[i].setEnabled(true);
-		//						tfwp[i].setEnabled(true);
-		//						tfqp[i].setEnabled(true);
-		//					} else {
-		//						lbwp[i].setEnabled(false);
-		//						lbqp[i].setEnabled(false);
-		//						tfwp[i].setEnabled(false);
-		//						tfqp[i].setEnabled(false);
-		//					}
-		//				}
-		//				lbSigma.setEnabled(true);
-		//				tfSigma.setEditable(true);
-		//				break;
-		//
-		//			case "10":
-		//				for (int i = 0; i < 10; i++) {
-		//					lbwp[i].setEnabled(true);
-		//					lbqp[i].setEnabled(true);
-		//					tfwp[i].setEnabled(true);
-		//					tfqp[i].setEnabled(true);
-		//				}
-		//				lbSigma.setEnabled(false);
-		//				tfSigma.setEditable(false);
-		//				break;
-		//		}
+		
 	}
 
 	/*
@@ -477,5 +306,25 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading...");
 
 		return measurementList;
+	}
+	
+	public void update(Observable obs, Object obj) {
+		Model model = (Model) obs;
+		
+		Object[] values = model.getValues();
+	
+		String K = (String) values[0];
+		String[] wp = (String[]) values[1];
+		String[] qp = (String[]) values[2];
+		String sigma = (String) values[3];
+		String meanError = (String) values[4];
+		
+		for(int i = 0; i < lbwp.length; i++){
+			tfqp[i].setText(qp[i]);
+			tfwp[i].setText(wp[i]);
+		}
+		 
+		tfK.setText(K);
+		tfSigma.setText(sigma);		
 	}
 }

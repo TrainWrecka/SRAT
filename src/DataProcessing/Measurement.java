@@ -18,13 +18,16 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 import org.apache.commons.math3.util.FastMath;
 import org.jfree.data.xy.XYSeries;
+import org.jfree.util.ArrayUtilities;
 
 import com.sun.org.apache.bcel.internal.generic.FMUL;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import matlabfunctions.Filter;
 import matlabfunctions.FilterFactory;
 import matlabfunctions.Filtfilt;
 import matlabfunctions.Matlab;
+import matlabfunctions.Polynom;
 import matlabfunctions.SVTools;
 import userinterface.StatusBar;
 
@@ -43,16 +46,17 @@ public class Measurement {
 	private double[] approxData;
 	private double[] errorData;
 
+	private Complex[] poles;
+
 	private double tNorm;
 	private double nor = (175 * 30);
 	double offset = 0;
 
 	String K;
-	String[] wp;
-	String[] qp;
+	String[] wp = new String[5];
+	String[] qp = new String[5];
 	String sigma;
 	String meanError;
-	
 
 	//private List<String[]> measurementList;
 
@@ -61,6 +65,7 @@ public class Measurement {
 	private PlotData polesPlotData = new PlotData();
 
 	private boolean input = false;
+	private boolean normed = false;
 
 	int stepIndex = 0;
 	int order = 2;
@@ -71,13 +76,15 @@ public class Measurement {
 	int maxEval = 5000;
 	boolean filter = true;
 	boolean showConditioned = true;
+	boolean autoFilter = true;
+	int filterPercentage = 80;
+	int unitStepLocation;
 
 	public Measurement() {
 
 	}
 
 	public void setMeasurement(List<String[]> measurementList) {
-		//this.measurementList = measurementList;
 
 		extractData(convertList(measurementList));
 
@@ -90,47 +97,37 @@ public class Measurement {
 			stepPlotData.setPlotData(new Object[][] { { timeData, "Time" }, new Object[] { stepData, "Step" } });
 		}
 
+		normed = false;
 	}
 
-	public void approximateMeasurement() {
-
-		int unitStepLocation = 0;
-		
-		if (input) {
-			unitStepLocation = getStepLocation(inputData);
-		} else {
-			unitStepLocation = 10;
-		}
+	public void filtData() {
+		unitStepLocation = (input) ? getStepLocation(inputData) : 10;
 
 		offset = getOffset(stepData, unitStepLocation);
 
 		boolean noise = checkNoise(stepData, unitStepLocation);
 
 		if (noise) {
-			stepIndex = 0;
-			stepDataFiltered = filtFunction(stepData, 30, 100.9e-3);
+			stepDataFiltered = signalFilter(stepData, autoFilter, filterPercentage);
 			stepIndex = getLastOffsetIntersection(stepDataFiltered, offset);
-		}
-
-		else {
-			stepIndex = getFirstSignalChange(stepData);
-		}
-
-		if (noise) {
 			stepDataConditioned = removeDeadTime(removeOffset(stepDataFiltered, offset),
 					new int[] { stepIndex, stepData.length });
-		}
-
-		else {
+		} else {
+			stepIndex = getFirstSignalChange(stepData);
 			stepDataConditioned = removeDeadTime(removeOffset(stepData, offset), new int[] { stepIndex, stepData.length });
 		}
+	}
+
+	public void approximateMeasurement() {
 
 		if (input) {
 			inputDataConditioned = removeDeadTime(removeOffset(inputData, getOffset(inputData, unitStepLocation)),
 					new int[] { stepIndex, inputData.length });
 		}
 
-		normTime();
+		if (normed == false) {
+			normTime();
+		}
 
 		timeDataConditioned = removeDeadTime(timeData, new int[] { 0, timeData.length - stepIndex });
 
@@ -142,6 +139,10 @@ public class Measurement {
 		double[] A = (double[]) approxRet[2];
 
 		stepPlotData.removeStepresponseData();
+
+		denormTime();
+		//approxData = addOffset(addDeadTime(approxData), offset);
+		
 
 		if (input) {
 			if (showConditioned) {
@@ -171,11 +172,11 @@ public class Measurement {
 		errorPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { errorData, "Error" } });
 
 		Complex[] polesComplex = getPoles(A);
+		polesComplex = Matlab.sort(polesComplex);
 		double[][] polesData = convPoles(polesComplex);
 
 		polesPlotData.setPlotData(new Object[][] { { polesData[0], "-" }, { polesData[1], "Poles" } });
 
-		
 		calcValues(polesComplex);
 	}
 
@@ -186,9 +187,9 @@ public class Measurement {
 		this.maxEval = (int) settings[3];
 		this.filter = (boolean) settings[4];
 		this.showConditioned = (boolean) settings[5];
+		this.autoFilter = (boolean) settings[6];
+		this.filterPercentage = (int) settings[7];
 	}
-
-	
 
 	//	public double[][] getMeasurement() {
 	//		return measurement;
@@ -350,12 +351,28 @@ public class Measurement {
 		}
 		return signal;
 	}
+	
+	private double[] addOffset(double[] signal, double offset){
+		for (int i = 0; i < signal.length; i++) {
+			signal[i] += offset;
+		}
+		return signal;
+	}
 
 	/*
 	 * removes the deadtime
 	 */
 	private double[] removeDeadTime(double[] signal, int[] range) {
 		return Arrays.copyOfRange(signal, range[0], range[1]);
+	}
+	
+	private double[] addDeadTime(double[] signal) {
+
+		double[] ret = new double[timeData.length];
+		Arrays.fill(ret, 0.0);
+		System.arraycopy(signal, 0, ret, timeData.length - approxData.length, signal.length);
+		
+		return ret;
 	}
 
 	/*
@@ -442,13 +459,19 @@ public class Measurement {
 		for (int i = 0; i < timeData.length; i++) {
 			timeData[i] = timeData[i] / tNorm * nor;
 		}
+
+		normed = true;
+	}
+
+	private void denormTime() {
+		for (int i = 0; i < timeDataConditioned.length; i++) {
+			timeDataConditioned[i] = timeDataConditioned[i] / nor * tNorm;
+		}
 	}
 
 	public void setOrder(int order) {
 		this.order = order;
 	}
-
-
 
 	private Complex[] getPoles(double[] A) {
 
@@ -460,71 +483,205 @@ public class Measurement {
 
 		return poles;
 	}
-	
-	private double[][] convPoles(Complex[] poles){
+
+	private double[][] convPoles(Complex[] poles) {
 		double[][] polesData = new double[2][poles.length];
 
 		for (int i = 0; i < poles.length; i++) {
 			polesData[0][i] = poles[i].getReal();
 			polesData[1][i] = poles[i].getImaginary();
 		}
-		
+
 		return polesData;
 	}
 
 	private void calcValues(Complex[] poles) {
 		sigma = "-";
-		wp = new String[(int) Math.floor(poles.length / 2)];
-		qp = new String[wp.length];
 
 		for (int i = 0; i < wp.length; i++) {
-			wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
-			double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
-			double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
-			qp[i] = Double.toString(-(temp1/temp2));
+			if (i < Math.floor(poles.length / 2)) {
+				wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
+				double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
+				double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
+				qp[i] = Double.toString(-(temp1 / temp2));
+			} else {
+				wp[i] = "-";
+				qp[i] = "-";
+			}
+
 		}
 
 		if (poles.length % 2 == 0) {
 			sigma = "-";
 		} else {
-			sigma = Double.toString(poles[poles.length-1].getReal());
+			sigma = Double.toString(poles[poles.length - 1].getReal());
 		}
-		
+
 		meanError = Double.toString(Matlab.mean(errorData));
-		
-		K = Double.toString(approxData[approxData.length-1]-offset);
+
+		K = Double.toString(approxData[approxData.length - 1]);
 	}
-	
-	private Object[] getValues(){
-		return new Object[] {K, wp, qp, sigma, meanError};
+
+	public Object[] getValues() {
+		return new Object[] { K, wp, qp, sigma, meanError };
 	}
-	
-	public void setValues(Object[] val){
-		setPoles(val);
-	}
-	
-	private double[] setPoles(Object[] val){
-		double K = (double)val[0];
-		double[] wp = (double[])val[1];
-		double[] qp = (double[])val[2];
-		double sigma = (double)val[3];
-		
-		double[] poles = new double[order*2+order%2];
-		
-		for(int i = 0; i < order;){
-			poles[i++] = -((wp[i]/qp[i])+(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
-			poles[i++] = -((wp[i]/qp[i])-(Math.sqrt(Math.pow(wp[i]/qp[i], 2)-4*Math.pow(wp[i], 2)))/2);
+
+	public void setValues(Object[] val) {
+		stepDataConditioned = setPoles(val);
+
+		if (input) {
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepDataConditioned, "Step" }, { approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
+						new Object[] { stepData, "Step" }, { approxData, "Approximation" } });
+			}
+
+		} else {
+			if (showConditioned) {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepDataConditioned, "Step" },
+						{ approxData, "Approximation" } });
+			} else {
+				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepData, "Step" },
+						{ approxData, "Approximation" } });
+			}
+
 		}
-		
-		if(order % 2 == 1){
-			poles[poles.length] = sigma;
-		}
-		
-		return poles;
 	}
-	
+
+	private double[] setPoles(Object[] val) {
+		double K = (double) val[0]; //???
+		double[] wp = (double[]) val[1];
+		double[] qp = (double[]) val[2];
+		double sigma = (double) val[3];
+		double[] denom = new double[1];
+		denom[0] = 1;
+
+		double[] B = new double[1];
+		B[0] = K;
+
+		for (int i = 0; i < wp.length; i++) {
+			B[0] *= Math.pow(wp[i], 2);
+		}
+
+		for (int i = 0; i < order / 2; i++) {
+			double[] poly = { 1, wp[i] / qp[i], Math.pow(wp[i], 2) };
+			denom = Matlab.conv(poly, denom);
+		}
+
+		if (order % 2 == 1) {
+			denom = Matlab.conv(denom, new double[] { 1, (-1) * sigma });
+			B[0] *= Math.abs(sigma);
+		}
+
+		/*Complex[] A = Matlab.roots(denom);
+		
+		double[] doubleA = new double[A.length];
+		
+		for (int i = 0; i < A.length; i++) {
+			doubleA[i] = A[i].getReal();
+		}*/
+
+		for (int i = 0; i < this.wp.length; i++) {
+			if (i < Math.floor(wp.length)) {
+				this.wp[i] = Double.toString(wp[i]);
+				this.qp[i] = Double.toString(qp[i]);
+			} else {
+				this.wp[i] = "-";
+				this.qp[i] = "-";
+			}
+		}
+
+		this.K = Double.toString(K);
+		this.sigma = Double.toString(sigma);
+		this.meanError = "-";
+
+		//return (double[]) SVTools.step(B, doubleA, timeDataConditioned)[0];
+		return (double[]) SVTools.step(B, denom, timeDataConditioned)[0];
+	}
+
+	private double[] signalFilter(double[] signal, boolean modeAuto, int percent) {
+		double errorDetection[] = new double[] { 2e-7, 3.2e-9, 3e-5, 4e-3 };
+		double errorCompare[] = new double[] { 5e-7, 10e-7, 5e-4, 5e-3 };
+
+		//if(noise)
+		//	ret
+		double noiseError;
+		int stepLoc = getStepLocation(inputData);
+		double offset = getOffset(signal, stepLoc);
+
+		int max_iN = 30;
+		int index = 0;
+		double[] diff = new double[signal.length];
+		double[] signalFiltered = new double[signal.length];
+
+		signalFiltered = filtfiltSimple(signal, max_iN);
+
+		double percentRatio = 0;
+
+		for (int i = 0; i < signalFiltered.length; i++) {
+			diff[i] = Math.pow((signal[i] - signalFiltered[i]), 6);
+		}
+		noiseError = Matlab.max(diff);
+
+		for (int i = 0; i < errorCompare.length; i++) {
+			if (noiseError < errorCompare[i]) {
+				index = i;
+			}
+		}
+
+		for (int iN = max_iN; iN > 0; iN--) {
+			signalFiltered = filtfiltSimple(signal, iN);
+			for (int i = 0; i < signalFiltered.length; i++) {
+				diff[i] = Math.pow((signal[i] - signalFiltered[i]), 6);
+			}
+			noiseError = Matlab.max(diff);
+
+			if (noiseError < errorDetection[index]) {
+				percentRatio = iN / 100.0;
+				break;
+			}
+
+		}
+
+		if (modeAuto == false) {
+			int iN = (int) Math.ceil(percent * percentRatio);
+			iN = (iN <= 2) ? 2 : iN;
+
+			signalFiltered = filtfiltSimple(signal, iN);
+		}
+
+		return signalFiltered;
+	}
+
+	private double[] filtfiltSimple(double[] signal, int iN) {
+		ArrayList<Double> signalFilteredList;
+		double[] signalFiltered = new double[signal.length];
+
+		ArrayList<Double> signalList = new ArrayList<Double>();
+		for (double d : signal)
+			signalList.add(d);
+
+		ArrayList<Double> vectorA = new ArrayList<Double>();
+		vectorA.add(1.0);
+
+		ArrayList<Double> vectorB = new ArrayList<Double>();
+		for (int i = 0; i < iN; i++) {
+			vectorB.add(1.0 / iN);
+		}
+
+		signalFilteredList = Filtfilt.doFiltfilt(vectorB, vectorA, signalList);
+
+		for (int i = 0; i < signalFilteredList.size(); i++) {
+			signalFiltered[i] = signalFilteredList.get(i);
+		}
+
+		return signalFiltered;
+	}
+
 	public static void main(String[] args) {
-		
+
 	}
 
 }

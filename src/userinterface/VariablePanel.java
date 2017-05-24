@@ -158,6 +158,24 @@ public class VariablePanel extends JPanel implements ActionListener{
 		setBorder(MyBorderFactory.createMyBorder("Variables"));
 	}
 	
+	public void setValues(Object[] values){
+		String K = (String) values[0];
+		String[] wp = (String[]) values[1];
+		String[] qp = (String[]) values[2];
+		String sigma = (String) values[3];
+		String meanError = (String) values[4];
+		
+		for(int i = 0; i < lbwp.length; i++){
+			lbwpValues[i].setText(wp[i]);
+			lbqpValues[i].setText(qp[i]);
+		}
+		 
+		lbKValues.setText(K);
+		lbSigmaValues.setText(sigma);
+		lbErrorValues.setText(meanError);
+	}
+
+	
 	
 	public void update(Observable obs, Object obj) {}
 	
