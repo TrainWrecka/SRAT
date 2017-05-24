@@ -117,6 +117,8 @@ public class Plots extends JPanel {
 			plot.setDomainGridlinePaint(Color.black);
 			plot.setRangeGridlinePaint(Color.black);
 			
+			
+			
 			Shape cross = ShapeUtilities.createDiagonalCross(5, 0.3f);
 			XYItemRenderer renderer = plot.getRenderer();
 			renderer.setSeriesShape(0, cross);

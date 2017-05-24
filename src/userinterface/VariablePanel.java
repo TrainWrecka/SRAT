@@ -34,6 +34,8 @@ public class VariablePanel extends JPanel implements ActionListener{
     public JLabel[] lbwpValues = new JLabel[5];
     public JLabel[] lbqpValues = new JLabel[5];
     
+    private int wpPlacement = 1;
+	private int qpPlacement = 2;
 
     
 //    private Font myfont= new Font("myFont",1,100);
@@ -46,14 +48,25 @@ public class VariablePanel extends JPanel implements ActionListener{
 		for(int i=0; i<lbwp.length;i++){
 			lbwp[i]= new JLabel("\u03C9p"+(i+1)+":");
 			lbqp[i]= new JLabel("qp"+(i+1)+":");
-			
-	
+			lbwpValues[i]= new JLabel();
+			lbqpValues[i]= new JLabel();
 		}
+		
 		for(int i=0; i<lbwp.length;i++){
-		add(lbwp[i], new GridBagConstraints( 0, (i+1), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbwp[i], new GridBagConstraints( 0, (wpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 0, 0, 0), 0, 0));
-		add(lbqp[i], new GridBagConstraints( 0, (i+6), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbqp[i], new GridBagConstraints( 0, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 0, 0, 0), 0, 0));
+		
+		add(lbwpValues[i], new GridBagConstraints( 1, (wpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+				new Insets(0, 50, 0, 0), 0, 0));
+		add(lbqpValues[i], new GridBagConstraints( 1, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+				new Insets(0, 50, 0, 0), 0, 0));
+		
+		
+		wpPlacement=wpPlacement+2;
+		qpPlacement=qpPlacement+2;
+		
 		}
 		
 		
@@ -75,16 +88,10 @@ public class VariablePanel extends JPanel implements ActionListener{
 		add(lbKValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 50, 0, 0), 0, 0));
 		
-		for(int i=0; i<lbwp.length;i++){
-			lbwpValues[i]= new JLabel();
-			lbqpValues[i]= new JLabel();
-		}
+		
 		
 		for(int i=0; i<lbwp.length;i++){
-		add(lbwpValues[i], new GridBagConstraints( 1, (i+1), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbqpValues[i], new GridBagConstraints( 1, (i+6), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-				new Insets(0, 50, 0, 0), 0, 0));
+		
 		}
 		
 		add(lbSigmaValues, new GridBagConstraints( 1, 11, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
