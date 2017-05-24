@@ -73,6 +73,7 @@
   
   	public void update(Observable obs, Object obj) {
 		outputPanel.update(obs, obj);
+		inputPanel.update(obs, obj);
 	}
 
 	@Override
