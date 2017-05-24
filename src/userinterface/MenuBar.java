@@ -19,8 +19,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
+import javax.swing.event.MenuListener;
 
-public class MenuBar extends JMenuBar implements Observer, ActionListener {
+public class MenuBar extends JMenuBar implements Observer, ActionListener{
 	JMenu menu, submenu,optionsMenu;
 	JMenuItem menuItemOnTop, submenuItem, exampleItem, settingsItem;
 	JFrame frame;
@@ -40,7 +41,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 
 		menu.addSeparator();
 		submenu = new JMenu("A submenu");
-		submenu.setMnemonic(KeyEvent.VK_S);
+		submenu.setMnemonic(KeyEvent.VK_L);
 		submenuItem = new JMenuItem("SubmenuItem");
 		submenu.add(submenuItem);
 		menu.add(submenu);
@@ -65,10 +66,15 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		add(menu);
 		
 		optionsMenu=new JMenu("Options");
+		optionsMenu.setMnemonic(KeyEvent.VK_O);
+//		optionsMenu.setActionCommand("Settings");
 		settingsItem=new JMenuItem("Settings");
+		settingsItem.setMnemonic(KeyEvent.VK_S);
+		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
 		settingsItem.setActionCommand("Settings");
 		settingsItem.addActionListener(this);
 		optionsMenu.add(settingsItem);
+//		optionsMenu.addActionListener(this);
 		add(optionsMenu);
 		
 		if(Toolkit.getDefaultToolkit().getScreenSize().getWidth()>=3700){
