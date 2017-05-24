@@ -693,7 +693,7 @@ public class Approximation {
 		double[] y_soll;
 		int order;
 		double evals = 0;
-		double[] poles;
+		double[] coeffs;
 		double error;
 		
 		public Target(double[] t, double[] y_soll, int order){
@@ -704,16 +704,15 @@ public class Approximation {
 		
 		public double value(double[] variables) {
 			
-			final double[] poles = variables;
-			//final double y = variables[1];
-			double error = errorFunction(t, y_soll, poles, order);
+			final double[] coeffs = variables;
+			double error = errorFunction(t, y_soll, coeffs, order);
 			
 			evals++;
 			System.out.println("Evals: "+evals);
 			System.out.println("Error: "+error);
 			
 			this.error = error;
-			this.poles = poles;
+			this.coeffs = coeffs;
 			
 			return error;
 		}
@@ -748,7 +747,7 @@ public class Approximation {
 					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
 			 approxPoles = optimum.getPoint();
 		} catch (TooManyEvaluationsException e) {
-			approxPoles = target.poles;
+			approxPoles = target.coeffs;
 		}
 	
 		 		

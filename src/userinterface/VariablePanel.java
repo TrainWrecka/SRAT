@@ -87,79 +87,30 @@ public class VariablePanel extends JPanel implements ActionListener{
 				new Insets(0, 50, 0, 0), 0, 0));
 		}
 		
-		add(lbSigmaValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbSigmaValues, new GridBagConstraints( 1, 11, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbErrorValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbErrorValues, new GridBagConstraints( 1, 12, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 10, 0), 0, 0));	
 		
-		
-		
-				
-		
-		
-//		add(tfk, new GridBagConstraints( 1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(tfwp,new GridBagConstraints( 1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(tfqp, new GridBagConstraints( 1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(tfSigma, new GridBagConstraints( 1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(tfError, new GridBagConstraints( 1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));	
-//		
-//		tfk.setEditable(false);
-		
-		
-//		add(lbKShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(10, 50, 30, 0), 0, 0));
-//		add(lbwpShowValues,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(30, 50, 30, 0), 0, 0));
-//		add(lbqpShowValues, new GridBagConstraints( 1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(30, 50, 30, 0), 0, 0));
-//		add(lbSigmaShowValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(30, 50, 30, 0), 0, 0));
-//		add(lbErrorShowValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-//				new Insets(30, 50, 10, 0), 0, 0));	
-		
-				
-		
-		
-		
-		
-		
-//		SizeLabels=new Dimension(getWidth(), getHeight());
-//				
-//		lbk.setPreferredSize(SizeLabels);
-//		lbwp.setPreferredSize(SizeLabels);
-//		lbqp.setPreferredSize(SizeLabels);
-//		lbSigma.setPreferredSize(SizeLabels);
-//		lbError.setPreferredSize(SizeLabels);
-//		this.
-		
-//		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));
-//		add(lbError, new GridBagConstraints( 0, 4, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
-//				new Insets(0, 0, 0, 0), 0, 0));	
 		
 		setBorder(MyBorderFactory.createMyBorder("Variables"));
 	}
 	
 	public void setValues(Object[] values){
-		 //Object[] {K, wp, qp, sigma, meanError};
-		 
+		String K = (String) values[0];
+		String[] wp = (String[]) values[1];
+		String[] qp = (String[]) values[2];
+		String sigma = (String) values[3];
+		String meanError = (String) values[4];
 		
-		lbKShowValues.setText((String) values[0]);
+		for(int i = 0; i < lbwp.length; i++){
+			lbwpValues[i].setText(wp[i]);
+			lbqpValues[i].setText(qp[i]);
+		}
 		 
-		 
-		 lbSigmaShowValues.setText((String) values[3]);
-		 lbErrorShowValues.setText((String) values[4]);
+		lbKValues.setText(K);
+		lbSigmaValues.setText(sigma);
+		lbErrorValues.setText(meanError);
 	}
 	
 	
