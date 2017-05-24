@@ -34,6 +34,8 @@ public class VariablePanel extends JPanel implements ActionListener{
     public JLabel[] lbwpValues = new JLabel[5];
     public JLabel[] lbqpValues = new JLabel[5];
     
+    private int wpPlacement = 1;
+	private int qpPlacement = 2;
 
     
 //    private Font myfont= new Font("myFont",1,100);
@@ -46,14 +48,25 @@ public class VariablePanel extends JPanel implements ActionListener{
 		for(int i=0; i<lbwp.length;i++){
 			lbwp[i]= new JLabel("\u03C9p"+(i+1)+":");
 			lbqp[i]= new JLabel("qp"+(i+1)+":");
-			
-	
+			lbwpValues[i]= new JLabel();
+			lbqpValues[i]= new JLabel();
 		}
+		
 		for(int i=0; i<lbwp.length;i++){
-		add(lbwp[i], new GridBagConstraints( 0, (i+1), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbwp[i], new GridBagConstraints( 0, (wpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 0, 0, 0), 0, 0));
-		add(lbqp[i], new GridBagConstraints( 0, (i+6), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbqp[i], new GridBagConstraints( 0, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 0, 0, 0), 0, 0));
+		
+		add(lbwpValues[i], new GridBagConstraints( 1, (wpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+				new Insets(0, 50, 0, 0), 0, 0));
+		add(lbqpValues[i], new GridBagConstraints( 1, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+				new Insets(0, 50, 0, 0), 0, 0));
+		
+		
+		wpPlacement=wpPlacement+2;
+		qpPlacement=qpPlacement+2;
+		
 		}
 		
 		
@@ -75,23 +88,72 @@ public class VariablePanel extends JPanel implements ActionListener{
 		add(lbKValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(10, 50, 0, 0), 0, 0));
 		
-		for(int i=0; i<lbwp.length;i++){
-			lbwpValues[i]= new JLabel();
-			lbqpValues[i]= new JLabel();
-		}
+		
 		
 		for(int i=0; i<lbwp.length;i++){
-		add(lbwpValues[i], new GridBagConstraints( 1, (i+1), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbqpValues[i], new GridBagConstraints( 1, (i+6), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
-				new Insets(0, 50, 0, 0), 0, 0));
+		
 		}
 		
-		add(lbSigmaValues, new GridBagConstraints( 1, 11, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbSigmaValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbErrorValues, new GridBagConstraints( 1, 12, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbErrorValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 10, 0), 0, 0));	
 		
+		
+		
+				
+		
+		
+//		add(tfk, new GridBagConstraints( 1, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(tfwp,new GridBagConstraints( 1, 1, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(tfqp, new GridBagConstraints( 1, 2, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(tfSigma, new GridBagConstraints( 1, 3, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(tfError, new GridBagConstraints( 1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));	
+//		
+//		tfk.setEditable(false);
+		
+		
+//		add(lbKShowValues, new GridBagConstraints( 1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//				new Insets(10, 50, 30, 0), 0, 0));
+//		add(lbwpShowValues,new GridBagConstraints( 1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//				new Insets(30, 50, 30, 0), 0, 0));
+//		add(lbqpShowValues, new GridBagConstraints( 1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//				new Insets(30, 50, 30, 0), 0, 0));
+//		add(lbSigmaShowValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//				new Insets(30, 50, 30, 0), 0, 0));
+//		add(lbErrorShowValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+//				new Insets(30, 50, 10, 0), 0, 0));	
+		
+				
+		
+		
+		
+		
+		
+//		SizeLabels=new Dimension(getWidth(), getHeight());
+//				
+//		lbk.setPreferredSize(SizeLabels);
+//		lbwp.setPreferredSize(SizeLabels);
+//		lbqp.setPreferredSize(SizeLabels);
+//		lbSigma.setPreferredSize(SizeLabels);
+//		lbError.setPreferredSize(SizeLabels);
+//		this.
+		
+//		add(lbk, new GridBagConstraints( 0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(lbwp,new GridBagConstraints( 0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(lbqp, new GridBagConstraints( 0, 2, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(lbSigma, new GridBagConstraints( 0, 3, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));
+//		add(lbError, new GridBagConstraints( 0, 4, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,  
+//				new Insets(0, 0, 0, 0), 0, 0));	
 		
 		setBorder(MyBorderFactory.createMyBorder("Variables"));
 	}
@@ -112,6 +174,7 @@ public class VariablePanel extends JPanel implements ActionListener{
 		lbSigmaValues.setText(sigma);
 		lbErrorValues.setText(meanError);
 	}
+
 	
 	
 	public void update(Observable obs, Object obj) {}
