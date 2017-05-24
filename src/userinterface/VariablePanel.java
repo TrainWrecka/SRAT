@@ -58,9 +58,9 @@ public class VariablePanel extends JPanel implements ActionListener{
 		add(lbqp[i], new GridBagConstraints( 0, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 0, 0, 0), 0, 0));
 		
-		add(lbwpValues[i], new GridBagConstraints( 1, (wpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbwpValues[i], new GridBagConstraints( 1, (wpPlacement), 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbqpValues[i], new GridBagConstraints( 1, (qpPlacement), 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbqpValues[i], new GridBagConstraints( 1, (qpPlacement), 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
 		
 		
@@ -94,9 +94,9 @@ public class VariablePanel extends JPanel implements ActionListener{
 		
 		}
 		
-		add(lbSigmaValues, new GridBagConstraints( 1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbSigmaValues, new GridBagConstraints( 1, 11, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 0, 0), 0, 0));
-		add(lbErrorValues, new GridBagConstraints( 1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
+		add(lbErrorValues, new GridBagConstraints( 1, 12, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,  
 				new Insets(0, 50, 10, 0), 0, 0));	
 		
 		
