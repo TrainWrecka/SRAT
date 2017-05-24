@@ -21,11 +21,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.MenuListener;
 
+import StepResponseApproximationTool.StepResponseApproximationTool;
+
 public class MenuBar extends JMenuBar implements Observer, ActionListener{
 	JMenu menu, submenu,optionsMenu;
 	JMenuItem menuItemOnTop, submenuItem, exampleItem, settingsItem;
 	JFrame frame;
 	Controller controller;
+	JDialog settingsDialog = new JDialog();
 	public JFrame settingsFrame;
 	private SettingsPanel settingsPanel;
 	private double xPosition;
@@ -117,20 +120,31 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 			}
 		}
 		if(e.getActionCommand().equals("Settings")){
-			settingsFrame= new JFrame("Settings");
-			settingsFrame.setType(Type.POPUP);
-			settingsFrame.setVisible(true);
-			settingsFrame.setResizable(false);
-			settingsFrame.setLayout(new GridBagLayout());
-			settingsFrame.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+//			settingsFrame= new JFrame("Settings");
+//			settingsFrame.setType(Type.POPUP);
+//			settingsFrame.setVisible(true);
+//			settingsFrame.setResizable(false);
+//			settingsFrame.setLayout(new GridBagLayout());
+//			settingsFrame.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+//					new Insets(0, 0, 0, 0), 0, 0));
+//			settingsFrame.setPreferredSize(settingsPanel.getPreferredSize());
+//			settingsFrame.setSize((int) (settingsFrame.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsFrame.getPreferredSize().getHeight())+settingsFrameHeight);
+//			
+//			settingsFrame.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
+			
+			
+			settingsDialog.setTitle("Settings");
+			settingsDialog.setVisible(true);
+			settingsDialog.setResizable(false);
+			settingsDialog.setLayout(new GridBagLayout());
+			settingsDialog.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 					new Insets(0, 0, 0, 0), 0, 0));
-			settingsFrame.setPreferredSize(settingsPanel.getPreferredSize());
-			settingsFrame.setSize((int) (settingsFrame.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsFrame.getPreferredSize().getHeight())+settingsFrameHeight);
+			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
+			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsDialog.getPreferredSize().getHeight())+settingsFrameHeight);
+			settingsDialog.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
 			
-			settingsFrame.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
-			
-//			System.out.println(settingsFrame.getSize());
-			System.out.println(settingsPanel.getSize().getWidth());
+//			System.out.println(settingsDialog.getSize());
+//			System.out.println(settingsPanel.getSize().getWidth());
 		}
 	}
 }
