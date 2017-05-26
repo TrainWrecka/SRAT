@@ -70,14 +70,12 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 		
 		optionsMenu=new JMenu("Options");
 		optionsMenu.setMnemonic(KeyEvent.VK_O);
-//		optionsMenu.setActionCommand("Settings");
 		settingsItem=new JMenuItem("Settings");
 		settingsItem.setMnemonic(KeyEvent.VK_S);
 		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
 		settingsItem.setActionCommand("Settings");
 		settingsItem.addActionListener(this);
 		optionsMenu.add(settingsItem);
-//		optionsMenu.addActionListener(this);
 		add(optionsMenu);
 		
 		if(Toolkit.getDefaultToolkit().getScreenSize().getWidth()>=3700){
@@ -142,9 +140,6 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
 			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsDialog.getPreferredSize().getHeight())+settingsFrameHeight);
 			settingsDialog.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
-			
-//			System.out.println(settingsDialog.getSize());
-//			System.out.println(settingsPanel.getSize().getWidth());
 		}
 	}
 }
