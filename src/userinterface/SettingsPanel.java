@@ -157,12 +157,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		
 
 		
-//		add(btOk, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 0, 0, 10), 0, 0));
-//		add(btCancel, new GridBagConstraints(2, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 0, 0, 10), 0, 0));
 		
-//		setBorder(MyBorderFactory.createMyBorder("Settings"));
 
 		add(lbAutoFilter,new GridBagConstraints(0, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 10, 0, 20), 0, 0));
@@ -177,8 +172,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 				new Insets(10, 0, 0, 10), 0, 0));
 		
 		btApply.addActionListener(this);
-//		btOk.addActionListener(this);
-//		btCancel.addActionListener(this);
 		btDefaults.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
 		
