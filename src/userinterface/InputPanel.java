@@ -160,6 +160,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		//file chooser options
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
+	//	fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 

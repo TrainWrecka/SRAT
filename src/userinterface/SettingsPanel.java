@@ -216,10 +216,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 			double[] simplexOpt = {Double.parseDouble(tfSimplexOptimizerRelative.getText()), Double.parseDouble(tfSimplexOptimizerAbsolute.getText())};
 			double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
 			int maxEval = Integer.parseInt(tfMaxEval.getText());
-			boolean filter = rbtFilterSignalYes.isSelected();
-			boolean showConditioned = rbtShowFilteredSignalYes.isSelected();
+			boolean doFilter = rbtFilterSignalYes.isSelected();
+			boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
+			boolean autoFilter = cbAutoFilter.isSelected();
+			int filterPercentage = Filter.getValue();
 			
-			controller.setSettings(new Object[]{LaguerreAcc, simplexOpt, nelderSteps, maxEval, filter, showConditioned});
+			controller.setSettings(new Object[]{LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered, autoFilter, filterPercentage});
 		}
 		if(e.getSource() == cbAutoFilter){
 			if(cbAutoFilter.isSelected()){
@@ -238,7 +240,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfNelderMeadSimplexSteps.setText("0.01");
 		tfMaxEval.setText("5000");
 		rbtFilterSignalYes.setSelected(true);
-		rbtShowFilteredSignalYes.setSelected(true);
+		rbtShowFilteredSignalNo.setSelected(true);
 		Filter.setValue(100);
 	}
 

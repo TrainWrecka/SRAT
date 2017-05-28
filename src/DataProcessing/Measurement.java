@@ -33,20 +33,17 @@ import userinterface.StatusBar;
 
 public class Measurement {
 
-	//private double[][] measurement;
-	private double[][] cutData;
 	private double[] inputData;
 	private double[] timeData;
 	private double[] stepData;
-	private double[] stepDataFiltered;
-	private double[] stepDataConditioned;
-	private double[] inputDataConditioned;
-	private double[] timeDataConditioned;
+
+	private double[] stepDataOriginal;
+	private double[] timeDataOriginal;
 
 	private double[] approxData;
 	private double[] errorData;
 
-	private Complex[] poles;
+	double[][] polesData;
 
 	private double tNorm;
 	private double nor = (175 * 30);
@@ -58,157 +55,116 @@ public class Measurement {
 	String sigma;
 	String meanError;
 
-	//private List<String[]> measurementList;
-
-	private PlotData stepPlotData = new PlotData();
-	private PlotData errorPlotData = new PlotData();
-	private PlotData polesPlotData = new PlotData();
-
-	private boolean input = false;
-	private boolean normed = false;
+	public boolean input = false;
+	public boolean approximated = false;
 
 	int stepIndex = 0;
 	int order = 2;
 
-	double laguerreAcc = 1e-10;
-	double[] simplexOpt = { 1e-24, 1e-24 };
-	double nelderSteps = 0.01;
-	int maxEval = 5000;
-	boolean filter = true;
-	boolean showConditioned = true;
-	boolean autoFilter = true;
-	int filterPercentage = 80;
+	boolean noise;
 	int unitStepLocation;
 
 	public Measurement() {
 
 	}
 
+	public double[] getInputData() {
+		return inputData;
+	}
+
+	public double[] getErrorData() {
+		return errorData;
+	}
+
+	public double[][] getPolesData() {
+		return polesData;
+	}
+
+	public double[] getTimeData() {
+		return timeDataOriginal;
+	}
+
+	public double[] getStepData(boolean showFiltered) {
+		if (showFiltered) {
+			return stepData;
+		} else {
+			return stepDataOriginal;
+		}
+
+	}
+
+	public double[] getApproxData() {
+		return approxData;
+	}
+
 	public void setMeasurement(List<String[]> measurementList) {
-
 		extractData(convertList(measurementList));
-
-		//stepPlotData.removeStepresponseData();
-
-		if (input) {
-			stepPlotData.setPlotData(
-					new Object[][] { { timeData, "Time" }, { inputData, "Input" }, new Object[] { stepData, "Step" } });
-		} else {
-			stepPlotData.setPlotData(new Object[][] { { timeData, "Time" }, new Object[] { stepData, "Step" } });
-		}
-
-		normed = false;
+		stepIndex = (input) ? getStepLocation(inputData) : 10;
+		noise = checkNoise(stepData, stepIndex);
+		approximated = false;
+	}
+	
+	public void undoFilter(){
+		stepData = stepDataOriginal;
 	}
 
-	public void filtData() {
-		unitStepLocation = (input) ? getStepLocation(inputData) : 10;
-
-		offset = getOffset(stepData, unitStepLocation);
-
-		boolean noise = checkNoise(stepData, unitStepLocation);
-
+	public void filtData(boolean autoFilter, int filterPercentage) {
 		if (noise) {
-			stepDataFiltered = signalFilter(stepData, autoFilter, filterPercentage);
-			stepIndex = getLastOffsetIntersection(stepDataFiltered, offset);
-			stepDataConditioned = removeDeadTime(removeOffset(stepDataFiltered, offset),
-					new int[] { stepIndex, stepData.length });
-		} else {
-			stepIndex = getFirstSignalChange(stepData);
-			stepDataConditioned = removeDeadTime(removeOffset(stepData, offset), new int[] { stepIndex, stepData.length });
+			stepData = signalFilter(stepDataOriginal, autoFilter, filterPercentage);
 		}
 	}
 
-	public void approximateMeasurement() {
 
-		if (input) {
-			inputDataConditioned = removeDeadTime(removeOffset(inputData, getOffset(inputData, unitStepLocation)),
-					new int[] { stepIndex, inputData.length });
+	public void approximateMeasurement(double nelderSteps, double[] simplexOpt, int maxEval) {
+		double[] stepDataTemp = new double[stepData.length];
+		System.arraycopy(stepData, 0, stepDataTemp, 0, stepData.length);
+		
+		offset = getOffset(stepDataTemp, stepIndex);
+		stepDataTemp = removeOffset(stepDataTemp, offset);
+		
+		if(!input){
+			stepIndex = getLastOffsetIntersection(stepDataTemp, offset);
 		}
 
-		if (normed == false) {
-			normTime();
-		}
+		timeData = removeTime(timeDataOriginal, 0, timeDataOriginal.length - stepIndex);
+		normTime();
+		
+		stepDataTemp = removeTime(stepDataTemp, stepIndex, stepDataTemp.length);
 
-		timeDataConditioned = removeDeadTime(timeData, new int[] { 0, timeData.length - stepIndex });
 
 		Object[] approxRet;
-		approxRet = Approximation.approximate(timeDataConditioned, stepDataConditioned, order, nelderSteps, simplexOpt,
+		approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt,
 				maxEval);
 
 		approxData = (double[]) approxRet[0];
 		double[] A = (double[]) approxRet[2];
 
-		stepPlotData.removeStepresponseData();
+		approxData = addOffset(addTime(approxData), offset);
 
-		denormTime();
-		//approxData = addOffset(addDeadTime(approxData), offset);
-		
-
-		if (input) {
-			if (showConditioned) {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
-						new Object[] { stepDataConditioned, "Step" }, { approxData, "Approximation" } });
-			} else {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
-						new Object[] { stepData, "Step" }, { approxData, "Approximation" } });
-			}
-
-		} else {
-			if (showConditioned) {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepDataConditioned, "Step" },
-						{ approxData, "Approximation" } });
-			} else {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepData, "Step" },
-						{ approxData, "Approximation" } });
-			}
-
-		}
-		errorData = new double[timeDataConditioned.length];
-
-		for (int i = 0; i < timeDataConditioned.length; i++) {
-			errorData[i] = stepDataConditioned[i] - approxData[i];
-		}
-
-		errorPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { errorData, "Error" } });
+		calulateError();
 
 		Complex[] polesComplex = getPoles(A);
 		polesComplex = Matlab.sort(polesComplex);
-		double[][] polesData = convPoles(polesComplex);
-
-		polesPlotData.setPlotData(new Object[][] { { polesData[0], "-" }, { polesData[1], "Poles" } });
+		polesData = convPoles(polesComplex);
 
 		calcValues(polesComplex);
+		approximated = true;
+	}
+	
+	public void calulateError(){
+		errorData = new double[timeDataOriginal.length];
+
+		for (int i = 0; i < timeDataOriginal.length; i++) {
+			errorData[i] = stepData[i] - approxData[i];
+		}
 	}
 
-	public void setSettings(Object[] settings) {
-		Matlab.laguerreAcc = (double) settings[0];
-		this.simplexOpt = (double[]) settings[1];
-		this.nelderSteps = (double) settings[2];
-		this.maxEval = (int) settings[3];
-		this.filter = (boolean) settings[4];
-		this.showConditioned = (boolean) settings[5];
-		this.autoFilter = (boolean) settings[6];
-		this.filterPercentage = (int) settings[7];
-	}
+	public void setValues(Object[] val) {
+		timeData = removeTime(timeDataOriginal, 0, timeDataOriginal.length - stepIndex);
 
-	//	public double[][] getMeasurement() {
-	//		return measurement;
-	//	}
+		approxData = setPoles(val);
 
-	/*	public List<String[]> getMeasurementList() {
-			return measurementList;
-		}*/
-
-	public XYSeries[] getStepresponseData() {
-		return stepPlotData.getData();
-	}
-
-	public XYSeries[] getErrorData() {
-		return errorPlotData.getData();
-	}
-
-	public XYSeries[] getPolesData() {
-		return polesPlotData.getData();
+		approxData = addOffset(addTime(approxData), offset);
 	}
 
 	/*
@@ -315,6 +271,11 @@ public class Measurement {
 		} else {
 			StatusBar.showStatus("Too many data columns");
 		}
+
+		stepDataOriginal = new double[stepData.length];
+		System.arraycopy(stepData, 0, stepDataOriginal, 0, stepData.length);
+		timeDataOriginal = new double[timeData.length];
+		System.arraycopy(timeData, 0, timeDataOriginal, 0, timeData.length);
 	}
 
 	/*
@@ -338,7 +299,6 @@ public class Measurement {
 	private double getOffset(double[] signal, int range) {
 		double[] tempArray = Arrays.copyOfRange(signal, 0, range);
 		double offset = Matlab.mean(tempArray);
-		StatusBar.showStatus("Offset:" + Double.toString(offset));
 		return offset;
 	}
 
@@ -346,13 +306,15 @@ public class Measurement {
 	 * removes the offset from the signal
 	 */
 	private double[] removeOffset(double[] signal, double offset) {
-		for (int i = 0; i < signal.length; i++) {
-			signal[i] -= offset;
+		double[] temp = new double[signal.length];
+		System.arraycopy(signal, 0, temp, 0, signal.length);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] -= offset;
 		}
-		return signal;
+		return temp;
 	}
-	
-	private double[] addOffset(double[] signal, double offset){
+
+	private double[] addOffset(double[] signal, double offset) {
 		for (int i = 0; i < signal.length; i++) {
 			signal[i] += offset;
 		}
@@ -362,17 +324,17 @@ public class Measurement {
 	/*
 	 * removes the deadtime
 	 */
-	private double[] removeDeadTime(double[] signal, int[] range) {
-		return Arrays.copyOfRange(signal, range[0], range[1]);
+	private double[] removeTime(double[] signal, int rangeFrom, int rangeTo) {
+		return Arrays.copyOfRange(signal, rangeFrom, rangeTo);
 	}
-	
-	private double[] addDeadTime(double[] signal) {
 
-		double[] ret = new double[timeData.length];
-		Arrays.fill(ret, 0.0);
-		System.arraycopy(signal, 0, ret, timeData.length - approxData.length, signal.length);
-		
-		return ret;
+	private double[] addTime(double[] signal) {
+
+		double[] res = new double[timeDataOriginal.length];
+		Arrays.fill(res, 0.0);
+		System.arraycopy(signal, 0, res, timeDataOriginal.length - approxData.length, signal.length);
+
+		return res;
 	}
 
 	/*
@@ -380,41 +342,6 @@ public class Measurement {
 	 */
 	public boolean inputExisting() {
 		return input;
-	}
-
-	/*
-	 * filter function
-	 */
-	private double[] filtFunction(double[] signal, int filterLength, double maxError) {
-		double[] diff = new double[signal.length];
-		double[] signalFiltered = new double[signal.length];
-		double noiseError = 1;
-		ArrayList<Double> signalFilteredList;
-		ArrayList<Double> signalList = new ArrayList<Double>();
-		for (double d : signal)
-			signalList.add(d);
-
-		ArrayList<Double> vectorA = new ArrayList<Double>();
-		vectorA.add(1.0);
-
-		for (int iN = filterLength; (Math.abs(noiseError) > maxError) && (iN > 0); iN--) {
-
-			ArrayList<Double> vectorB = new ArrayList<Double>();
-			for (int i = 0; i < filterLength; i++) {
-				vectorB.add(1.0 / filterLength);
-			}
-
-			signalFilteredList = Filtfilt.doFiltfilt(vectorB, vectorA, signalList);
-
-			for (int i = 0; i < signalFilteredList.size(); i++) {
-				signalFiltered[i] = signalFilteredList.get(i);
-				diff[i] = (signal[i] - signalFiltered[i]) / signal[i];
-			}
-
-			noiseError = Math.abs(Matlab.mean(diff));
-		}
-
-		return signalFiltered;
 	}
 
 	/*
@@ -458,14 +385,6 @@ public class Measurement {
 
 		for (int i = 0; i < timeData.length; i++) {
 			timeData[i] = timeData[i] / tNorm * nor;
-		}
-
-		normed = true;
-	}
-
-	private void denormTime() {
-		for (int i = 0; i < timeDataConditioned.length; i++) {
-			timeDataConditioned[i] = timeDataConditioned[i] / nor * tNorm;
 		}
 	}
 
@@ -519,35 +438,11 @@ public class Measurement {
 
 		meanError = Double.toString(Matlab.mean(errorData));
 
-		K = Double.toString(approxData[approxData.length - 1]);
+		K = Double.toString(approxData[approxData.length - 1] - offset);
 	}
 
 	public Object[] getValues() {
 		return new Object[] { K, wp, qp, sigma, meanError };
-	}
-
-	public void setValues(Object[] val) {
-		stepDataConditioned = setPoles(val);
-
-		if (input) {
-			if (showConditioned) {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
-						new Object[] { stepDataConditioned, "Step" }, { approxData, "Approximation" } });
-			} else {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { inputDataConditioned, "Input" },
-						new Object[] { stepData, "Step" }, { approxData, "Approximation" } });
-			}
-
-		} else {
-			if (showConditioned) {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepDataConditioned, "Step" },
-						{ approxData, "Approximation" } });
-			} else {
-				stepPlotData.setPlotData(new Object[][] { { timeDataConditioned, "Time" }, { stepData, "Step" },
-						{ approxData, "Approximation" } });
-			}
-
-		}
 	}
 
 	private double[] setPoles(Object[] val) {
@@ -575,14 +470,6 @@ public class Measurement {
 			B[0] *= Math.abs(sigma);
 		}
 
-		/*Complex[] A = Matlab.roots(denom);
-		
-		double[] doubleA = new double[A.length];
-		
-		for (int i = 0; i < A.length; i++) {
-			doubleA[i] = A[i].getReal();
-		}*/
-
 		for (int i = 0; i < this.wp.length; i++) {
 			if (i < Math.floor(wp.length)) {
 				this.wp[i] = Double.toString(wp[i]);
@@ -597,8 +484,7 @@ public class Measurement {
 		this.sigma = Double.toString(sigma);
 		this.meanError = "-";
 
-		//return (double[]) SVTools.step(B, doubleA, timeDataConditioned)[0];
-		return (double[]) SVTools.step(B, denom, timeDataConditioned)[0];
+		return (double[]) SVTools.step(B, denom, timeData)[0];
 	}
 
 	private double[] signalFilter(double[] signal, boolean modeAuto, int percent) {
@@ -678,10 +564,6 @@ public class Measurement {
 		}
 
 		return signalFiltered;
-	}
-
-	public static void main(String[] args) {
-
 	}
 
 }
