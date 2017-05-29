@@ -438,7 +438,7 @@ public class Measurement {
 
 		meanError = Double.toString(Matlab.mean(errorData));
 
-		K = Double.toString(approxData[approxData.length - 1] - offset);
+		K = Double.toString(approxData[approxData.length/* - 1*/-10] - offset);
 	}
 
 	public Object[] getValues() {
@@ -528,7 +528,6 @@ public class Measurement {
 				percentRatio = iN / 100.0;
 				break;
 			}
-
 		}
 
 		if (modeAuto == false) {
