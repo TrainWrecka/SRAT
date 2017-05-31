@@ -1,0 +1,28 @@
+USER GUIDE
+
+START UP:
+Zuerst müssen Sie Ihr gewünschtes Signal laden. Dazu betätigen Sie:
+1. "Load" (oben links neben den Plots)
+Danach können Sie in den Dateien Ihr Signal laden.
+
+
+Nun können Sie entscheiden, ob Sie ihr Signal im Automatischen- oder im Manuellen-Modus bearbeiten möchten:
+2. entweder "Auto" oder "Manually" betätigen.(unter "Load")
+Im Automatischen-Modus wählt das Tool seine Eingabewerte selber aus. 
+Im Manuellen-Modus können Sie die benötigten Eingabewerte selber eingeben.
+
+3. Die Ordnung ist immer auswählbar und befindet sich bei den Eingabewerten zuoberst.
+
+Nun müssen Sie noch das ganze Starten. Die machen Sie indem Sie:
+4. "Run" betätigen.(unten links)
+So beginnt das Tool seine Berechnungen.
+
+
+HINTS:
+-Über den Plots sind Registerkarten. Hier können Sie einzelne Plots auswählen und grösser anshauen.
+
+-Das Tool besitzt ein "Settings"- Fenster. Dieses können Sie in der Task-Leiste am oberen Rand öffnen.
+ Hier können Sie verschiedenste Einstellungen vornehmen.
+ Das Tool kann das Rauschen der Signale filtern und diese gefiltert anzeigen.
+ Sie können aber auch die ungefilterten Signale anzeigen lassen.
+ Ihre Eingaben können Sie mit den Knöpfen unten bestätigen/wiederrufen.
