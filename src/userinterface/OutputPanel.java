@@ -25,6 +25,7 @@ import model.Model;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.Border;
 import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -35,8 +36,8 @@ import org.jfree.data.xy.XYSeries;
 
 public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
 
-	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
+	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 	private JPanel DefaultPanel = new JPanel(new GridBagLayout());
 
 	public ErrorPlot Errorplot = new ErrorPlot("ERROR");
@@ -90,6 +91,7 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		tabpane.addChangeListener(this);
+		tabpane.setBorder(MyBorderFactory.createMyBorder("Output"));
 	}
 
 	public void update(Observable obs, Object obj) {

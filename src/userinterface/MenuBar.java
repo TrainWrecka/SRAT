@@ -169,7 +169,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 		}
 		if(e.getActionCommand().equals("Help")){
 			helpDialog.setTitle("Help");
-			helpDialog.setVisible(true);
+			helpDialog.setVisible(true);	
 			helpDialog.setResizable(true);
 		}
 	}

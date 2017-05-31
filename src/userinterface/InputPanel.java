@@ -80,7 +80,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	public InputPanel() {
 		super(new GridBagLayout());
-		setBorder(MyBorderFactory.createMyBorder("InputPanel"));
+		setBorder(MyBorderFactory.createMyBorder("Input"));
 		// create Buttongroup
 		rbtAutomatically.setSelected(true);
 		gruppeAuto_Manual.add(rbtAutomatically);

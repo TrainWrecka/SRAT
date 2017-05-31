@@ -50,7 +50,6 @@
   	private OutputPanel outputPanel = new OutputPanel();
 	private Controller controller;
 	private File file;
-//	public SettingsPanel settingsPanel=new SettingsPanel();
 
 	double[][] measurementData;
 
@@ -58,7 +57,6 @@
   
   	public View(Controller controller) {
   		super(new GridBagLayout());
-  		setBorder(MyBorderFactory.createMyBorder(" Topview "));
   		this.controller = controller;
   		inputPanel.setController(controller);
   		add(inputPanel,new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
