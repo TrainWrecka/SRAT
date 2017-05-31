@@ -2,6 +2,7 @@ package userinterface;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Observable;
 
 import java.awt.GridBagLayout;
@@ -164,6 +165,8 @@ public class VariablePanel extends JPanel implements ActionListener{
 		String[] qp = (String[]) values[2];
 		String sigma = (String) values[3];
 		String meanError = (String) values[4];
+		
+		
 		
 		for(int i = 0; i < lbwp.length; i++){
 			lbwpValues[i].setText(wp[i]);

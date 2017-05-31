@@ -30,6 +30,8 @@ public class Approximation {
 
 	public double[] yIst;
 	public double[] t;
+	
+	public static boolean stop;
 
 	//chng
 	//	public Complex[] res = new Complex[10];
@@ -123,15 +125,34 @@ public class Approximation {
 		int order;
 		double evals = 0;
 		double[] coeffs;
+		boolean leave = false;
 		double error;
+		long timeOut = 50000;
 
 		public Target(double[] t, double[] y_soll, int order) {
 			this.t = t;
 			this.y_soll = y_soll;
 			this.order = order;
+			
+			stop = false;
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(timeOut);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					leave = true;
+				}
+			}).start();
 		}
 
 		public double value(double[] variables) {
+			if (stop) {
+				throw new RuntimeException("Time - Out");
+			}
 
 			final double[] coeffs = variables;
 			double error = errorFunction(t, y_soll, coeffs, order);
@@ -169,13 +190,14 @@ public class Approximation {
 		Target target = new Target(timeData, stepData, order);
 		PointValuePair optimum = null;
 		double[] approxPoles = null;
-
+		target.timeOut = 0;
 		try {
 			optimum = optimizer.optimize(new MaxEval(maxEval), new ObjectiveFunction(target), GoalType.MINIMIZE,
 					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
 			approxPoles = optimum.getPoint();
 		} catch (TooManyEvaluationsException e) {
 			approxPoles = target.coeffs;
+			System.out.println("Time - Out");
 		}
 
 		Object[] result = Approximation.schritt(approxPoles, timeData, order);

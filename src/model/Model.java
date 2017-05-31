@@ -19,9 +19,9 @@ public class Model extends Observable {
 	private PlotData errorPlotData = new PlotData();
 	private PlotData polesPlotData = new PlotData();
 	
-	double laguerreAcc = 1e-10;
+	double laguerreAcc = 1e-6;
 	double[] simplexOpt = { 1e-24, 1e-24 };
-	double nelderSteps = 0.01;
+	double nelderSteps = 0.1;
 	int maxEval = 5000;
 	boolean doFilter = false;
 	boolean showFiltered = true;
@@ -86,10 +86,6 @@ public class Model extends Observable {
 
 		notifyObservers();
 	}
-
-//	public void setSettings(Object[] settings) {
-//		measurement.setSettings(settings);
-//	}
 	
 	public void setSettings(Object[] settings) {
 		Matlab.laguerreAcc = (double) settings[0];
@@ -107,7 +103,7 @@ public class Model extends Observable {
 			measurement.undoFilter();
 		}
 		if(measurement.approximated){
-			measurement.calulateError();
+			measurement.calculateError();
 			updateError();
 		}
 		updateMeasurement();

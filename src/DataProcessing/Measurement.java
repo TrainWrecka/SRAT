@@ -1,5 +1,6 @@
 package DataProcessing;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import org.apache.commons.math3.util.FastMath;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.util.ArrayUtilities;
 
+import com.sun.javafx.css.CalculatedValue;
 import com.sun.org.apache.bcel.internal.generic.FMUL;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
@@ -33,12 +35,12 @@ import userinterface.StatusBar;
 
 public class Measurement {
 
+	private double[] stepDataOriginal;
+	private double[] timeDataOriginal;
+
 	private double[] inputData;
 	private double[] timeData;
 	private double[] stepData;
-
-	private double[] stepDataOriginal;
-	private double[] timeDataOriginal;
 
 	private double[] approxData;
 	private double[] errorData;
@@ -63,6 +65,8 @@ public class Measurement {
 
 	boolean noise;
 	int unitStepLocation;
+
+	DecimalFormat f = new DecimalFormat("##0.##E0");
 
 	public Measurement() {
 
@@ -90,7 +94,6 @@ public class Measurement {
 		} else {
 			return stepDataOriginal;
 		}
-
 	}
 
 	public double[] getApproxData() {
@@ -98,13 +101,17 @@ public class Measurement {
 	}
 
 	public void setMeasurement(List<String[]> measurementList) {
-		extractData(convertList(measurementList));
+		double[][] tempData = convertList(measurementList);
+		if (tempData == null) {
+			return;
+		}
+		extractData(tempData);
 		stepIndex = (input) ? getStepLocation(inputData) : 10;
 		noise = checkNoise(stepData, stepIndex);
 		approximated = false;
 	}
-	
-	public void undoFilter(){
+
+	public void undoFilter() {
 		stepData = stepDataOriginal;
 	}
 
@@ -114,34 +121,40 @@ public class Measurement {
 		}
 	}
 
-
 	public void approximateMeasurement(double nelderSteps, double[] simplexOpt, int maxEval) {
 		double[] stepDataTemp = new double[stepData.length];
 		System.arraycopy(stepData, 0, stepDataTemp, 0, stepData.length);
-		
+
 		offset = getOffset(stepDataTemp, stepIndex);
 		stepDataTemp = removeOffset(stepDataTemp, offset);
-		
-		if(!input){
+
+		if (!input) {
 			stepIndex = getLastOffsetIntersection(stepDataTemp, offset);
 		}
 
 		timeData = removeTime(timeDataOriginal, 0, timeDataOriginal.length - stepIndex);
 		normTime();
-		
+
 		stepDataTemp = removeTime(stepDataTemp, stepIndex, stepDataTemp.length);
 
+		//		double[] stepDataTempShortened = new double[stepDataTemp.length/10];
+		//		double[] timeDataTempShortened = new double[stepDataTempShortened.length];
+		//		
+		//		for (int i = 0; i < timeDataTempShortened.length; i++) {
+		//			stepDataTempShortened[i] = stepDataTemp[i*10];
+		//			timeDataTempShortened[i] = timeData[i*10];
+		//		}
 
 		Object[] approxRet;
-		approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt,
-				maxEval);
+		approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt, maxEval);
+		//approxRet = Approximation.approximate(timeDataTempShortened, stepDataTempShortened, order, nelderSteps, simplexOpt, maxEval);
 
 		approxData = (double[]) approxRet[0];
 		double[] A = (double[]) approxRet[2];
 
 		approxData = addOffset(addTime(approxData), offset);
 
-		calulateError();
+		calculateError();
 
 		Complex[] polesComplex = getPoles(A);
 		polesComplex = Matlab.sort(polesComplex);
@@ -149,9 +162,13 @@ public class Measurement {
 
 		calcValues(polesComplex);
 		approximated = true;
+
+		//timeDataOriginal = timeDataTempShortened;
+		//timeDataOriginal = new double[timeDataTempShortened.length];
+		//System.arraycopy(timeDataTempShortened, 0, timeDataOriginal, 0, timeDataTempShortened.length);
 	}
-	
-	public void calulateError(){
+
+	public void calculateError() {
 		errorData = new double[timeDataOriginal.length];
 
 		for (int i = 0; i < timeDataOriginal.length; i++) {
@@ -178,14 +195,19 @@ public class Measurement {
 			tempArrayString[i] = arrayRow;
 		}
 
-		double[][] tempArrayDouble = new double[tempArrayString.length][tempArrayString[0].length];
-		for (int i = 0; i < tempArrayString.length; i++) {
-			for (int j = 0; j < tempArrayString[0].length; j++) {
-				tempArrayDouble[i][j] = Double.parseDouble(tempArrayString[i][j]);
+		try {
+			double[][] tempArrayDouble = new double[tempArrayString.length][tempArrayString[0].length];
+			for (int i = 0; i < tempArrayString.length; i++) {
+				for (int j = 0; j < tempArrayString[0].length; j++) {
+					tempArrayDouble[i][j] = Double.parseDouble(tempArrayString[i][j]);
+				}
 			}
+			return tempArrayDouble;
+		} catch (NumberFormatException e) {
+			// TODO: handle exception
+			StatusBar.showStatus("Wrong format");
+			return null;
 		}
-
-		return tempArrayDouble;
 	}
 
 	/*
@@ -248,28 +270,33 @@ public class Measurement {
 	private void extractData(double[][] measurement) {
 		input = false;
 
+		int cutter = (int) Math.pow(10, Math.floor(measurement.length/1000) - 1);
+		cutter = (cutter < 1)? 1 : cutter;
+
 		if (measurement[0].length == 3) {
-			timeData = new double[measurement.length];
-			inputData = new double[measurement.length];
-			stepData = new double[measurement.length];
-			for (int i = 0; i < measurement.length; i++) {
-				timeData[i] = measurement[i][0];
-				inputData[i] = measurement[i][1];
-				stepData[i] = measurement[i][2];
+			timeData = new double[measurement.length / cutter];
+			inputData = new double[timeData.length];
+			stepData = new double[timeData.length];
+			for (int i = 0; i < timeData.length; i++) {
+				timeData[i] = measurement[i * cutter][0];
+				inputData[i] = measurement[i * cutter][1];
+				stepData[i] = measurement[i * cutter][2];
 			}
 			input = true;
 		} else if (measurement[0].length == 2) {
-			timeData = new double[measurement.length];
+			timeData = new double[measurement.length / cutter];
 			inputData = new double[1];
-			stepData = new double[measurement.length];
+			stepData = new double[timeData.length];
 			for (int i = 0; i < measurement.length; i++) {
-				timeData[i] = measurement[i][0];
-				stepData[i] = measurement[i][1];
+				timeData[i] = measurement[i * cutter][0];
+				stepData[i] = measurement[i * cutter][1];
 			}
 		} else if (measurement[0].length == 0) {
 			StatusBar.showStatus("No data found");
+			return;
 		} else {
 			StatusBar.showStatus("Too many data columns");
+			return;
 		}
 
 		stepDataOriginal = new double[stepData.length];
@@ -419,10 +446,11 @@ public class Measurement {
 
 		for (int i = 0; i < wp.length; i++) {
 			if (i < Math.floor(poles.length / 2)) {
-				wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
+				//wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
+				wp[i] = f.format(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
 				double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
 				double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
-				qp[i] = Double.toString(-(temp1 / temp2));
+				qp[i] = f.format(-(temp1 / temp2));
 			} else {
 				wp[i] = "-";
 				qp[i] = "-";
@@ -433,12 +461,12 @@ public class Measurement {
 		if (poles.length % 2 == 0) {
 			sigma = "-";
 		} else {
-			sigma = Double.toString(poles[poles.length - 1].getReal());
+			sigma = f.format(poles[poles.length - 1].getReal());
 		}
 
-		meanError = Double.toString(Matlab.mean(errorData));
+		meanError = f.format(Matlab.mean(errorData));
 
-		K = Double.toString(approxData[approxData.length/* - 1*/-10] - offset);
+		K = f.format(approxData[approxData.length - 1] - offset);
 	}
 
 	public Object[] getValues() {
@@ -472,17 +500,24 @@ public class Measurement {
 
 		for (int i = 0; i < this.wp.length; i++) {
 			if (i < Math.floor(wp.length)) {
-				this.wp[i] = Double.toString(wp[i]);
-				this.qp[i] = Double.toString(qp[i]);
+				this.wp[i] = f.format(wp[i]);
+				this.qp[i] = f.format(qp[i]);
 			} else {
 				this.wp[i] = "-";
 				this.qp[i] = "-";
 			}
 		}
 
-		this.K = Double.toString(K);
-		this.sigma = Double.toString(sigma);
-		this.meanError = "-";
+		this.K = f.format(K);
+		if (sigma == 0) {
+			this.sigma = "-";
+		} else {
+			this.sigma = f.format(sigma);
+		}
+
+		calculateError();
+
+		meanError = f.format(Matlab.mean(errorData));
 
 		return (double[]) SVTools.step(B, denom, timeData)[0];
 	}
