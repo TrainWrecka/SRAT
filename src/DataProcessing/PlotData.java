@@ -3,107 +3,69 @@ package DataProcessing;
 import org.jfree.data.xy.XYSeries;
 
 public class PlotData {
+	private XYSeries[] xySeries;
+	private double[] xData;
+	private int seriesCount;
 
-	private XYSeries[] seriesStepresponse;
+	public PlotData() {
+		xySeries = new XYSeries[seriesCount + 1];
+	}
 
-	public PlotData() {}
+	/** 
+	 * sets the data of the x-Axis of the series
+	 * @param xData data of the x-Axis to be set
+	 */
+	public void setXData(double[] xData) {
+		this.xData = xData;
+	}
 
-	public void setStepresponseData(double[][] stepresponseData) {
-		int index = 1;
+	/**
+	 * sets/adds the data of the y-Axis of the series
+	 * @param yData data of the y-Axis to be set
+	 * @param name name of the data to be displayed in the graph
+	 */
+	public void setYData(double[] yData, String name) {
+		if (yData != null) {
+			if (seriesCount > 0) {
+				XYSeries[] tempSeries = xySeries;
 
-		if (stepresponseData[0].length == 3) {
+				xySeries = new XYSeries[seriesCount + 1];
 
-			seriesStepresponse[1] = new XYSeries("Input");
-			for (int i = 0; i < stepresponseData.length; i++) {
-				seriesStepresponse[1].add(stepresponseData[i][0], stepresponseData[i][index]);
+				for (int i = 0; i < tempSeries.length; i++) {
+					xySeries[i] = tempSeries[i];
+				}
 			}
 
-			index++;
-		}
-
-		seriesStepresponse[0] = new XYSeries("Output");
-		for (int i = 0; i < stepresponseData.length; i++) {
-			seriesStepresponse[0].add(stepresponseData[i][0], stepresponseData[i][index]);
-		}
-	}
-
-	public void setPlotData(Object[][] data) {
-		double[] timeAxis = (double[]) data[0][0];
-		double[] data1Points;
-		double[] data2Points;
-		double[] data3Points;
-
-		String data1Name;
-		String data2Name;
-		String data3Name;
-
-		seriesStepresponse = new XYSeries[data.length - 1];
-
-		switch (data.length) {
-			case 4:
-				data3Points = (double[]) data[3][0];
-				data3Name = (String) data[3][1];
-
-				seriesStepresponse[2] = new XYSeries(data3Name);
-				for (int i = 0; i < timeAxis.length; i++) {
-					seriesStepresponse[2].add(timeAxis[i], data3Points[i]);
-				}
-			case 3:
-				data2Points = (double[]) data[2][0];
-				data2Name = (String) data[2][1];
-
-				seriesStepresponse[1] = new XYSeries(data2Name);
-				for (int i = 0; i < timeAxis.length; i++) {
-					seriesStepresponse[1].add(timeAxis[i], data2Points[i]);
-				}
-
-			case 2:
-				data1Points = (double[]) data[1][0];
-				data1Name = (String) data[1][1];
-
-				seriesStepresponse[0] = new XYSeries(data1Name);
-				for (int i = 0; i < timeAxis.length; i++) {
-					seriesStepresponse[0].add(timeAxis[i], data1Points[i]);
-				}
-		}
-	}
-
-	public void setStepresponseData(double[] timeData, double[] stepData) {
-
-		seriesStepresponse[0] = new XYSeries("Output");
-		for (int i = 0; i < timeData.length; i++) {
-			seriesStepresponse[0].add(timeData[i], stepData[i]);
-		}
-	}
-
-	public XYSeries[] getData() {
-		//Object[] ret;
-		//ret[0] = seriesStepresponse;
-		//ret[1] = 
-		return seriesStepresponse;
-	}
-
-	public void removeStepresponseData() {
-		for (int i = 0; i < seriesStepresponse.length; i++) {
-			if (seriesStepresponse[i] != null) {
-				seriesStepresponse[i].clear();
-			}	
-		} /*
-			if (seriesStepresponse[0] != null) {
-			seriesStepresponse[0].clear();
+			xySeries[seriesCount] = new XYSeries(name);
+			for (int i = 0; i < yData.length; i++) {
+				xySeries[seriesCount].add(xData[i], yData[i]);
 			}
-			if (seriesStepresponse[1] != null) {
-			seriesStepresponse[1].clear();
-			}*/
 
+			seriesCount++;
+		}
 	}
 
-	public void setErrorData() {
-
+	/**
+	 * returns the series of the plot data
+	 * @return series of the plot data
+	 */
+	public XYSeries[] getPlotData() {
+		return xySeries;
 	}
 
-	public void setZeroesData() {
+	/**
+	 * removes all data in the series
+	 */
+	public void removePlotData() {
+		if (xySeries != null) {
+			for (int i = 0; i < xySeries.length; i++) {
+				if (xySeries[i] != null) {
+					xySeries[i].clear();
+				}
+			}
+		}
 
+		seriesCount = 0;
+		xySeries = new XYSeries[seriesCount + 1];
 	}
-
 }

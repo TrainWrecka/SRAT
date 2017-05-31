@@ -205,14 +205,22 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		}
 		
 		if(e.getSource() == btApply){
-			double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
-			double[] simplexOpt = {Double.parseDouble(tfSimplexOptimizerRelative.getText()), Double.parseDouble(tfSimplexOptimizerAbsolute.getText())};
-			double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
-			int maxEval = Integer.parseInt(tfMaxEval.getText());
-			boolean filter = rbtFilterSignalYes.isSelected();
-			boolean showConditioned = rbtShowFilteredSignalYes.isSelected();
+			try {
+				double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
+				double[] simplexOpt = {Double.parseDouble(tfSimplexOptimizerRelative.getText()), Double.parseDouble(tfSimplexOptimizerAbsolute.getText())};
+				double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
+				int maxEval = Integer.parseInt(tfMaxEval.getText());
+				boolean doFilter = rbtFilterSignalYes.isSelected();
+				boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
+				boolean autoFilter = cbAutoFilter.isSelected();
+				int filterPercentage = Filter.getValue();
+				
+				controller.setSettings(new Object[]{LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered, autoFilter, filterPercentage});
+			} catch (NumberFormatException e2) {
+				// TODO: handle exception
+				StatusBar.showStatus("Wrong number format");
+			}
 			
-			controller.setSettings(new Object[]{LaguerreAcc, simplexOpt, nelderSteps, maxEval, filter, showConditioned});
 		}
 		if(e.getSource() == cbAutoFilter){
 			if(cbAutoFilter.isSelected()){
@@ -228,11 +236,13 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfLaguerre.setText("1e-6");
 		tfSimplexOptimizerRelative.setText("1e-24");
 		tfSimplexOptimizerAbsolute.setText("1e-24");
-		tfNelderMeadSimplexSteps.setText("0.01");
+		tfNelderMeadSimplexSteps.setText("0.1");
 		tfMaxEval.setText("5000");
 		rbtFilterSignalYes.setSelected(true);
-		rbtShowFilteredSignalYes.setSelected(true);
+		rbtShowFilteredSignalNo.setSelected(true);
 		Filter.setValue(100);
+		
+		
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion
