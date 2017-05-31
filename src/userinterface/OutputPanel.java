@@ -94,30 +94,31 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	public void update(Observable obs, Object obj) {
 		Model model = (Model) obs;
-		
+
 		StepresponsePanel.clearData(StepresponsePlot);
 		ErrorPanel.clearData(ErrorPlot);
 		ZeroesPanel.clearData(ZeroesPlot);
-		
-		if(model.getErrorData() != null){
-			for(int i = 0; i < model.getErrorData().length; i++){
+
+		if (model.getErrorData()[0] != null) {
+			for (int i = 0; i < model.getErrorData().length; i++) {
 				ErrorPanel.addData(model.getErrorData()[i], ErrorPlot);
 			}
 		}
-		
-		if(model.getPolesData() != null){
-			for(int i = 0; i < model.getPolesData().length; i++){
+
+		if (model.getPolesData()[0] != null) {
+			for (int i = 0; i < model.getPolesData().length; i++) {
 				ZeroesPanel.addData(model.getPolesData()[i], ZeroesPlot);
 			}
 		}
-				
-		
-		for(int i = 0; i < model.getStepresponseData().length; i++){
-			StepresponsePanel.addData(model.getStepresponseData()[i], StepresponsePlot);
+
+		for (int i = 0; i < model.getStepresponseData().length; i++) {
+			if (model.getStepresponseData()[i] != null) {
+				StepresponsePanel.addData(model.getStepresponseData()[i], StepresponsePlot);
+			}
 		}
-		
+
 		DefaultVariablePanel.setValues(model.getValues());
-	
+
 	}
 
 	@Override

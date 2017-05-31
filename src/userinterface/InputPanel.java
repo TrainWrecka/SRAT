@@ -20,6 +20,7 @@ import org.jfree.chart.plot.XYPlot;
 
 import com.opencsv.CSVReader;
 
+import DataProcessing.Approximation;
 import matlabfunctions.Matlab;
 import model.Model;
 
@@ -161,12 +162,14 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		//file chooser options
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
+	//	fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 
 		cbOrdnungsauswahl.addItemListener(this);
 		rbtAutomatically.addActionListener(this);
 		rbtManually.addActionListener(this);
+		btCancel.addActionListener(this);
 
 	}
 
@@ -229,24 +232,32 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				double[] wp = new double[(order / 2)];
 				double[] qp = new double[wp.length];
 				double sigma = 0;
-				double K = Double.parseDouble(tfK.getText());
-				for (int i = 0; i < wp.length; i++) {
-					wp[i] = Double.parseDouble(tfwp[i].getText());
-					qp[i] = Double.parseDouble(tfqp[i].getText());
+				try {
+					double K = Double.parseDouble(tfK.getText());
+					for (int i = 0; i < wp.length; i++) {
+						wp[i] = Double.parseDouble(tfwp[i].getText());
+						qp[i] = Double.parseDouble(tfqp[i].getText());
+					}
+					
+					if (order % 2 == 0) {
+						sigma = 0;
+					} else {
+						sigma = Double.parseDouble(tfSigma.getText());
+					}
+					controller.setValues(new Object[]{K, wp, qp, sigma});
+				} catch (NumberFormatException e2) {
+					// TODO: handle exception
+					StatusBar.showStatus("Wrong number format");
 				}
 				
-				if (order % 2 == 0) {
-					sigma = 0;
-				} else {
-					sigma = Double.parseDouble(tfSigma.getText());
-				}
-				
-				controller.setValues(new Object[]{K, wp, qp, sigma});
 			} else {
 				controller.approximateMeasurement();
 			}
 			
 			
+		}
+		if(e.getSource() == btCancel){
+			Approximation.stop = true;
 		}
 	}
 
@@ -304,7 +315,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			StatusBar.showStatus("File does not exist");
 		}
 
-		StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading...");
+		StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
 
 		return measurementList;
 	}
