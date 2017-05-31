@@ -61,11 +61,8 @@
   		setBorder(MyBorderFactory.createMyBorder(" Topview "));
   		this.controller = controller;
   		inputPanel.setController(controller);
-//  		add(btOk, new GridBagConstraints(0, 0, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//  				new Insets(10, 10, 10, 10), 0, 0));
   		add(inputPanel,new GridBagConstraints(0, 0, 1, 1, 0.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.VERTICAL,
   				new Insets(0, 0, 10, 10), 0, 0));
-  		inputPanel.setBorder(MyBorderFactory.createMyBorder("InputPanel"));
  		add(outputPanel,new GridBagConstraints(1, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
   				new Insets(0, 0, 10, 10), 0, 0));
  		
