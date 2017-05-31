@@ -50,7 +50,6 @@
   	private OutputPanel outputPanel = new OutputPanel();
 	private Controller controller;
 	private File file;
-//	public SettingsPanel settingsPanel=new SettingsPanel();
 
 	double[][] measurementData;
 
