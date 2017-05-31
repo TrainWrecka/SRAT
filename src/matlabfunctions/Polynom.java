@@ -2,8 +2,6 @@ package matlabfunctions;
 
 import org.apache.commons.math3.complex.Complex;
 
-import DataProcessing.Approximation;
-
 public class Polynom {
 
 	public double[] p;

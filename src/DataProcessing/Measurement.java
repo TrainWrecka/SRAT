@@ -3,33 +3,12 @@ package DataProcessing;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
-import org.apache.commons.math3.optim.InitialGuess;
-import org.apache.commons.math3.optim.MaxEval;
-import org.apache.commons.math3.optim.PointValuePair;
-import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
-import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
-import org.apache.commons.math3.util.FastMath;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.util.ArrayUtilities;
 
-import com.sun.javafx.css.CalculatedValue;
-import com.sun.org.apache.bcel.internal.generic.FMUL;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
-import matlabfunctions.Filter;
-import matlabfunctions.FilterFactory;
 import matlabfunctions.Filtfilt;
 import matlabfunctions.Matlab;
-import matlabfunctions.Polynom;
 import matlabfunctions.SVTools;
 import userinterface.StatusBar;
 
@@ -44,6 +23,7 @@ public class Measurement {
 
 	private double[] approxData;
 	private double[] errorData;
+	public double[] timeDataApprox;
 
 	double[][] polesData;
 
@@ -137,17 +117,21 @@ public class Measurement {
 
 		stepDataTemp = removeTime(stepDataTemp, stepIndex, stepDataTemp.length);
 
-		//		double[] stepDataTempShortened = new double[stepDataTemp.length/10];
-		//		double[] timeDataTempShortened = new double[stepDataTempShortened.length];
-		//		
-		//		for (int i = 0; i < timeDataTempShortened.length; i++) {
-		//			stepDataTempShortened[i] = stepDataTemp[i*10];
-		//			timeDataTempShortened[i] = timeData[i*10];
-		//		}
+		int cutter = (int) Math.pow(10, Math.floor(stepData.length / 1000) - 1);
+		cutter = (cutter < 1) ? 1 : cutter;
+		
+		double[] stepDataTempShortened = new double[stepDataTemp.length / cutter];
+		timeDataApprox = new double[stepDataTempShortened.length];
+
+		for (int i = 0; i < timeDataApprox.length; i++) {
+			stepDataTempShortened[i] = stepDataTemp[i * cutter];
+			timeDataApprox[i] = timeData[i * cutter];
+		}
 
 		Object[] approxRet;
-		approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt, maxEval);
-		//approxRet = Approximation.approximate(timeDataTempShortened, stepDataTempShortened, order, nelderSteps, simplexOpt, maxEval);
+		//approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt, maxEval);
+		approxRet = Approximation.approximate(timeDataApprox, stepDataTempShortened, order, nelderSteps, simplexOpt,
+				maxEval);
 
 		approxData = (double[]) approxRet[0];
 		double[] A = (double[]) approxRet[2];
@@ -211,36 +195,6 @@ public class Measurement {
 	}
 
 	/*
-	 * removes the unused data
-	 */
-	private double[][] cutMeasurement(double[][] measurement) {
-		double[][] cutData = null;
-
-		if (measurement[0].length != 3) {
-			return cutData = measurement;
-		}
-
-		int j = 0;
-		for (int i = 0; i < measurement.length; i++) {
-			if (measurement[i][1] != 0) {
-				j = i;
-				break;
-			}
-		}
-
-		cutData = new double[measurement.length - j][measurement[0].length];
-
-		for (int i = 0; i < cutData.length; i++) {
-			cutData[i][0] = measurement[i][0];
-			cutData[i][1] = measurement[j][1];
-			cutData[i][2] = measurement[j][2];
-			j++;
-		}
-
-		return cutData;
-	}
-
-	/*
 	 * returns true if a fluctuation exists in
 	 * the signal for the specified range
 	 */
@@ -270,8 +224,8 @@ public class Measurement {
 	private void extractData(double[][] measurement) {
 		input = false;
 
-		int cutter = (int) Math.pow(10, Math.floor(measurement.length/1000) - 1);
-		cutter = (cutter < 1)? 1 : cutter;
+		//int cutter = (int) Math.pow(10, Math.floor(measurement.length / 1000) - 1);
+		int cutter = 1;//(cutter < 1) ? 1 : cutter;
 
 		if (measurement[0].length == 3) {
 			timeData = new double[measurement.length / cutter];
@@ -446,7 +400,6 @@ public class Measurement {
 
 		for (int i = 0; i < wp.length; i++) {
 			if (i < Math.floor(poles.length / 2)) {
-				//wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
 				wp[i] = f.format(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
 				double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
 				double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
@@ -525,9 +478,6 @@ public class Measurement {
 	private double[] signalFilter(double[] signal, boolean modeAuto, int percent) {
 		double errorDetection[] = new double[] { 2e-7, 3.2e-9, 3e-5, 4e-3 };
 		double errorCompare[] = new double[] { 5e-7, 10e-7, 5e-4, 5e-3 };
-
-		//if(noise)
-		//	ret
 		double noiseError;
 		int stepLoc = getStepLocation(inputData);
 		double offset = getOffset(signal, stepLoc);

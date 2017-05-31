@@ -1,28 +1,14 @@
 package userinterface;
 
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-
-import java.awt.GridBagLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayoutInfo;
-import java.awt.Insets;
-import java.awt.Toolkit;
-
-import JFreeChart.Plots;
-import JFreeChart.StepResponsePlot;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
-import com.sun.glass.ui.Size;
-
-import javax.swing.JLabel;
+import JFreeChart.Plots;
 
 public class DataPanel extends JPanel implements ActionListener {
 

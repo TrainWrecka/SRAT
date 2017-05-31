@@ -1,41 +1,21 @@
 package JFreeChart;
 
-import org.jfree.chart.ChartPanel;
-
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Shape;
-import java.awt.Toolkit;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.Renderer;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartMouseListener;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
-import org.jfree.util.ShapeUtilities;
-
-import userinterface.StatusBar;
-
-import org.jfree.chart.plot.Marker;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.util.ShapeUtilities;
 
 public class Plots extends JPanel {
 

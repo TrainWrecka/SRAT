@@ -1,38 +1,22 @@
 package userinterface;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.util.Observable;
-
-import java.awt.GridBagLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayoutInfo;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
-
-import JFreeChart.ErrorPlot;
-import JFreeChart.Plots;
-import JFreeChart.StepResponsePlot;
-import JFreeChart.ZeroesPlot;
-import model.Model;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.border.Border;
-import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
-import org.jfree.data.xy.XYSeries;
+import JFreeChart.ErrorPlot;
+import JFreeChart.Plots;
+import model.Model;
 
 public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
 

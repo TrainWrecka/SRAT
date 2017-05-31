@@ -1,7 +1,5 @@
 package DataProcessing;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.exception.TooManyEvaluationsException;
@@ -17,7 +15,6 @@ import matlabfunctions.Filter;
 import matlabfunctions.FilterFactory;
 import matlabfunctions.Matlab;
 import matlabfunctions.SVTools;
-import userinterface.StatusBar;
 
 public class Approximation {
 

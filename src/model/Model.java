@@ -3,12 +3,12 @@ package model;
 import java.util.List;
 import java.util.Observable;
 
+import org.jfree.data.xy.XYSeries;
+
 import DataProcessing.Approximation;
 import DataProcessing.Measurement;
 import DataProcessing.PlotData;
 import matlabfunctions.Matlab;
-
-import org.jfree.data.xy.XYSeries;
 
 public class Model extends Observable {
 	private Approximation approximation;
@@ -18,7 +18,7 @@ public class Model extends Observable {
 	private PlotData stepPlotData = new PlotData();
 	private PlotData errorPlotData = new PlotData();
 	private PlotData polesPlotData = new PlotData();
-	
+
 	double laguerreAcc = 1e-6;
 	double[] simplexOpt = { 1e-24, 1e-24 };
 	double nelderSteps = 0.1;
@@ -27,7 +27,6 @@ public class Model extends Observable {
 	boolean showFiltered = true;
 	boolean autoFilter = true;
 	int filterPercentage = 80;
-	
 
 	public Model() {}
 
@@ -37,40 +36,39 @@ public class Model extends Observable {
 		polesPlotData.removePlotData();
 
 		measurement.setMeasurement(measurementList);
-		
-		if(doFilter){
+
+		if (doFilter) {
 			filtMeasurement();
 		}
 
 		updateMeasurement();
 		notifyObservers();
 	}
-	
-	public void filtMeasurement(){
+
+	public void filtMeasurement() {
 		measurement.filtData(autoFilter, filterPercentage);
 	}
 
-	
-	private void updateMeasurement(){
+	private void updateMeasurement() {
 		stepPlotData.removePlotData();
-		
+
 		stepPlotData.setXData(measurement.getTimeData());
 		if (inputExisting()) {
 			stepPlotData.setYData(measurement.getInputData(), "Input");
 		}
 		stepPlotData.setYData(measurement.getStepData(showFiltered), "Step");
-		if(measurement.approximated){
-			stepPlotData.setYData(measurement.getApproxData(), "Approximation");
+		if (measurement.approximated) {
+			stepPlotData.setData(measurement.timeDataApprox, measurement.getApproxData(), "Approximation");
 		}
 	}
-	
-	private void updateError(){
+
+	private void updateError() {
 		errorPlotData.removePlotData();
 		errorPlotData.setXData(measurement.getTimeData());
 		errorPlotData.setYData(measurement.getErrorData(), "Error");
 	}
-	
-	private void updatePoles(){
+
+	private void updatePoles() {
 		polesPlotData.removePlotData();
 		polesPlotData.setXData(measurement.getPolesData()[0]);
 		polesPlotData.setYData(measurement.getPolesData()[1], "Poles");
@@ -78,15 +76,19 @@ public class Model extends Observable {
 
 	public void approximateMeasurement() {
 
-		measurement.approximateMeasurement(nelderSteps, simplexOpt, maxEval);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				measurement.approximateMeasurement(nelderSteps, simplexOpt, maxEval);
+				updateMeasurement();
+				updateError();
+				updatePoles();
+				notifyObservers();
+			}
+		}).start();
 
-		updateMeasurement();
-		updateError();
-		updatePoles();
-
-		notifyObservers();
 	}
-	
+
 	public void setSettings(Object[] settings) {
 		Matlab.laguerreAcc = (double) settings[0];
 		this.simplexOpt = (double[]) settings[1];
@@ -96,13 +98,13 @@ public class Model extends Observable {
 		this.showFiltered = (boolean) settings[5];
 		this.autoFilter = (boolean) settings[6];
 		this.filterPercentage = (int) settings[7];
-		
-		if(doFilter){
+
+		if (doFilter) {
 			filtMeasurement();
 		} else {
 			measurement.undoFilter();
 		}
-		if(measurement.approximated){
+		if (measurement.approximated) {
 			measurement.calculateError();
 			updateError();
 		}
