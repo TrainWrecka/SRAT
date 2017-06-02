@@ -11,6 +11,8 @@ import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 import org.apache.commons.math3.complex.Complex;
 import org.jfree.chart.ChartFactory;
@@ -63,6 +65,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JTextField[] tfwp = new JTextField[10];
 	private JTextField[] tfqp = new JTextField[10];
 	
+//	private JFormattedTextField[] tfwp = new JFormattedTextField[10];
+//	private JFormattedTextField[] tfqp = new JFormattedTextField[10];
+	
+
 	private JTextField tfSigma = new JTextField();
 	private JTextField tfK = new JTextField();
 
@@ -121,6 +127,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
 			tfwp[i] = new JTextField();
+			
+//			tfwp[i] = new JFormattedTextField();
+
+			
+			
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
