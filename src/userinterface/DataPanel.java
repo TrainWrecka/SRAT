@@ -1,51 +1,49 @@
 package userinterface;
 
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-
-import java.awt.GridBagLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayoutInfo;
-import java.awt.Insets;
-import java.awt.Toolkit;
-
-import JFreeChart.Plots;
-import JFreeChart.StepResponsePlot;
 
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
-import com.sun.glass.ui.Size;
+import JFreeChart.Plots;
 
-import javax.swing.JLabel;
+public class DataPanel extends JPanel{
 
-public class DataPanel extends JPanel implements ActionListener {
+	//================================================================================
+	// Properties
+	//================================================================================
 
-//	public StepResponsePlot StepResponseplot = new StepResponsePlot("Stepresponse");
+	Plots plot;
 
-
-	public DataPanel() {
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
+	public DataPanel(Plots plot) {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder(""));
+		this.plot = plot;
 	}
 	
-	public void clearData(Plots plot){
+	//================================================================================
+	// Public Methods
+	//================================================================================
+	
+	/**
+	 * Fügt dem Plot eine Serie mit Daten hinzu.
+	 * @param series Serie mit Daten.
+	 */
+	public void addData(XYSeries series) {
+		plot.addSeries(series);
+	}
+	
+	/**
+	 * Löscht alle Daten der Serie vom Plot.
+	 */
+	public void clearData(){
 		plot.clearSeries();
 	}
-
-	public void addData(XYSeries seriesStepresponse, Plots plot) {
-		plot.addSeries(seriesStepresponse);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

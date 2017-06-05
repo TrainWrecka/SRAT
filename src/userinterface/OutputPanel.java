@@ -1,41 +1,29 @@
 package userinterface;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.util.Observable;
-
-import java.awt.GridBagLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayoutInfo;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
-
-import JFreeChart.ErrorPlot;
-import JFreeChart.Plots;
-import JFreeChart.StepResponsePlot;
-import JFreeChart.ZeroesPlot;
-import model.Model;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.border.Border;
-import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jfree.chart.ChartMouseEvent;
-import org.jfree.chart.ChartMouseListener;
-import org.jfree.data.xy.XYSeries;
+import JFreeChart.ErrorPlot;
+import JFreeChart.PlotData;
+import JFreeChart.Plots;
+import model.Model;
 
 public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
 
+	//================================================================================
+	// Properties
+	//================================================================================
 
 	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 	private JPanel DefaultPanel = new JPanel(new GridBagLayout());
@@ -44,13 +32,13 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
-	private DataPanel StepresponsePanel = new DataPanel();
-	private DataPanel ZeroesPanel = new DataPanel();
-	private DataPanel ErrorPanel = new DataPanel();
-
 	private Plots ErrorPlot = new Plots("error", "xyline", "time", "In/Out");
 	private Plots StepresponsePlot = new Plots("stepresponse", "xyline", "time", "In/Out");
 	private Plots ZeroesPlot = new Plots("poles", "scatter", "", "");
+
+	private DataPanel StepresponsePanel = new DataPanel(StepresponsePlot);
+	private DataPanel ZeroesPanel = new DataPanel(ZeroesPlot);
+	private DataPanel ErrorPanel = new DataPanel(ErrorPlot);
 
 	private JPanel TabStepresponsePanel = new JPanel(new GridBagLayout());
 	private JPanel TabErrorPanel = new JPanel(new GridBagLayout());
@@ -58,6 +46,14 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 	public Font myFont = new Font("Serif", Font.BOLD, 20);
 
 	public Dimension ErrorPanelDimension;
+
+	private PlotData stepData = new PlotData();
+	private PlotData errorData = new PlotData();
+	private PlotData polesData = new PlotData();
+
+	//================================================================================
+	// Constructor
+	//================================================================================
 
 	public OutputPanel() {
 		super(new GridBagLayout());
@@ -94,32 +90,56 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 		tabpane.setBorder(MyBorderFactory.createMyBorder("Output"));
 	}
 
+	//================================================================================
+	// Public Methods
+	//================================================================================
+
+	/**
+	 * Bei jedem Aufruf werden alle Panels gelöscht. Falls eine Messung geladen wurde wird
+	 * der Plot mit der Schrittantwort aktualisiert, mit Einheitsschritt falss vorhanden. Ausserdem
+	 * werden die Variablen aktualisiert. Wenn die Schrittantwort approximiert wurde, wird die Approximation
+	 * zusammen mit dem Error und den Polen geladen.
+	 * @param obs the observable object.
+	 * @param obj an argument passed to the notifyObservers method.
+	 */
 	public void update(Observable obs, Object obj) {
 		Model model = (Model) obs;
 
-		StepresponsePanel.clearData(StepresponsePlot);
-		ErrorPanel.clearData(ErrorPlot);
-		ZeroesPanel.clearData(ZeroesPlot);
+		StepresponsePanel.clearData();
+		ErrorPanel.clearData();
+		ZeroesPanel.clearData();
 
-		if (model.getErrorData()[0] != null) {
-			for (int i = 0; i < model.getErrorData().length; i++) {
-				ErrorPanel.addData(model.getErrorData()[i], ErrorPlot);
+		if (model.measurementLoaded()) {
+
+			stepData.removePlotData();
+			stepData.setXData(model.getTimeData());
+			if (model.inputExisting()) {
+				stepData.setYData(model.getInputData(), "Input");
 			}
-		}
 
-		if (model.getPolesData()[0] != null) {
-			for (int i = 0; i < model.getPolesData().length; i++) {
-				ZeroesPanel.addData(model.getPolesData()[i], ZeroesPlot);
+			stepData.setYData(model.getStepData(), "Step");
+
+			DefaultVariablePanel.update(obs, obj);
+
+			if (model.approximated()) {
+				errorData.removePlotData();
+				stepData.setYData(model.getApproxData(), "Apprximation");
+
+				errorData.setXData(model.getTimeData());
+				errorData.setYData(model.getErrorData(), "Error");
+				ErrorPanel.addData(errorData.getPlotData()[0]);
+
+				polesData.removePlotData();
+				polesData.setXData(model.getPolesData()[0]);
+				polesData.setYData(model.getPolesData()[1], "Poles");
+				ZeroesPanel.addData(polesData.getPlotData()[0]);
 			}
-		}
 
-		for (int i = 0; i < model.getStepresponseData().length; i++) {
-			if (model.getStepresponseData()[i] != null) {
-				StepresponsePanel.addData(model.getStepresponseData()[i], StepresponsePlot);
+			for (int i = 0; i < stepData.getPlotData().length; i++) {
+				StepresponsePanel.addData(stepData.getPlotData()[i]);
 			}
-		}
 
-		DefaultVariablePanel.setValues(model.getValues());
+		}
 
 	}
 

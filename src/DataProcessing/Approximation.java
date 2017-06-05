@@ -1,7 +1,5 @@
 package DataProcessing;
 
-import java.util.Arrays;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.exception.TooManyEvaluationsException;
@@ -17,43 +15,109 @@ import matlabfunctions.Filter;
 import matlabfunctions.FilterFactory;
 import matlabfunctions.Matlab;
 import matlabfunctions.SVTools;
+import sun.swing.SwingUtilities2.Section;
 import userinterface.StatusBar;
 
 public class Approximation {
 
-	public static Complex test1 = new Complex(12, 2);
-	public static Complex test2 = new Complex(12, 2);
-	public static Complex test3 = new Complex(12, 2);
-	public static double[] polstellenReal = new double[10];
-	public static double[] polstellenImag;
-	public Complex[] Polstellen;
+	//================================================================================
+	// Properties
+	//================================================================================
 
-	public double[] yIst;
-	public double[] t;
-	
-	public static boolean stop;
+	private boolean running;
 
-	//chng
-	//	public Complex[] res = new Complex[10];
-
-	private static PlotData plotData = new PlotData();
+	//================================================================================
+	// Constructor 
+	//================================================================================
 
 	public Approximation() {
 
 	}
 
-	public static double[] Awert(int order, Complex[] polesReal) {
-		double[] x0 = new double[order + 1];
+	//================================================================================
+	// Public Methods
+	//================================================================================
 
-		x0[0] = 0.5;
-		for (int i = 1; i <= polesReal.length; i++) {
-			x0[i] = polesReal[i - 1].getReal();
+	/**
+	 * TODO!!!
+	 * @param timeData Zeitachse.
+	 * @param stepData Zu approximierender Schritt.
+	 * @param order Zu approximiernede Ordnung.
+	 * @param nelderSteps Nelder Simplex Steps des Optimierers.
+	 * @param simplexOpt Relative und Absolute Goals des Optimierers.
+	 * @param maxEval Maximale Evaluationen des optimierers.
+	 * @return Gibt den generierten Schritt und die dazugehörigen Pole zurück.
+	 */
+	public double[][] approximate(double[] timeData, double[] stepData, int order, double nelderSteps, double[] simplexOpt,
+			int maxEval) {
+		Filter filt = FilterFactory.createButter(order, 1.0);
+
+		Complex[] P = (Complex[]) Matlab.residue(filt.B, filt.A)[1];
+
+		double[] initCoeffs = initialCoeffs(order, P);
+		double[] nelderValues = new double[order + 1];
+
+		for (int i = 0; i < nelderValues.length; i++) {
+			nelderValues[i] = nelderSteps;
 		}
 
-		return x0;
+		SimplexOptimizer optimizer = new SimplexOptimizer(simplexOpt[0], simplexOpt[1]);
+		Target target = new Target(timeData, stepData, order);
+		PointValuePair optimum = null;
+		double[] approxPoles = null;
+		try {
+			optimum = optimizer.optimize(new MaxEval(maxEval), new ObjectiveFunction(target), GoalType.MINIMIZE,
+					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
+			approxPoles = optimum.getPoint();
+		} catch (TooManyEvaluationsException e) {
+			approxPoles = target.coeffs;
+		}
+
+		StatusBar.clear();
+		StatusBar.showStatus("Approximation finished");
+		StatusBar.showStatus("Evaluations: " + target.evals);
+
+		return generateStep(approxPoles, timeData, order);
 	}
 
-	public static final Object[] schritt(double[] poles, double[] t, int order) {
+	/**
+	 * Überprüft ob die Approximation noch am laufen ist.
+	 * @return false falls die Approximaiton steckengeblieben ist.
+	 */
+	public boolean checkRunning() {
+		boolean ret = running;
+		running = false;
+		return ret;
+	}
+
+	//================================================================================
+	// Private Methods
+	//================================================================================
+
+	private double[] initialCoeffs(int order, Complex[] polesReal) {
+		double[] coeffs = new double[order + 1];
+
+		coeffs[0] = 0.5;
+		for (int i = 1; i <= polesReal.length; i++) {
+			coeffs[i] = polesReal[i - 1].getReal();
+		}
+
+		return coeffs;
+	}
+
+	private double errorFunction(double[] timeAxis, double[] stepGoal, double[] poles, int order) {
+		double error = 0;
+
+		double[] stepCurrent = (double[]) generateStep(poles, timeAxis, order)[0];
+
+		for (int i = 0; i < stepGoal.length; i += 10) {
+			error += Math.pow(stepGoal[i] - stepCurrent[i], 2);
+		}
+		
+		return error;
+	}
+
+	private double[][] generateStep(double[] poles, double[] timeAxis, int order) {
 		double[] B = new double[1];
 		B[0] = poles[0];
 
@@ -93,115 +157,43 @@ public class Approximation {
 			doubleA[i] = A[i].getReal();
 		}
 
-		Object[] ret = new Object[3];
-		Object[] step = SVTools.step(B, doubleA, t);
+		double[] step = (double[]) SVTools.step(B, doubleA, timeAxis)[0];
 
-		ret[0] = step[0];
-		ret[1] = step[1];
-		ret[2] = doubleA;
-
-		return ret;
+		return new double[][] { step, doubleA };
 	}
 
-	//t, y_soll, x,N
-	public static double errorFunction(double[] t, double[] y_soll, double[] poles, int order) {
-		double error = 0;
-
-		Object[] ret = Approximation.schritt(poles, t, order);
-
-		double[] y_ist = (double[]) ret[0];
-		double[] t1 = (double[]) ret[1];
-
-		for (int i = 0; i < y_soll.length; i++) {
-			error += Math.pow(y_soll[i] - y_ist[i], 2);
-		}
-
-		return error;
-	}
-
-	private static class Target implements MultivariateFunction {
+	private class Target implements MultivariateFunction {
 		double[] t;
 		double[] y_soll;
 		int order;
-		double evals = 0;
+		int evals = 0;
 		double[] coeffs;
-		boolean leave = false;
 		double error;
-		long timeOut = 50000;
 
 		public Target(double[] t, double[] y_soll, int order) {
 			this.t = t;
 			this.y_soll = y_soll;
 			this.order = order;
-			
-			stop = false;
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(timeOut);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					leave = true;
-				}
-			}).start();
+			running = true;
 		}
 
 		public double value(double[] variables) {
-			if (stop) {
-				throw new RuntimeException("Time - Out");
-			}
-
 			final double[] coeffs = variables;
 			double error = errorFunction(t, y_soll, coeffs, order);
 
+			if (evals % 100 == 0) {
+				StatusBar.clear();
+				StatusBar.showStatus("Approximating...");
+				StatusBar.showStatus("Evaluations: " + evals);
+			}
+
 			evals++;
-			System.out.println("Evals: " + evals);
-			System.out.println("Error: " + error);
 
 			this.error = error;
 			this.coeffs = coeffs;
 
 			return error;
 		}
-	}
-
-	public static Object[] approximate(double[] timeData, double[] stepData, int order, double nelderSteps, double[] simplexOpt,
-			int maxEval) {
-		Filter filt = FilterFactory.createButter(order, 1.0);
-
-		Object[] resi = Matlab.residue(filt.B, filt.A);
-
-		Complex[] R = (Complex[]) resi[0];
-		Complex[] P = (Complex[]) resi[1];
-		double K = (double) resi[2];
-
-		double[] initCoeffs = Awert(order, P);
-
-		double[] nelderValues = new double[order + 1];
-
-		for (int i = 0; i < nelderValues.length; i++) {
-			nelderValues[i] = nelderSteps;
-		}
-
-		SimplexOptimizer optimizer = new SimplexOptimizer(simplexOpt[0], simplexOpt[1]);
-		Target target = new Target(timeData, stepData, order);
-		PointValuePair optimum = null;
-		double[] approxPoles = null;
-		target.timeOut = 0;
-		try {
-			optimum = optimizer.optimize(new MaxEval(maxEval), new ObjectiveFunction(target), GoalType.MINIMIZE,
-					new InitialGuess(initCoeffs), new NelderMeadSimplex(nelderValues));
-			approxPoles = optimum.getPoint();
-		} catch (TooManyEvaluationsException e) {
-			approxPoles = target.coeffs;
-			System.out.println("Time - Out");
-		}
-
-		Object[] result = Approximation.schritt(approxPoles, timeData, order);
-
-		return result;
 	}
 }

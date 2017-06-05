@@ -1,5 +1,8 @@
 package userinterface;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -8,26 +11,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Observable;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.apache.commons.math3.complex.Complex;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.XYPlot;
 
 import com.opencsv.CSVReader;
 
-import DataProcessing.Approximation;
-import matlabfunctions.Matlab;
 import model.Model;
-
-import java.awt.*;
-import java.awt.Window.Type;
-import java.util.List;
-import java.util.Observable;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
@@ -35,9 +36,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private int qpPlacement = 6;
 	// Buttons
 	private JButton btLoad = new JButton("Load");
-	private JButton btRun = new JButton("Run");
+	public JButton btRun = new JButton("Run");
 	private JButton btCancel = new JButton("Cancel");
-	
+
 	private JRadioButton rbtAutomatically = new JRadioButton("Automatically");
 	private JRadioButton rbtManually = new JRadioButton("Manually");
 	// Buttongroup
@@ -45,10 +46,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	// JCombobox
 	private String comboBoxListe[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
-	
 
+	DecimalFormat f = new DecimalFormat("##0.##E0");
 
-	
 	// Labels
 
 	private JLabel[] lbwp = new JLabel[5];
@@ -60,9 +60,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	private JLabel Output = new JLabel("");
 	// Textfields
-	private JTextField[] tfwp = new JTextField[10];
-	private JTextField[] tfqp = new JTextField[10];
-	
+	private JTextField[] tfwp = new JTextField[5];
+	private JTextField[] tfqp = new JTextField[5];
+
 	private JTextField tfSigma = new JTextField();
 	private JTextField tfK = new JTextField();
 
@@ -110,13 +110,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		btRun.addActionListener(this);
 
 		// Label und Texfield für k platzieren
-		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
-		add(tfK, new GridBagConstraints(1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
+		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(20, 0, 0, 0), 0, 0));
+		add(tfK, new GridBagConstraints(1, 4, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
+				new Insets(20, 0, 0, 0), 0, 0));
 		lbK.setEnabled(false);
 		tfK.setEnabled(false);
-		
+
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
@@ -162,7 +162,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		//file chooser options
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
-	//	fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		//	fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 
@@ -170,6 +170,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		rbtAutomatically.addActionListener(this);
 		rbtManually.addActionListener(this);
 		btCancel.addActionListener(this);
+		btRun.setEnabled(false);
+		
+		rbtManually.setEnabled(false);
 
 	}
 
@@ -191,10 +194,57 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
-		if (e.getSource() == rbtAutomatically) {
+		
+		if (e.getSource() == btLoad) {
+			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+				controller.setMeasurement(readCSV());
+
+				rbtAutomatically.setSelected(true);
+				rbtManually.setEnabled(false);
+			}
+			
+		}
+
+		if (e.getSource() == btRun) {
+			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
+			controller.setOrder(order);
+			if (rbtManually.isSelected() == true) {
+				double[][] wqp = new double[2][(int)Math.floor(order / 2)];
+				double sigma = 0;
+				try {
+					double K = Double.parseDouble(tfK.getText());
+					for (int i = 0; i < wqp[0].length; i++) {
+						wqp[0][i] = Double.parseDouble(tfwp[i].getText());
+						wqp[1][i] = Double.parseDouble(tfqp[i].getText());
+					}
+
+					if (order % 2 == 0) {
+						sigma = 0;
+					} else {
+						sigma = Double.parseDouble(tfSigma.getText());
+					}
+					controller.setK(K);
+					controller.setSigma(sigma);
+					controller.setWqp(wqp);
+					controller.approximateManual();
+				} catch (NumberFormatException e2) {
+					// TODO: handle exception
+					StatusBar.showStatus("Wrong number format");
+				}
+
+			} else {
+				controller.approximateAuto();
+			}
+
+		}
+		if (e.getSource() == btCancel) {
+			controller.stopApproximation();
+		}
+		
+		if (/*e.getSource() == rbtAutomatically*/ rbtAutomatically.isSelected()) {
 			lbK.setEnabled(false);
 			tfK.setEnabled(false);
-			
+
 			for (int i = 0; i < 5; i++) {
 				lbwp[i].setEnabled(false);
 				lbqp[i].setEnabled(false);
@@ -206,58 +256,17 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		} else if (e.getSource() == rbtManually) {
 			lbK.setEnabled(true);
 			tfK.setEnabled(true);
-			
-			
-			for (int i = 0; i < Math.floor(Ordnung1/2); i++) {
+
+			for (int i = 0; i < Math.floor(Ordnung1 / 2); i++) {
 				lbwp[i].setEnabled(true);
 				lbqp[i].setEnabled(true);
 				tfwp[i].setEnabled(true);
 				tfqp[i].setEnabled(true);
-			}			
-			if(Ordnung1%2==1){
+			}
+			if (Ordnung1 % 2 == 1) {
 				lbSigma.setEnabled(true);
 				tfSigma.setEnabled(true);
 			}
-		}
-		if (e.getSource() == btLoad) {
-			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
-				controller.setMeasurement(readCSV());
-			}
-		}
-
-		if (e.getSource() == btRun) {
-			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
-			controller.setOrder(order);
-			if (rbtManually.isSelected() == true) {
-				double[] wp = new double[(order / 2)];
-				double[] qp = new double[wp.length];
-				double sigma = 0;
-				try {
-					double K = Double.parseDouble(tfK.getText());
-					for (int i = 0; i < wp.length; i++) {
-						wp[i] = Double.parseDouble(tfwp[i].getText());
-						qp[i] = Double.parseDouble(tfqp[i].getText());
-					}
-					
-					if (order % 2 == 0) {
-						sigma = 0;
-					} else {
-						sigma = Double.parseDouble(tfSigma.getText());
-					}
-					controller.setValues(new Object[]{K, wp, qp, sigma});
-				} catch (NumberFormatException e2) {
-					// TODO: handle exception
-					StatusBar.showStatus("Wrong number format");
-				}
-				
-			} else {
-				controller.approximateMeasurement();
-			}
-			
-			
-		}
-		if(e.getSource() == btCancel){
-			Approximation.stop = true;
 		}
 	}
 
@@ -267,10 +276,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		Ordnung = "0";
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
-		
+
 		for (int i = 0; i < 5; i++) {
 
-			if (i < Math.floor(Ordnung1/2) & rbtAutomatically.isSelected() == false) {
+			if (i < Math.floor(Ordnung1 / 2) & rbtAutomatically.isSelected() == false) {
 				lbwp[i].setEnabled(true);
 				lbqp[i].setEnabled(true);
 				tfwp[i].setEnabled(true);
@@ -289,54 +298,61 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
 		}
-		
+
 	}
 
-	/*
-	 * reads a csv file
-	 */
 	private List<String[]> readCSV() {
 		CSVReader reader = null;
 		List<String[]> measurementList = null;
 
 		try {
 			reader = new CSVReader(new FileReader(fileChooser.getSelectedFile()));
+			measurementList = reader.readAll();
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			StatusBar.showStatus("File does not exist");
-		}
-
-		try {
-			measurementList = reader.readAll();
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
-			StatusBar.showStatus("File does not exist");
+			StatusBar.showStatus("IO Problem when reading file");
 		}
 
 		StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
 
 		return measurementList;
 	}
-	
+
 	public void update(Observable obs, Object obj) {
 		Model model = (Model) obs;
-		
-		Object[] values = model.getValues();
-	
-		String K = (String) values[0];
-		String[] wp = (String[]) values[1];
-		String[] qp = (String[]) values[2];
-		String sigma = (String) values[3];
-		String meanError = (String) values[4];
-		
-		for(int i = 0; i < lbwp.length; i++){
-			tfqp[i].setText(qp[i]);
-			tfwp[i].setText(wp[i]);
+
+		if (model.approximated()) {
+			//btRun.setEnabled(true);
+			rbtManually.setEnabled(true);
+			
+			for (int i = 0; i < tfwp.length; i++) {
+				if (i < model.getWqp()[0].length) {
+					tfwp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
+					tfqp[i].setText(f.format(model.getWqp()[1][i]).toLowerCase());
+				} else {
+					tfwp[i].setText("");
+					tfqp[i].setText("");
+				}
+			}
+
+			tfK.setText(f.format(model.getK()).toLowerCase());
+
+			if (model.getOrder() % 2 == 1) {
+				tfSigma.setText(f.format(model.getSigma()).toLowerCase());
+			} else {
+				tfSigma.setText("");
+			}
+		} else {
+			for (int i = 0; i < tfwp.length; i++) {
+				tfwp[i].setText("");
+				tfqp[i].setText("");
+			}
+
+			tfK.setText("");
+			tfSigma.setText("");
 		}
-		 
-		tfK.setText(K);
-		tfSigma.setText(sigma);		
 	}
 }

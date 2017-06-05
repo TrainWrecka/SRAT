@@ -17,7 +17,7 @@ public class Matlab {
 	static final FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
 	static final SplineInterpolator interpolator = new SplineInterpolator();
 
-	public static double laguerreAcc = 1e-6;
+	public static double laguerreAccuracy = 1e-6;
 	
 	public static double acosh(double x) {
 		return Math.log(x + Math.sqrt(x * x - 1.0));
@@ -486,7 +486,7 @@ public class Matlab {
 	}
 
 	public static final Complex[] roots(double[] poly) {
-		final LaguerreSolver solver = new LaguerreSolver(laguerreAcc/*1e-16,1e-10*/);
+		final LaguerreSolver solver = new LaguerreSolver(laguerreAccuracy/*1e-16,1e-10*/);
 		double[] p = new double[poly.length];
 
 		// Koeffizient der höchsten Potenz auf durch Multiplikation mit einer
@@ -637,8 +637,10 @@ public class Matlab {
 
 	}
 
-	/*
-	 * returns max value of array
+	/**
+	 * Gibt das Maximum aus einem Datensatz zurück.
+	 * @param data Datensatz.
+	 * @return Maximum.
 	 */
 	public static double max(double[] data) {
 		double max = 0;
@@ -650,20 +652,23 @@ public class Matlab {
 		return max;
 	}
 
-	/*
-	 * calculates the mean value of array
-	 * elements
+	/**
+	 * Berechnet den Mittelwert eines Datensatzes.
+	 * @param data Datensatz.
+	 * @return Mittelwert.
 	 */
-	public static double mean(double[] m) {
+	public static double mean(double[] data) {
 		double sum = 0;
-		for (int i = 0; i < m.length; i++) {
-			sum += m[i];
+		for (int i = 0; i < data.length; i++) {
+			sum += data[i];
 		}
-		return sum / m.length;
+		return sum / data.length;
 	}
 
-	/*
-	 * norms a vector
+	/**
+	 * Normiert einen Vektor.
+	 * @param vect Vektor.
+	 * @return Normierter Vektor.
 	 */
 	public static double norm(double[] vect) {
 		double sum = 0;
