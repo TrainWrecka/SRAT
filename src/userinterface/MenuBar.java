@@ -139,9 +139,11 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 			StatusBar.showStatus(this, e, e.getActionCommand());
 			if (((JFrame) this.getTopLevelAncestor()).isAlwaysOnTop()) {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(false);
+				settingsDialog.setAlwaysOnTop(false);
 				menuItemOnTop.setText("Allways on Top");
 			} else {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(true);
+				settingsDialog.setAlwaysOnTop(true);
 				menuItemOnTop.setText("Not allways on Top");
 			}
 		}
