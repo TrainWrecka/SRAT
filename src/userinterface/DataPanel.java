@@ -10,28 +10,40 @@ import org.jfree.data.xy.XYSeries;
 
 import JFreeChart.Plots;
 
-public class DataPanel extends JPanel implements ActionListener {
+public class DataPanel extends JPanel{
 
-//	public StepResponsePlot StepResponseplot = new StepResponsePlot("Stepresponse");
+	//================================================================================
+	// Properties
+	//================================================================================
 
+	Plots plot;
 
-	public DataPanel() {
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
+	public DataPanel(Plots plot) {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder(""));
+		this.plot = plot;
 	}
 	
-	public void clearData(Plots plot){
+	//================================================================================
+	// Public Methods
+	//================================================================================
+	
+	/**
+	 * Fügt dem Plot eine Serie mit Daten hinzu.
+	 * @param series Serie mit Daten.
+	 */
+	public void addData(XYSeries series) {
+		plot.addSeries(series);
+	}
+	
+	/**
+	 * Löscht alle Daten der Serie vom Plot.
+	 */
+	public void clearData(){
 		plot.clearSeries();
 	}
-
-	public void addData(XYSeries seriesStepresponse, Plots plot) {
-		plot.addSeries(seriesStepresponse);
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

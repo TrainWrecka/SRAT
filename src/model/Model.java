@@ -3,94 +3,94 @@ package model;
 import java.util.List;
 import java.util.Observable;
 
-import org.jfree.data.xy.XYSeries;
-
-import DataProcessing.Approximation;
 import DataProcessing.Measurement;
-import DataProcessing.PlotData;
 import matlabfunctions.Matlab;
 
+import userinterface.StatusBar;
+
 public class Model extends Observable {
-	private Approximation approximation;
-	private PlotData plotData;
-	private Measurement measurement = new Measurement();
 
-	private PlotData stepPlotData = new PlotData();
-	private PlotData errorPlotData = new PlotData();
-	private PlotData polesPlotData = new PlotData();
+	//================================================================================
+	// Properties
+	//================================================================================
 
-	double laguerreAcc = 1e-6;
-	double[] simplexOpt = { 1e-24, 1e-24 };
-	double nelderSteps = 0.1;
-	int maxEval = 5000;
-	boolean doFilter = false;
-	boolean showFiltered = true;
-	boolean autoFilter = true;
-	int filterPercentage = 80;
+	private double[] simplexOpt;
+	private double nelderSteps;
+	private int maxEval;
+	private boolean doFilter;
+	private boolean showFiltered;
+	private boolean autoFilter;
+	private int filterPercentage;
+
+	private boolean measurementLoaded = false;
+
+	private Measurement measurement;
+
+	//================================================================================
+	// Constructor
+	//================================================================================
 
 	public Model() {}
 
+	//================================================================================
+	// Public Methods (excl.Setters and Getters)
+	//================================================================================
+
+	/**
+	 * Setzt die Messdaten aus der Übergebenen List und filtert die Schrittantwort anhand
+	 * der gesetzten Einstellungen. Falls eine Exception während dem Einlesen auftritt,
+	 * wird der User darüber benachrichtigt und die Daten werden nicht geladen.
+	 * Ruft notifyObservers auf um die Plots zu aktualisieren.
+	 * @param measurementList Liste mit Messdaten.
+	 */
 	public void setMeasurement(List<String[]> measurementList) {
-		stepPlotData.removePlotData();
-		errorPlotData.removePlotData();
-		polesPlotData.removePlotData();
 
-		measurement.setMeasurement(measurementList);
+		measurementLoaded = false;
 
-		if (doFilter) {
-			filtMeasurement();
+		try {
+			measurement = new Measurement();
+			measurement.setMeasurement(measurementList);
+			if (doFilter) {
+				filtMeasurement();
+			}
+			measurementLoaded = true;
+
+		} catch (NumberFormatException e) {
+			StatusBar.showStatus("Wrong Number format");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			StatusBar.showStatus("Wrong Data format");
+		} catch (RuntimeException e) {
+			StatusBar.showStatus("Incorrect data columns");
 		}
 
-		updateMeasurement();
 		notifyObservers();
 	}
 
-	public void filtMeasurement() {
-		measurement.filtData(autoFilter, filterPercentage);
+
+	/**
+	 * Approximiert die Schrittantwort automatisch anhand der gesetzten Einstellungen. 
+	 * Ruft notifyObservers auf um die Plots zu aktualisieren.
+	 */
+	public void approximateAuto() {
+		measurement.approximateAuto(nelderSteps, simplexOpt, maxEval);
+		notifyObservers();
 	}
 
-	private void updateMeasurement() {
-		stepPlotData.removePlotData();
-
-		stepPlotData.setXData(measurement.getTimeData());
-		if (inputExisting()) {
-			stepPlotData.setYData(measurement.getInputData(), "Input");
-		}
-		stepPlotData.setYData(measurement.getStepData(showFiltered), "Step");
-		if (measurement.approximated) {
-			stepPlotData.setData(measurement.timeDataApprox, measurement.getApproxData(), "Approximation");
-		}
+	/**
+	 * Approximiert die Schrittantwort manuell anhand der gesetzten Parameter. 
+	 * Ruft notifyObservers auf um die Plots zu aktualisieren.
+	 */
+	public void approximateManual() {
+		measurement.approximateManual();
+		notifyObservers();
 	}
 
-	private void updateError() {
-		errorPlotData.removePlotData();
-		errorPlotData.setXData(measurement.getTimeData());
-		errorPlotData.setYData(measurement.getErrorData(), "Error");
-	}
-
-	private void updatePoles() {
-		polesPlotData.removePlotData();
-		polesPlotData.setXData(measurement.getPolesData()[0]);
-		polesPlotData.setYData(measurement.getPolesData()[1], "Poles");
-	}
-
-	public void approximateMeasurement() {
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				measurement.approximateMeasurement(nelderSteps, simplexOpt, maxEval);
-				updateMeasurement();
-				updateError();
-				updatePoles();
-				notifyObservers();
-			}
-		}).start();
-
-	}
-
+	/**
+	 * Setzt die Einstellungen. Falls die Filtereinstellungen verändert wurden
+	 * @param settings Objekt mit den Einstellungen.
+	 */
 	public void setSettings(Object[] settings) {
-		Matlab.laguerreAcc = (double) settings[0];
+		Matlab.laguerreAccuracy = (double) settings[0];
 		this.simplexOpt = (double[]) settings[1];
 		this.nelderSteps = (double) settings[2];
 		this.maxEval = (int) settings[3];
@@ -99,61 +99,137 @@ public class Model extends Observable {
 		this.autoFilter = (boolean) settings[6];
 		this.filterPercentage = (int) settings[7];
 
-		if (doFilter) {
-			filtMeasurement();
-		} else {
-			measurement.undoFilter();
+		if (measurementLoaded) {
+			if (doFilter) {
+				filtMeasurement();
+			} else {
+				measurement.undoFilter();
+			}
+
+			if (measurement.approximated()) {
+				measurement.recalculateError();
+			}
+			notifyObservers();
 		}
-		if (measurement.approximated) {
-			measurement.calculateError();
-			updateError();
-		}
-		updateMeasurement();
 
-		notifyObservers();
 	}
 
-	public XYSeries[] getStepresponseData() {
-		return stepPlotData.getPlotData();
-	}
-
-	public XYSeries[] getErrorData() {
-		return errorPlotData.getPlotData();
-	}
-
-	public XYSeries[] getPolesData() {
-		return polesPlotData.getPlotData();
-	}
-
+	/**
+	 * Prüft ob ein Einheitsschritt vorhanden ist.
+	 * @return false falls kein Einheitsschritt vorhanden ist.
+	 */
 	public boolean inputExisting() {
 		return measurement.inputExisting();
 	}
 
-	public void setValues(Object[] val) {
-		measurement.setValues(val);
-
-		updateMeasurement();
-		updateError();
-		updatePoles();
-
-		notifyObservers();
+	/**
+	 * Prüft ob die Approximation abgeschlossen ist.
+	 * @return false falls die Approximation noch nicht komplett 
+	 * durchgeführt wurde.
+	 */
+	public boolean approximated() {
+		return measurement.approximated();
 	}
 
-	public Object[] getValues() {
-		return measurement.getValues();
+	/**
+	 * Prüft ob die Approximation noch am laufen ist.
+	 * @return false falls der LaguerreSolver das Programm blockiert.
+	 */
+	public boolean checkRunning() {
+		return measurement.checkRunning();
 	}
 
+	/**
+	 * Prüft ob eine Messung geladen ist.
+	 * @return false falls keine Messung geladen ist.
+	 */
+	public boolean measurementLoaded() {
+		return measurementLoaded;
+	}
+
+	/**
+	 * Notifiziert Observers.
+	 */
 	public void notifyObservers() {
 		setChanged();
 		super.notifyObservers();
 	}
 
+	//================================================================================
+	// Private Methods
+	//================================================================================
+
+	public void filtMeasurement() {
+		measurement.filtData(autoFilter, filterPercentage);
+	}
+
+	//================================================================================
+	// Setters and Getters
+	//================================================================================
+
+	public double[] getTimeData() {
+		return measurement.getTimeData();
+	}
+
+	public double[] getInputData() {
+		return measurement.getInputData();
+
+	}
+
+	/**
+	 * Gibt die Schrittantwort zurück, abhängig ob diese gefiltert
+	 * angezeigt werden soll.
+	 * @return Schrittantwort.
+	 */
+	public double[] getStepData() {
+		return measurement.getStepData(showFiltered);
+	}
+
+	public double[] getApproxData() {
+		return measurement.getApproxData();
+	}
+
+	public double[][] getPolesData() {
+		return measurement.getPolesData();
+	}
+
+	public double[] getErrorData() {
+		return measurement.getErrorData();
+	}
+
 	public void setOrder(int order) {
 		measurement.setOrder(order);
 	}
-	/*
-	public int getSeriesCount(){
-		return stepPlotData.getSeriesCount();
-	}*/
 
+	public int getOrder() {
+		return measurement.getOrder();
+	}
+
+	public void setK(double K) {
+		measurement.setK(K);
+	}
+
+	public double getK() {
+		return measurement.getK();
+	}
+
+	public void setWqp(double[][] wqp) {
+		measurement.setWqp(wqp);
+	}
+
+	public double[][] getWqp() {
+		return measurement.getWqp();
+	}
+
+	public void setSigma(double sigma) {
+		measurement.setSigma(sigma);
+	}
+
+	public double getSigma() {
+		return measurement.getSigma();
+	}
+
+	public double getMeanError() {
+		return measurement.getMeanError();
+	}
 }

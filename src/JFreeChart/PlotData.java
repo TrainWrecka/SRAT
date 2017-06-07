@@ -1,31 +1,43 @@
-package DataProcessing;
+package JFreeChart;
 
 import org.jfree.data.xy.XYSeries;
 
 public class PlotData {
+	
+	//================================================================================
+	// Properties
+	//================================================================================
+	
 	private XYSeries[] xySeries;
 	private double[] xData;
 	private int seriesCount;
 
-	/*
-	 * 
-	 */
+
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
 	public PlotData() {
 		xySeries = new XYSeries[seriesCount + 1];
 	}
+	
+	//================================================================================
+	// Public Methods
+	//================================================================================
 
 	/** 
-	 * sets the data of the x-Axis of the series
-	 * @param xData data of the x-Axis to be set
+	 * Setzt die Daten der X-Achse der Serie.
+	 * @param xData Daten der X-Achse.
 	 */
 	public void setXData(double[] xData) {
 		this.xData = xData;
 	}
 
 	/**
-	 * sets/adds the data of the y-Axis of the series
-	 * @param yData data of the y-Axis to be set
-	 * @param name name of the data to be displayed in the graph
+	 * Setzt die Daten der Y-Achse der Serie. Wnenn schon ein Datenset existiert, werden die Daten
+	 * zu den bestehenden Daten dazugefügt.
+	 * @param yData Daten der Y-Achse.
+	 * @param name Name der Daten.
 	 */
 	public void setYData(double[] yData, String name) {
 		if (yData != null) {
@@ -43,7 +55,7 @@ public class PlotData {
 			for (int i = 0; i < yData.length; i++) {
 				xySeries[seriesCount].add(xData[i], yData[i]);
 			}
-
+			
 			seriesCount++;
 		}
 	}
@@ -68,15 +80,15 @@ public class PlotData {
 	}
 
 	/**
-	 * returns the series of the plot data
-	 * @return series of the plot data
+	 * Gibt die Serie der PlotData zurück.
+	 * @return Serie der PlotData.
 	 */
 	public XYSeries[] getPlotData() {
 		return xySeries;
 	}
 
 	/**
-	 * removes all data in the series
+	 * Entfernt gesamte Daten in der Serie.
 	 */
 	public void removePlotData() {
 		if (xySeries != null) {
@@ -86,7 +98,6 @@ public class PlotData {
 				}
 			}
 		}
-
 		seriesCount = 0;
 		xySeries = new XYSeries[seriesCount + 1];
 	}
