@@ -5,6 +5,7 @@ import java.util.Observable;
 
 import DataProcessing.Measurement;
 import matlabfunctions.Matlab;
+
 import userinterface.StatusBar;
 
 public class Model extends Observable {
@@ -43,6 +44,7 @@ public class Model extends Observable {
 	 * @param measurementList Liste mit Messdaten.
 	 */
 	public void setMeasurement(List<String[]> measurementList) {
+
 		measurementLoaded = false;
 
 		try {
@@ -63,6 +65,7 @@ public class Model extends Observable {
 
 		notifyObservers();
 	}
+
 
 	/**
 	 * Approximiert die Schrittantwort automatisch anhand der gesetzten Einstellungen. 

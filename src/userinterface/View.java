@@ -11,6 +11,7 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
+
 public class View extends JPanel implements Observer, ActionListener {
 	
 	//================================================================================
@@ -19,7 +20,6 @@ public class View extends JPanel implements Observer, ActionListener {
 
 	public InputPanel inputPanel = new InputPanel();
 	private OutputPanel outputPanel = new OutputPanel();
-
 	double[][] measurementData;
 
 	//================================================================================

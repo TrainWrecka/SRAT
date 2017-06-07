@@ -10,7 +10,6 @@ import java.util.Observable;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import model.Model;
 
 public class VariablePanel extends JPanel implements ActionListener {

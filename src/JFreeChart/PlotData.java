@@ -12,6 +12,7 @@ public class PlotData {
 	private double[] xData;
 	private int seriesCount;
 
+
 	//================================================================================
 	// Constructor
 	//================================================================================
@@ -57,6 +58,25 @@ public class PlotData {
 			
 			seriesCount++;
 		}
+	}
+
+	public void setData(double[] xData, double[] yData, String name) {
+		if (seriesCount > 0) {
+			XYSeries[] tempSeries = xySeries;
+
+			xySeries = new XYSeries[seriesCount + 1];
+
+			for (int i = 0; i < tempSeries.length; i++) {
+				xySeries[i] = tempSeries[i];
+			}
+		}
+
+		xySeries[seriesCount] = new XYSeries(name);
+		for (int i = 0; i < yData.length; i++) {
+			xySeries[seriesCount].add(xData[i], yData[i]);
+		}
+
+		seriesCount++;
 	}
 
 	/**
