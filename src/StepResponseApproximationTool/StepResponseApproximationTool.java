@@ -2,8 +2,6 @@ package StepResponseApproximationTool;
 
 
 import java.awt.BorderLayout;
-
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -32,7 +30,7 @@ public class StepResponseApproximationTool extends JFrame {
 	private Mode mode = Mode.FIXED;
 //	private int width = 1200, height = 800;
 	private Model model = new Model();
-	private Controller controller = new Controller(model, this);
+	private Controller controller = new Controller(model);
 	private View view = new View(controller);
 	private MenuBar menuBar = new MenuBar(controller, this);
 	private StatusBar statusBar = new StatusBar();

@@ -1,129 +1,104 @@
 package DataProcessing;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
-import org.apache.commons.math3.optim.InitialGuess;
-import org.apache.commons.math3.optim.MaxEval;
-import org.apache.commons.math3.optim.PointValuePair;
-import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
-import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
-import org.apache.commons.math3.util.FastMath;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.util.ArrayUtilities;
 
-import com.sun.javafx.css.CalculatedValue;
-import com.sun.org.apache.bcel.internal.generic.FMUL;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
-import matlabfunctions.Filter;
-import matlabfunctions.FilterFactory;
 import matlabfunctions.Filtfilt;
 import matlabfunctions.Matlab;
-import matlabfunctions.Polynom;
 import matlabfunctions.SVTools;
+import sun.swing.SwingUtilities2.Section;
 import userinterface.StatusBar;
 
 public class Measurement {
 
-	private double[] stepDataOriginal;
-	private double[] timeDataOriginal;
+	//================================================================================
+	// Properties
+	//================================================================================
 
 	private double[] inputData;
 	private double[] timeData;
 	private double[] stepData;
-
+	private double[] stepDataOriginal;
 	private double[] approxData;
 	private double[] errorData;
+	private double[][] polesData;
 
-	double[][] polesData;
+	private int order;
+	private double K;
+	private double wqp[][];
+	private double sigma;
+	private double meanError;
 
-	private double tNorm;
+	private int stepIndex;
+
 	private double nor = (175 * 30);
-	double offset = 0;
+	private double offset = 0;
+	private boolean noise;
+	private boolean input = false;
+	private boolean approximated = false;
 
-	String K;
-	String[] wp = new String[5];
-	String[] qp = new String[5];
-	String sigma;
-	String meanError;
+	private Approximation approximation = new Approximation();
 
-	public boolean input = false;
-	public boolean approximated = false;
-
-	int stepIndex = 0;
-	int order = 2;
-
-	boolean noise;
-	int unitStepLocation;
-
-	DecimalFormat f = new DecimalFormat("##0.##E0");
+	//================================================================================
+	// Constructor
+	//================================================================================
 
 	public Measurement() {
 
 	}
 
-	public double[] getInputData() {
-		return inputData;
-	}
+	//================================================================================
+	// Public Methods (excl. Setter and Getter)
+	//================================================================================
 
-	public double[] getErrorData() {
-		return errorData;
-	}
-
-	public double[][] getPolesData() {
-		return polesData;
-	}
-
-	public double[] getTimeData() {
-		return timeDataOriginal;
-	}
-
-	public double[] getStepData(boolean showFiltered) {
-		if (showFiltered) {
-			return stepData;
-		} else {
-			return stepDataOriginal;
-		}
-	}
-
-	public double[] getApproxData() {
-		return approxData;
-	}
-
+	/**
+	 * Setzt die Messdaten aus der übergebenen List und extrahiert deren Komponenten. Ausserdem
+	 * wird überprüft, ob ein Einheitsschritt vorhanden ist und ob die Sprungantwort Rauschen enthält.
+	 * @param measurementList List mit String Array, enthält daten aus dem CSV File.
+	 */
 	public void setMeasurement(List<String[]> measurementList) {
 		double[][] tempData = convertList(measurementList);
-		if (tempData == null) {
-			return;
-		}
 		extractData(tempData);
 		stepIndex = (input) ? getStepLocation(inputData) : 10;
 		noise = checkNoise(stepData, stepIndex);
 		approximated = false;
 	}
 
-	public void undoFilter() {
-		stepData = stepDataOriginal;
-	}
-
+	/**
+	 * Filtert die Schrittantwort, falls diese Rauschen enthält.
+	 * @param autoFilter Automatisches filtern ein/aus.
+	 * @param filterPercentage Stärke des manuellen Filters.
+	 */
 	public void filtData(boolean autoFilter, int filterPercentage) {
 		if (noise) {
 			stepData = signalFilter(stepDataOriginal, autoFilter, filterPercentage);
 		}
 	}
 
-	public void approximateMeasurement(double nelderSteps, double[] simplexOpt, int maxEval) {
+	/**
+	 * Stellt die ursprüngliche Schrittantwort wieder her.
+	 */
+	public void undoFilter() {
+		stepData = stepDataOriginal;
+	}
+
+	/**
+	 * Bereitet die Schrittantwort und Zeitdaten vor durch Entfernen des Offsets, der Totzeit und der 
+	 * Normierung der Zeitachse. Anschliessend wird eine Approximation durchgeführt, wessen resultierende
+	 * Werte für die Ausgabe berechnet werden. Zusätzlich wird der Fehler zwischen der originalen und der
+	 * approximierten Schrittantwort berechnet.
+	 * @param nelderSteps Nelder Simplex Steps des Optimierers.
+	 * @param simplexOpt Relative und Absolute Goals des Optimierers.
+	 * @param maxEval Maximale Evaluationen des optimierers.
+	 */
+	public void approximateAuto(double nelderSteps, double[] simplexOpt, int maxEval) {
 		double[] stepDataTemp = new double[stepData.length];
+		double[] timeDataTemp = new double[timeData.length];
 		System.arraycopy(stepData, 0, stepDataTemp, 0, stepData.length);
+		System.arraycopy(timeData, 0, timeDataTemp, 0, timeData.length);
 
 		offset = getOffset(stepDataTemp, stepIndex);
 		stepDataTemp = removeOffset(stepDataTemp, offset);
@@ -132,62 +107,83 @@ public class Measurement {
 			stepIndex = getLastOffsetIntersection(stepDataTemp, offset);
 		}
 
-		timeData = removeTime(timeDataOriginal, 0, timeDataOriginal.length - stepIndex);
-		normTime();
+		timeDataTemp = removeTime(timeData, 0, timeData.length - stepIndex);
+		double norm = calculateNorm(timeDataTemp, nor);
+		timeDataTemp = normTime(timeDataTemp, norm);
 
 		stepDataTemp = removeTime(stepDataTemp, stepIndex, stepDataTemp.length);
 
-		//		double[] stepDataTempShortened = new double[stepDataTemp.length/10];
-		//		double[] timeDataTempShortened = new double[stepDataTempShortened.length];
-		//		
-		//		for (int i = 0; i < timeDataTempShortened.length; i++) {
-		//			stepDataTempShortened[i] = stepDataTemp[i*10];
-		//			timeDataTempShortened[i] = timeData[i*10];
-		//		}
+		double[][] approxRet = approximation.approximate(timeDataTemp, stepDataTemp, order, nelderSteps, simplexOpt, maxEval);
+		approxData = approxRet[0];
+		double[] A = approxRet[1];
 
-		Object[] approxRet;
-		approxRet = Approximation.approximate(timeData, stepDataTemp, order, nelderSteps, simplexOpt, maxEval);
-		//approxRet = Approximation.approximate(timeDataTempShortened, stepDataTempShortened, order, nelderSteps, simplexOpt, maxEval);
+		approxData = addOffset(addTime(approxData, timeData.length - approxData.length), offset);
 
-		approxData = (double[]) approxRet[0];
-		double[] A = (double[]) approxRet[2];
+		errorData = calculateDifference(approxData, stepData);
 
-		approxData = addOffset(addTime(approxData), offset);
-
-		calculateError();
-
-		Complex[] polesComplex = getPoles(A);
+		Complex[] polesComplex = denormPoles(Matlab.roots(A), norm);
 		polesComplex = Matlab.sort(polesComplex);
-		polesData = convPoles(polesComplex);
+		polesData = convertPoles(polesComplex);
 
-		calcValues(polesComplex);
+		calculateVariables(polesComplex, approxData, errorData, offset);
 		approximated = true;
-
-		//timeDataOriginal = timeDataTempShortened;
-		//timeDataOriginal = new double[timeDataTempShortened.length];
-		//System.arraycopy(timeDataTempShortened, 0, timeDataOriginal, 0, timeDataTempShortened.length);
 	}
 
-	public void calculateError() {
-		errorData = new double[timeDataOriginal.length];
-
-		for (int i = 0; i < timeDataOriginal.length; i++) {
-			errorData[i] = stepData[i] - approxData[i];
-		}
-	}
-
-	public void setValues(Object[] val) {
-		timeData = removeTime(timeDataOriginal, 0, timeDataOriginal.length - stepIndex);
-
-		approxData = setPoles(val);
-
-		approxData = addOffset(addTime(approxData), offset);
-	}
-
-	/*
-	 * converts 2D list of strings in 2d array of doubles
-	 * uses string array for conversion
+	/**
+	 * Führt eine manuelle Approximation durch, indem eine Schrittantwort aus den momentanen
+	 * Werten generiert wird. Aktualiesert auch Daten wie Error und Pole.
 	 */
+	public void approximateManual() {
+		double[] timeDataTemp = removeTime(timeData, 0, timeData.length - stepIndex);
+		double[][] poly = calculatePoles(K, wqp, sigma);
+		approxData = (double[]) SVTools.step(poly[0], poly[1], timeDataTemp)[0];
+		approxData = addOffset(addTime(approxData, timeData.length - approxData.length), offset);
+
+		Complex[] polesComplex = Matlab.roots(poly[1]);
+		polesComplex = Matlab.sort(polesComplex);
+		polesData = convertPoles(polesComplex);
+
+		errorData = calculateDifference(approxData, stepDataOriginal);
+		meanError = Matlab.mean(errorData);
+	}
+
+	/**
+	 * Prüft ob die Approximation abgeschlossen ist.
+	 * @return false falls die Approximation noch nicht komplett 
+	 * durchgeführt wurde.
+	 */
+	public boolean approximated() {
+		return approximated;
+	}
+
+	/**
+	 * Prüft ob ein Einheitsschritt vorhanden ist.
+	 * @return false falls kein Einheitsschritt vorhanden ist.
+	 */
+	public boolean inputExisting() {
+		return input;
+	}
+
+	/**
+	 * Prüft ob die Approximation noch am laufen ist.
+	 * @return false falls der LaguerreSolver das Programm blockiert.
+	 */
+	public boolean checkRunning() {
+		return approximation.checkRunning();
+	}
+
+	/**
+	 * Aktualisiert den Error.
+	 */
+	public void recalculateError() {
+		errorData = calculateDifference(approxData, stepData);
+		meanError = Matlab.mean(errorData);
+	}
+
+	//================================================================================
+	// Private Methods
+	//================================================================================
+
 	private double[][] convertList(List<String[]> listString) {
 		String[][] tempArrayString = new String[listString.size()][];
 		for (int i = 0; i < listString.size(); i++) {
@@ -195,55 +191,55 @@ public class Measurement {
 			tempArrayString[i] = arrayRow;
 		}
 
-		try {
-			double[][] tempArrayDouble = new double[tempArrayString.length][tempArrayString[0].length];
-			for (int i = 0; i < tempArrayString.length; i++) {
-				for (int j = 0; j < tempArrayString[0].length; j++) {
-					tempArrayDouble[i][j] = Double.parseDouble(tempArrayString[i][j]);
-				}
+		double[][] tempArrayDouble = new double[tempArrayString.length][tempArrayString[0].length];
+		for (int i = 0; i < tempArrayString.length; i++) {
+			for (int j = 0; j < tempArrayString[0].length; j++) {
+				tempArrayDouble[i][j] = Double.parseDouble(tempArrayString[i][j]);
 			}
-			return tempArrayDouble;
-		} catch (NumberFormatException e) {
-			// TODO: handle exception
-			StatusBar.showStatus("Wrong format");
-			return null;
 		}
+		return tempArrayDouble;
 	}
 
-	/*
-	 * removes the unused data
-	 */
-	private double[][] cutMeasurement(double[][] measurement) {
-		double[][] cutData = null;
+	private void extractData(double[][] measurement) throws RuntimeException {
+		int index;
 
-		if (measurement[0].length != 3) {
-			return cutData = measurement;
+		timeData = new double[measurement.length];
+		stepData = new double[timeData.length];
+
+		if (measurement[0].length == 3) {
+			inputData = new double[timeData.length];
+			input = true;
+			index = 2;
+		} else if (measurement[0].length == 2) {
+			input = false;
+			index = 1;
+		} else {
+			throw new RuntimeException();
 		}
 
-		int j = 0;
-		for (int i = 0; i < measurement.length; i++) {
-			if (measurement[i][1] != 0) {
-				j = i;
+		for (int i = 0; i < timeData.length; i++) {
+			timeData[i] = measurement[i][0];
+			stepData[i] = measurement[i][index];
+			if (input) {
+				inputData[i] = measurement[i][1];
+			}
+		}
+
+		stepDataOriginal = new double[stepData.length];
+		System.arraycopy(stepData, 0, stepDataOriginal, 0, stepData.length);
+	}
+
+	private int getStepLocation(double[] signal) {
+		int unitStepLocation = 0;
+		for (int i = 0; i < signal.length; i++) {
+			if (signal[i] != signal[i + 1]) {
+				unitStepLocation = i;
 				break;
 			}
 		}
-
-		cutData = new double[measurement.length - j][measurement[0].length];
-
-		for (int i = 0; i < cutData.length; i++) {
-			cutData[i][0] = measurement[i][0];
-			cutData[i][1] = measurement[j][1];
-			cutData[i][2] = measurement[j][2];
-			j++;
-		}
-
-		return cutData;
+		return unitStepLocation;
 	}
 
-	/*
-	 * returns true if a fluctuation exists in
-	 * the signal for the specified range
-	 */
 	private boolean checkNoise(double[] signal, int range) {
 		boolean pos = false;
 		boolean neg = false;
@@ -261,276 +257,10 @@ public class Measurement {
 		return (pos & neg);
 	}
 
-	/*
-	 * if three columns are found, the format of the data is [time, input, output]
-	 * if two columns are found, the format of the data is [time, output]
-	 * else an error message is printed
-	 * if an input column exist a flag gets set
-	 */
-	private void extractData(double[][] measurement) {
-		input = false;
-
-		int cutter = (int) Math.pow(10, Math.floor(measurement.length/1000) - 1);
-		cutter = (cutter < 1)? 1 : cutter;
-
-		if (measurement[0].length == 3) {
-			timeData = new double[measurement.length / cutter];
-			inputData = new double[timeData.length];
-			stepData = new double[timeData.length];
-			for (int i = 0; i < timeData.length; i++) {
-				timeData[i] = measurement[i * cutter][0];
-				inputData[i] = measurement[i * cutter][1];
-				stepData[i] = measurement[i * cutter][2];
-			}
-			input = true;
-		} else if (measurement[0].length == 2) {
-			timeData = new double[measurement.length / cutter];
-			inputData = new double[1];
-			stepData = new double[timeData.length];
-			for (int i = 0; i < measurement.length; i++) {
-				timeData[i] = measurement[i * cutter][0];
-				stepData[i] = measurement[i * cutter][1];
-			}
-		} else if (measurement[0].length == 0) {
-			StatusBar.showStatus("No data found");
-			return;
-		} else {
-			StatusBar.showStatus("Too many data columns");
-			return;
-		}
-
-		stepDataOriginal = new double[stepData.length];
-		System.arraycopy(stepData, 0, stepDataOriginal, 0, stepData.length);
-		timeDataOriginal = new double[timeData.length];
-		System.arraycopy(timeData, 0, timeDataOriginal, 0, timeData.length);
-	}
-
-	/*
-	 * gets the location where the step of 
-	 * the unit data occurs
-	 */
-	private int getStepLocation(double[] signal) {
-		int unitStepLocation = 0;
-		for (int i = 0; i < signal.length; i++) {
-			if (signal[i] != signal[i + 1]) {
-				unitStepLocation = i;
-				break;
-			}
-		}
-		return unitStepLocation;
-	}
-
-	/*
-	 * returns the offset value
-	 */
-	private double getOffset(double[] signal, int range) {
-		double[] tempArray = Arrays.copyOfRange(signal, 0, range);
-		double offset = Matlab.mean(tempArray);
-		return offset;
-	}
-
-	/*
-	 * removes the offset from the signal
-	 */
-	private double[] removeOffset(double[] signal, double offset) {
-		double[] temp = new double[signal.length];
-		System.arraycopy(signal, 0, temp, 0, signal.length);
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] -= offset;
-		}
-		return temp;
-	}
-
-	private double[] addOffset(double[] signal, double offset) {
-		for (int i = 0; i < signal.length; i++) {
-			signal[i] += offset;
-		}
-		return signal;
-	}
-
-	/*
-	 * removes the deadtime
-	 */
-	private double[] removeTime(double[] signal, int rangeFrom, int rangeTo) {
-		return Arrays.copyOfRange(signal, rangeFrom, rangeTo);
-	}
-
-	private double[] addTime(double[] signal) {
-
-		double[] res = new double[timeDataOriginal.length];
-		Arrays.fill(res, 0.0);
-		System.arraycopy(signal, 0, res, timeDataOriginal.length - approxData.length, signal.length);
-
-		return res;
-	}
-
-	/*
-	 * returns if input value exists
-	 */
-	public boolean inputExisting() {
-		return input;
-	}
-
-	/*
-	 * get first signal change
-	 * only applicable if no noise
-	 */
-	private int getFirstSignalChange(double[] signal) {
-		int index = 0;
-		for (int i = 0; i < signal.length; i++) {
-			if (signal[i] != signal[i + 1]) {
-				index = i;
-				break;
-			}
-		}
-		return index;
-	}
-
-	/*
-	 * returns last intersection of
-	 * signal and offset, before signal
-	 * reaches the middle of its maximum
-	 */
-	private int getLastOffsetIntersection(double[] signal, double offset) {
-		double max = Matlab.max(signal);
-		int index = 0;
-		for (int i = 0; i < signal.length; i++) {
-			if (signal[i] <= offset && signal[i + 1] >= offset) {
-				index = i;
-			} else if ((signal[i] - offset) > ((max - offset) / 2)) {
-				break;
-			}
-		}
-		return index;
-	}
-
-	/*
-	 * norms the time axis
-	 */
-	private void normTime() {
-		tNorm = Matlab.norm(timeData);
-
-		for (int i = 0; i < timeData.length; i++) {
-			timeData[i] = timeData[i] / tNorm * nor;
-		}
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
-	}
-
-	private Complex[] getPoles(double[] A) {
-
-		Complex[] poles = Matlab.roots(A);
-
-		for (int i = 0; i < poles.length; i++) {
-			poles[i] = poles[i].divide(tNorm).multiply(nor);
-		}
-
-		return poles;
-	}
-
-	private double[][] convPoles(Complex[] poles) {
-		double[][] polesData = new double[2][poles.length];
-
-		for (int i = 0; i < poles.length; i++) {
-			polesData[0][i] = poles[i].getReal();
-			polesData[1][i] = poles[i].getImaginary();
-		}
-
-		return polesData;
-	}
-
-	private void calcValues(Complex[] poles) {
-		sigma = "-";
-
-		for (int i = 0; i < wp.length; i++) {
-			if (i < Math.floor(poles.length / 2)) {
-				//wp[i] = Double.toString(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
-				wp[i] = f.format(Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal()));
-				double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
-				double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
-				qp[i] = f.format(-(temp1 / temp2));
-			} else {
-				wp[i] = "-";
-				qp[i] = "-";
-			}
-
-		}
-
-		if (poles.length % 2 == 0) {
-			sigma = "-";
-		} else {
-			sigma = f.format(poles[poles.length - 1].getReal());
-		}
-
-		meanError = f.format(Matlab.mean(errorData));
-
-		K = f.format(approxData[approxData.length - 1] - offset);
-	}
-
-	public Object[] getValues() {
-		return new Object[] { K, wp, qp, sigma, meanError };
-	}
-
-	private double[] setPoles(Object[] val) {
-		double K = (double) val[0]; //???
-		double[] wp = (double[]) val[1];
-		double[] qp = (double[]) val[2];
-		double sigma = (double) val[3];
-		double[] denom = new double[1];
-		denom[0] = 1;
-
-		double[] B = new double[1];
-		B[0] = K;
-
-		for (int i = 0; i < wp.length; i++) {
-			B[0] *= Math.pow(wp[i], 2);
-		}
-
-		for (int i = 0; i < order / 2; i++) {
-			double[] poly = { 1, wp[i] / qp[i], Math.pow(wp[i], 2) };
-			denom = Matlab.conv(poly, denom);
-		}
-
-		if (order % 2 == 1) {
-			denom = Matlab.conv(denom, new double[] { 1, (-1) * sigma });
-			B[0] *= Math.abs(sigma);
-		}
-
-		for (int i = 0; i < this.wp.length; i++) {
-			if (i < Math.floor(wp.length)) {
-				this.wp[i] = f.format(wp[i]);
-				this.qp[i] = f.format(qp[i]);
-			} else {
-				this.wp[i] = "-";
-				this.qp[i] = "-";
-			}
-		}
-
-		this.K = f.format(K);
-		if (sigma == 0) {
-			this.sigma = "-";
-		} else {
-			this.sigma = f.format(sigma);
-		}
-
-		calculateError();
-
-		meanError = f.format(Matlab.mean(errorData));
-
-		return (double[]) SVTools.step(B, denom, timeData)[0];
-	}
-
 	private double[] signalFilter(double[] signal, boolean modeAuto, int percent) {
 		double errorDetection[] = new double[] { 2e-7, 3.2e-9, 3e-5, 4e-3 };
 		double errorCompare[] = new double[] { 5e-7, 10e-7, 5e-4, 5e-3 };
-
-		//if(noise)
-		//	ret
 		double noiseError;
-		int stepLoc = getStepLocation(inputData);
-		double offset = getOffset(signal, stepLoc);
 
 		int max_iN = 30;
 		int index = 0;
@@ -600,4 +330,203 @@ public class Measurement {
 		return signalFiltered;
 	}
 
+	private double getOffset(double[] signal, int range) {
+		double[] tempArray = Arrays.copyOfRange(signal, 0, range);
+		double offset = Matlab.mean(tempArray);
+		return offset;
+	}
+
+	private double[] removeOffset(double[] signal, double offset) {
+		double[] temp = new double[signal.length];
+		System.arraycopy(signal, 0, temp, 0, signal.length);
+		for (int i = 0; i < temp.length; i++) {
+			temp[i] -= offset;
+		}
+		return temp;
+	}
+
+	private double[] addOffset(double[] signal, double offset) {
+		for (int i = 0; i < signal.length; i++) {
+			signal[i] += offset;
+		}
+		return signal;
+	}
+
+	private int getLastOffsetIntersection(double[] signal, double offset) {
+		double max = Matlab.max(signal);
+		int index = 0;
+		for (int i = 0; i < signal.length; i++) {
+			if (signal[i] <= offset && signal[i + 1] >= offset) {
+				index = i;
+			} else if ((signal[i] - offset) > ((max - offset) / 2)) {
+				break;
+			}
+		}
+		return index;
+	}
+
+	private double calculateNorm(double[] timeData, double norm) {
+		return norm / Matlab.norm(timeData);
+	}
+
+	private double[] normTime(double[] timeData, double norm) {
+		for (int i = 0; i < timeData.length; i++) {
+			timeData[i] = timeData[i] * norm;
+		}
+		return timeData;
+	}
+
+	private double[] removeTime(double[] signal, int rangeFrom, int rangeTo) {
+		return Arrays.copyOfRange(signal, rangeFrom, rangeTo);
+	}
+
+	private double[] addTime(double[] signal, int length) {
+		double[] ret = new double[signal.length + length];
+		Arrays.fill(ret, 0.0);
+		System.arraycopy(signal, 0, ret, length, signal.length);
+
+		return ret;
+	}
+
+	private double[] calculateDifference(double[] dataA, double[] dataB) {
+		double[] error = new double[dataA.length];
+
+		for (int i = 0; i < error.length; i++) {
+			error[i] = dataA[i] - dataB[i];
+		}
+		return error;
+	}
+
+	private Complex[] denormPoles(Complex[] poles, double norm) {
+		for (int i = 0; i < poles.length; i++) {
+			poles[i] = poles[i].multiply(norm);
+		}
+
+		return poles;
+	}
+
+	private double[][] convertPoles(Complex[] poles) {
+		double[][] polesData = new double[2][poles.length];
+
+		for (int i = 0; i < poles.length; i++) {
+			polesData[0][i] = poles[i].getReal();
+			polesData[1][i] = poles[i].getImaginary();
+		}
+
+		return polesData;
+	}
+
+	private void calculateVariables(Complex[] poles, double[] approxData, double[] errorData, double offset) {
+		wqp = new double[2][(int) Math.floor(order / 2)];
+
+		K = approxData[approxData.length - 1] - offset;
+
+		for (int i = 0; i < wqp[0].length; i++) {
+			//if (i < Math.floor(poles.length / 2)) {
+			wqp[0][i] = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
+			double temp1 = Math.sqrt(poles[2 * i].multiply(poles[2 * i + 1]).getReal());
+			double temp2 = poles[2 * i].add(poles[2 * i + 1]).getReal();
+			wqp[1][i] = (-(temp1 / temp2));
+		}
+
+		meanError = Matlab.mean(errorData);
+
+		if (order % 2 == 1) {
+			sigma = poles[poles.length - 1].getReal();
+		}
+	}
+
+	private double[][] calculatePoles(double K, double[][] wqp, double sigma) {
+		double[] A = new double[1];
+		A[0] = 1;
+
+		double[] B = new double[1];
+		B[0] = K;
+
+		for (int i = 0; i < wqp[0].length; i++) {
+			B[0] *= Math.pow(wqp[0][i], 2);
+		}
+
+		for (int i = 0; i < order / 2; i++) {
+			double[] tempA = { 1, wqp[0][i] / wqp[1][i], Math.pow(wqp[0][i], 2) };
+			A = Matlab.conv(tempA, A);
+		}
+
+		if (order % 2 == 1) {
+			A = Matlab.conv(A, new double[] { 1, (-1) * sigma });
+			B[0] *= Math.abs(sigma);
+		}
+
+		return new double[][] { B, A };
+	}
+
+	//================================================================================
+	// Setters and Getters
+	//================================================================================
+
+	public double[] getTimeData() {
+		return timeData;
+	}
+
+	public double[] getInputData() {
+		return inputData;
+	}
+
+	public double[] getStepData(boolean showFiltered) {
+		if (showFiltered) {
+			return stepData;
+		} else {
+			return stepDataOriginal;
+		}
+	}
+
+	public double[] getApproxData() {
+		return approxData;
+	}
+
+	public double[][] getPolesData() {
+		return polesData;
+	}
+
+	public double[] getErrorData() {
+		return errorData;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public double getK() {
+		return K;
+	}
+
+	public void setK(double K) {
+		this.K = K;
+	}
+
+	public double[][] getWqp() {
+		return wqp;
+	}
+
+	public void setWqp(double[][] wqp) {
+		this.wqp = new double[2][wqp[0].length];
+		System.arraycopy(wqp[0], 0, this.wqp[0], 0, wqp[0].length);
+		System.arraycopy(wqp[1], 0, this.wqp[1], 0, wqp[0].length);
+	}
+
+	public double getSigma() {
+		return sigma;
+	}
+
+	public void setSigma(double sigma) {
+		this.sigma = sigma;
+	}
+
+	public double getMeanError() {
+		return meanError;
+	}
 }
