@@ -20,8 +20,8 @@ import javax.swing.KeyStroke;
 
 
 public class MenuBar extends JMenuBar implements Observer, ActionListener{
-	JMenu menu, submenu,optionsmenu;
-	JMenuItem menuItemOnTop, submenuItem, exampleItem, settingsmenuItem, helpmenuItem;
+	JMenu menu, optionsmenu;
+	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem;
 	JFrame frame;
 	Controller controller;
 	JDialog settingsDialog = new JDialog();
@@ -42,11 +42,6 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 		menu.setMnemonic(KeyEvent.VK_D);
 
 		menu.addSeparator();
-		submenu = new JMenu("A submenu");
-		submenu.setMnemonic(KeyEvent.VK_L);
-		submenuItem = new JMenuItem("SubmenuItem");
-		submenu.add(submenuItem);
-		menu.add(submenu);
 
 		menuItemOnTop = new JMenuItem("Allways on Top", KeyEvent.VK_T);
 		menuItemOnTop.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.ALT_MASK));
@@ -103,42 +98,38 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 	public void update(Observable o, Object obj) {}
 
 	public void actionPerformed(ActionEvent e) {
+		int cnt = 0;
 		if (e.getActionCommand().equals("Resizable")) {
 			frame.setResizable(true);
 			Dimension dim = frame.getSize();
+			if(cnt==0){
 			dim.width -= 100;
+			cnt++;
+			}
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("NotResizable")) {
 			frame.setResizable(false);
 			Dimension dim = frame.getSize();
+			if(cnt !=0){
 			dim.width += 100;
+			cnt--;
+			}
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("OnTop")) {
 			StatusBar.showStatus(this, e, e.getActionCommand());
 			if (((JFrame) this.getTopLevelAncestor()).isAlwaysOnTop()) {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(false);
+				settingsDialog.setAlwaysOnTop(false);
 				menuItemOnTop.setText("Allways on Top");
 			} else {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(true);
+				settingsDialog.setAlwaysOnTop(true);
 				menuItemOnTop.setText("Not allways on Top");
 			}
 		}
-		if(e.getActionCommand().equals("Settings")){
-//			settingsFrame= new JFrame("Settings");
-//			settingsFrame.setType(Type.POPUP);
-//			settingsFrame.setVisible(true);
-//			settingsFrame.setResizable(false);
-//			settingsFrame.setLayout(new GridBagLayout());
-//			settingsFrame.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//					new Insets(0, 0, 0, 0), 0, 0));
-//			settingsFrame.setPreferredSize(settingsPanel.getPreferredSize());
-//			settingsFrame.setSize((int) (settingsFrame.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsFrame.getPreferredSize().getHeight())+settingsFrameHeight);
-//			
-//			settingsFrame.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
-			
-			
+		if(e.getActionCommand().equals("Settings")){			
 			settingsDialog.setTitle("Settings");
 			settingsDialog.setVisible(true);
 			settingsDialog.setResizable(false);
