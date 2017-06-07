@@ -21,7 +21,7 @@ import javax.swing.KeyStroke;
 
 public class MenuBar extends JMenuBar implements Observer, ActionListener{
 	JMenu menu, optionsmenu;
-	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem;
+	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem, ExamplemenuItem;
 	JFrame frame;
 	Controller controller;
 	JDialog settingsDialog = new JDialog();
@@ -77,8 +77,15 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 		helpmenuItem.setActionCommand("Help");
 		helpmenuItem.addActionListener(this);
 		
+		exampleItem = new JMenuItem("Load Example");
+		helpmenuItem.setMnemonic(KeyEvent.VK_E);
+		helpmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));
+		helpmenuItem.setActionCommand("Help");
+		helpmenuItem.addActionListener(this);
+		
 		optionsmenu.add(settingsmenuItem);
 		optionsmenu.add(helpmenuItem);
+		optionsmenu.add(exampleItem);
 		add(optionsmenu);
 		
 		if(Toolkit.getDefaultToolkit().getScreenSize().getWidth()>=3700){
