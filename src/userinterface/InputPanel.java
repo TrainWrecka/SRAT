@@ -171,7 +171,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		rbtManually.addActionListener(this);
 		btCancel.addActionListener(this);
 		btRun.setEnabled(false);
-		
+
 		rbtManually.setEnabled(false);
 
 	}
@@ -194,22 +194,27 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
-		
+
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
-				controller.setMeasurement(readCSV());
+				try {
+					controller.setMeasurement(readCSV());
+					rbtAutomatically.setSelected(true);
+					rbtManually.setEnabled(false);
 
-				rbtAutomatically.setSelected(true);
-				rbtManually.setEnabled(false);
+				} catch (RuntimeException e1) {
+					StatusBar.showStatus(e1.getMessage());
+				}
+
 			}
-			
+
 		}
 
 		if (e.getSource() == btRun) {
 			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
 			controller.setOrder(order);
 			if (rbtManually.isSelected() == true) {
-				double[][] wqp = new double[2][(int)Math.floor(order / 2)];
+				double[][] wqp = new double[2][(int) Math.floor(order / 2)];
 				double sigma = 0;
 				try {
 					double K = Double.parseDouble(tfK.getText());
@@ -240,7 +245,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		if (e.getSource() == btCancel) {
 			controller.stopApproximation();
 		}
-		
+
 		if (/*e.getSource() == rbtAutomatically*/ rbtAutomatically.isSelected()) {
 			lbK.setEnabled(false);
 			tfK.setEnabled(false);
@@ -302,21 +307,22 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	}
 
 	private List<String[]> readCSV() {
-		CSVReader reader = null;
 		List<String[]> measurementList = null;
 
 		try {
-			reader = new CSVReader(new FileReader(fileChooser.getSelectedFile()));
+			File file = fileChooser.getSelectedFile();
+			StatusBar.clear();
+			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
+			CSVReader reader = new CSVReader(new FileReader(file));
 			measurementList = reader.readAll();
+			reader.close();
+			StatusBar.clear();
+			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loaded");
 		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-			StatusBar.showStatus("File does not exist");
+			throw new RuntimeException("File does not exist");
 		} catch (IOException e2) {
-			e2.printStackTrace();
-			StatusBar.showStatus("IO Problem when reading file");
+			throw new RuntimeException("IO Problem when reading file");
 		}
-
-		StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
 
 		return measurementList;
 	}
@@ -327,7 +333,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		if (model.approximated()) {
 			//btRun.setEnabled(true);
 			rbtManually.setEnabled(true);
-			
+
 			for (int i = 0; i < tfwp.length; i++) {
 				if (i < model.getWqp()[0].length) {
 					tfwp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
