@@ -63,8 +63,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
 	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
 
-	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(0);
-	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(f,0);
+	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(f, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -115,11 +115,12 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 		lbK.setEnabled(false);
 		tfK.setEnabled(false);
+//		tfK.setRange(1e-20, 100000.0);
 
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JFormattedDoubleTextField(0);
+			tfwp[i] = new JFormattedDoubleTextField(f, 0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -127,18 +128,20 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 			lbwp[i].setEnabled(false);
 			tfwp[i].setEnabled(false);
+//			tfwp[i].setRange(1e-20, 100000.0);
 			wpPlacement = wpPlacement + 2;
 		}
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JFormattedDoubleTextField(0);
+			tfqp[i] = new JFormattedDoubleTextField(f, 0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 			lbqp[i].setEnabled(false);
 			tfqp[i].setEnabled(false);
+//			tfqp[i].setRange(1e-20, 100000.0);
 			qpPlacement = qpPlacement + 2;
 		}
 
@@ -152,6 +155,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 		add(tfSigma, new GridBagConstraints(1, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
 				new Insets(20, 0, 0, 0), 0, 0));
+//		tfSigma.setRange(1e-20, 100000.0);
 
 		// Combobox platzieren
 		//		cbOrdnungsauswahl.setPreferredSize(new Dimension(50, 20));
