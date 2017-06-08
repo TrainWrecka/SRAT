@@ -43,11 +43,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
 
-	private JTextField tfLaguerre = new JTextField();
-	private JTextField tfSimplexOptimizerRelative = new JTextField();
-	private JTextField tfSimplexOptimizerAbsolute = new JTextField();
-	private JTextField tfMaxEval = new JTextField();
-	private JTextField tfNelderMeadSimplexSteps = new JTextField();
+	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
 	//	private JTextField tfFilterLength=new JTextField();
 	//	private JTextField tfFilterErrorMax=new JTextField();
 
