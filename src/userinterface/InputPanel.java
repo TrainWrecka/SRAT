@@ -60,11 +60,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	private JLabel Output = new JLabel("");
 	// Textfields
-	private JTextField[] tfwp = new JTextField[5];
-	private JTextField[] tfqp = new JTextField[5];
+	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
+	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
 
-	private JTextField tfSigma = new JTextField();
-	private JTextField tfK = new JTextField();
+	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -74,7 +74,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private String Ordnung;
 	private double Ordnung1;
 
-	private JFrame settingsFrame;
 
 	//	private StatusBar statusBar = new StatusBar();
 
@@ -120,7 +119,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JTextField();
+			tfwp[i] = new JFormattedDoubleTextField(0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -133,7 +132,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JTextField();
+			tfqp[i] = new JFormattedDoubleTextField(0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
