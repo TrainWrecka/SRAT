@@ -47,7 +47,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private String comboBoxListe[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
 
-	DecimalFormat f = new DecimalFormat("##0.##E0");
+	DecimalFormat f = new DecimalFormat("##0.0#E0");
+	
+	DecimalFormat fd = new DecimalFormat("##00.0#E0");
+
 
 	// Labels
 
@@ -58,13 +61,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel lbOrdnung = new JLabel("Ordnung:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
-	private JLabel Output = new JLabel("");
+//	private JLabel Output = new JLabel("");
 	// Textfields
 	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
 	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
 
-	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(f,0);
-	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(f, 0);
+	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
+	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -120,7 +123,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JFormattedDoubleTextField(f, 0);
+			tfwp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -134,7 +137,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JFormattedDoubleTextField(f, 0);
+			tfqp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
