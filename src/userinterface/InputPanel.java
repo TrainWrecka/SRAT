@@ -58,7 +58,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel[] lbqp = new JLabel[5];
 
 	private JLabel lbK = new JLabel("K:");
-	private JLabel lbOrdnung = new JLabel("Ordnung:");
+	private JLabel lbOrdnung = new JLabel("Order:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
 //	private JLabel Output = new JLabel("");

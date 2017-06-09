@@ -40,7 +40,7 @@ public class Plots extends JPanel {
 		this.setLayout(new GridBagLayout());
 
 		if (xylineOderscatter.toLowerCase() == "xyline") {
-			if (title.toLowerCase() == "stepresponse") {
+			if (title == "Stepresponse") {
 				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
 				JFreeChartDPIFix.applyChartTheme(chart);
 				stepresponseChartPanel = new ChartPanel(chart);
@@ -52,7 +52,7 @@ public class Plots extends JPanel {
 				plot.setBackgroundPaint(Color.WHITE);
 				plot.setDomainGridlinePaint(Color.black);
 				plot.setRangeGridlinePaint(Color.black);
-			} else if (title.toLowerCase() == "error") {
+			} else if (title == "Error") {
 				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
 				errorChartPanel = new ChartPanel(chart);
 				JFreeChartDPIFix.applyChartTheme(chart);
