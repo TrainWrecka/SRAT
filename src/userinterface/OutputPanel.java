@@ -124,7 +124,9 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 			if (model.approximated()) {
 				errorData.removePlotData();
 				stepData.setYData(model.getApproxData(), "Apprximation");
-
+				
+				//renderer.setSeriesPaint(0, new Color(0, 0, 255, 0));
+				
 				errorData.setXData(model.getTimeData());
 				errorData.setYData(model.getErrorData(), "Error");
 				ErrorPanel.addData(errorData.getPlotData()[0]);

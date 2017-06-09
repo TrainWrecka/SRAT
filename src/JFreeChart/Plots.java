@@ -13,6 +13,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
@@ -83,8 +84,8 @@ public class Plots extends JPanel {
 			XYItemRenderer renderer = plot.getRenderer();
 			renderer.setSeriesShape(0, cross);
 
+			
 		}
-
 	}
 	
 	//================================================================================
