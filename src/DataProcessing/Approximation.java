@@ -186,6 +186,7 @@ public class Approximation {
 				StatusBar.clear();
 				StatusBar.showStatus("Approximating...");
 				StatusBar.showStatus("Evaluations: " + evals);
+				StatusBar.showStatus("Optimizer Error:" + this.error);
 			}
 
 			evals++;
