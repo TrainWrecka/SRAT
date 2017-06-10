@@ -1,4 +1,4 @@
-package StepResponseApproximationTool;
+package stepResponseApproximationTool;
 
 
 import java.awt.BorderLayout;
