@@ -47,57 +47,20 @@ public class Plots extends JPanel {
 		this.setLayout(new GridBagLayout());
 
 		if (xylineOderscatter.toLowerCase() == "xyline") {
-			if (title.toLowerCase() == "stepresponse") {
-				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
-				JFreeChartDPIFix.applyChartTheme(chart);
-				stepresponseChartPanel = new ChartPanel(chart);
-				add(stepresponseChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				stepresponseChartPanel.setMouseWheelEnabled(true);
-				stepresponseChartPanel.setMouseZoomable(true);
-				XYPlot plot = (XYPlot) chart.getPlot();
-				plot.setBackgroundPaint(Color.WHITE);
-				plot.setDomainGridlinePaint(Color.black);
-				plot.setRangeGridlinePaint(Color.black);
-			} else if (title.toLowerCase() == "error") {
-				JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
-				errorChartPanel = new ChartPanel(chart);
-				JFreeChartDPIFix.applyChartTheme(chart);
-				add(errorChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-				errorChartPanel.setMouseWheelEnabled(true);
-				errorChartPanel.setMouseZoomable(true);
-				XYPlot plot = (XYPlot) chart.getPlot();
-				plot.setBackgroundPaint(Color.WHITE);
-				plot.setDomainGridlinePaint(Color.black);
-				plot.setRangeGridlinePaint(Color.black);
+			if (title == "Stepresponse") {
+				createStepresponsePlot(title, xAchse, yAchse);
+			} else if (title == "Error") {
+				createErrorPlot(title, xAchse, yAchse);
 			}
 
-		} else if (xylineOderscatter.toLowerCase() == "scatter") {
-			JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset);
-			JFreeChartDPIFix.applyChartTheme(chart);
-			zeroesChartPanel = new ChartPanel(chart);
-			add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-			XYPlot plot = (XYPlot) chart.getPlot();
-			zeroesChartPanel.setMouseWheelEnabled(true);
-			zeroesChartPanel.setMouseZoomable(true);
-			plot.setBackgroundPaint(Color.WHITE);
-			plot.setDomainGridlinePaint(Color.black);
-			plot.setRangeGridlinePaint(Color.black);
-
-			Shape cross = ShapeUtilities.createDiagonalCross(5, 0.3f);
-			XYItemRenderer renderer = plot.getRenderer();
-			renderer.setSeriesShape(0, cross);
-
-			
+		}else if (xylineOderscatter.toLowerCase() == "scatter") {
+			createPolesPlot(title);
 		}
 	}
-	
 	//================================================================================
 	// Public Methods
 	//================================================================================
-
+	
 	/**
 	 * Fügt dem Plot eine Serie mit Daten hinzu.
 	 * @param series Serie mit Daten.
@@ -111,5 +74,55 @@ public class Plots extends JPanel {
 	 */
 	public void clearSeries() {
 		dataset.removeAllSeries();
+	}
+	
+	//================================================================================
+	// Private Methods
+	//================================================================================
+	
+	private void createStepresponsePlot(String title, String xAchse, String yAchse){
+		JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
+		JFreeChartDPIFix.applyChartTheme(chart);
+		stepresponseChartPanel = new ChartPanel(chart);
+		add(stepresponseChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		stepresponseChartPanel.setMouseWheelEnabled(true);
+		stepresponseChartPanel.setMouseZoomable(true);
+		XYPlot plot = (XYPlot) chart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setDomainGridlinePaint(Color.black);
+		plot.setRangeGridlinePaint(Color.black);
+	}
+	
+	private void createErrorPlot(String title, String xAchse, String yAchse){
+		JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
+		errorChartPanel = new ChartPanel(chart);
+		JFreeChartDPIFix.applyChartTheme(chart);
+		add(errorChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		errorChartPanel.setMouseWheelEnabled(true);
+		errorChartPanel.setMouseZoomable(true);
+		XYPlot plot = (XYPlot) chart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setDomainGridlinePaint(Color.black);
+		plot.setRangeGridlinePaint(Color.black);
+	}
+	
+	private void createPolesPlot(String title){
+		JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset);
+		JFreeChartDPIFix.applyChartTheme(chart);
+		zeroesChartPanel = new ChartPanel(chart);
+		add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		XYPlot plot = (XYPlot) chart.getPlot();
+		zeroesChartPanel.setMouseWheelEnabled(true);
+		zeroesChartPanel.setMouseZoomable(true);
+		plot.setBackgroundPaint(Color.WHITE);
+		plot.setDomainGridlinePaint(Color.black);
+		plot.setRangeGridlinePaint(Color.black);
+
+		Shape cross = ShapeUtilities.createDiagonalCross(15, 3.0f);
+		XYItemRenderer renderer = plot.getRenderer();
+		renderer.setSeriesShape(0, cross);
 	}
 }

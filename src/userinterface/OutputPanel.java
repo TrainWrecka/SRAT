@@ -14,11 +14,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import DataProcessing.Model;
 import JFreeChart.PlotData;
 import JFreeChart.Plots;
+import dataProcessing.Model;
 
-public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
+public class OutputPanel extends JPanel implements ChangeListener {
 
 	//================================================================================
 	// Properties
@@ -29,9 +29,9 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
-	private Plots ErrorPlot = new Plots("error", "xyline", "time", "In/Out");
-	private Plots StepresponsePlot = new Plots("stepresponse", "xyline", "time", "In/Out");
-	private Plots ZeroesPlot = new Plots("poles", "scatter", "", "");
+	private Plots ErrorPlot = new Plots("Error", "xyline", "time", "In/Out");
+	private Plots StepresponsePlot = new Plots("Stepresponse", "xyline", "time", "In/Out");
+	private Plots ZeroesPlot = new Plots("Poles", "scatter", "", "");
 
 	private DataPanel StepresponsePanel = new DataPanel(StepresponsePlot);
 	private DataPanel ZeroesPanel = new DataPanel(ZeroesPlot);
@@ -54,7 +54,6 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	public OutputPanel() {
 		super(new GridBagLayout());
-		//		setFont(myFont);
 
 		DefaultPanel.add(StepresponsePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -76,8 +75,8 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 				GridBagConstraints.BOTH, new Insets(5, 5, 10, 5), 0, 0));
 
 		tabpane.addTab("Default", DefaultPanel);
-		tabpane.addTab("StepresponsePanel", TabStepresponsePanel);
-		tabpane.addTab("Zeroes", TabZeroesPanel);
+		tabpane.addTab("Stepresponse", TabStepresponsePanel);
+		tabpane.addTab("Poles", TabZeroesPanel);
 		tabpane.addTab("Error", TabErrorPanel);
 
 		add(tabpane, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
@@ -142,12 +141,11 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
-	}
-
+	/**
+	 * Wenn Tab wechselt, wird entsprechendes Panel auf den neuen Tab gesetzt und vom alten entfernt.
+	 */
+	
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();

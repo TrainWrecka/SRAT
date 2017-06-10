@@ -28,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.opencsv.CSVReader;
 
-import DataProcessing.Model;
+import dataProcessing.Model;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
@@ -51,7 +51,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private String comboBoxListe[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
 	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
 
-	DecimalFormat f = new DecimalFormat("##0.##E0");
+	DecimalFormat f = new DecimalFormat("##0.0#E0");
+	
+	DecimalFormat fd = new DecimalFormat("##00.0#E0");
+
 
 	// Labels
 
@@ -59,16 +62,15 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel[] lbqp = new JLabel[5];
 
 	private JLabel lbK = new JLabel("K:");
-	private JLabel lbOrdnung = new JLabel("Ordnung:");
+	private JLabel lbOrdnung = new JLabel("Order:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
-	private JLabel Output = new JLabel("");
 	// Textfields
-	private JTextField[] tfwp = new JTextField[5];
-	private JTextField[] tfqp = new JTextField[5];
+	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
+	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
 
-	private JTextField tfSigma = new JTextField();
-	private JTextField tfK = new JTextField();
+	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
+	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -78,7 +80,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private String Ordnung;
 	private double Ordnung1;
 
-	private JFrame settingsFrame;
 
 	//	private StatusBar statusBar = new StatusBar();
 
@@ -124,7 +125,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JTextField();
+			tfwp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -137,7 +138,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JTextField();
+			tfqp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -159,7 +160,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
-		//		cbOrdnungsauswahl.setPreferredSize(new Dimension(50, 20));
 		add(cbOrdnungsauswahl, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 
@@ -190,12 +190,28 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		return z;
 	}
 
+	/**
+	 * setzt controller
+	 * @param controller
+	 */
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
 
-	// Ausgrauen von allen Textfeldern, Labels, Ordnungsauswahl und Combobox bei entsprechender Aktion
-	@Override
+	/**
+	 *  Wenn Load gedrückt wird Open Dialog öffnen für Signalauswahl.
+	 *  
+	 *  Wenn Run gedrückt wird, Berechnungen starten.
+	 *  
+	 *  Wenn Cancel gedrückt wird, Berechnungen abbrechen.
+	 *  
+	 *  Wenn Automatically ausgewählt, Textfelder, Labels (K, wp, qp und Sigma) deaktivieren.
+	 *
+	 *  Wenn Manually ausgewählt, Textfelder, Labels(K, wp, qp und Sigma) für die gewählte Ordnung aktivieren
+	 *  und die Anderen deaktivieren.
+	 *  
+	 *  
+	 */
 	public void actionPerformed(ActionEvent e) {
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
 		Ordnung1 = Double.parseDouble(Ordnung);
@@ -253,7 +269,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			controller.stopApproximation();
 		}
 
-		if (/*e.getSource() == rbtAutomatically*/ rbtAutomatically.isSelected()) {
+		if (rbtAutomatically.isSelected()) {
 			lbK.setEnabled(false);
 			tfK.setEnabled(false);
 
@@ -265,7 +281,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			}
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
-		} else if (e.getSource() == rbtManually) {
+		} else if (rbtManually.isSelected()) {
 			lbK.setEnabled(true);
 			tfK.setEnabled(true);
 
@@ -283,7 +299,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	}
 
 	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion
-	@Override
+
+	/**
+	 * Wenn Ordnung ändert und Manually ausgewählt ist, Textfelder und Labels (K, wp, qp und Sigma) 
+	 * für die entsprechende Ordnung aktivieren und die Anderen deaktivieren.
+	 */
 	public void itemStateChanged(ItemEvent e) {
 		Ordnung = "0";
 		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
@@ -291,7 +311,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		for (int i = 0; i < 5; i++) {
 
-			if (i < Math.floor(Ordnung1 / 2) & rbtAutomatically.isSelected() == false) {
+			if (i < Math.floor(Ordnung1 / 2) & rbtManually.isSelected()) {
 				lbwp[i].setEnabled(true);
 				lbqp[i].setEnabled(true);
 				tfwp[i].setEnabled(true);
@@ -303,7 +323,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				tfqp[i].setEnabled(false);
 			}
 		}
-		if ((Ordnung1 % 2) != 0 & rbtAutomatically.isSelected() == false) {
+		if ((Ordnung1 % 2) != 0 & rbtManually.isSelected() == false) {
 			lbSigma.setEnabled(true);
 			tfSigma.setEnabled(true);
 		} else {
@@ -335,6 +355,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		return measurementList;
 	}
 
+	/**
+	 * 
+	 * @param obs
+	 * @param obj
+	 */
 	public void update(Observable obs, Object obj) {
 		Model model = (Model) obs;
 

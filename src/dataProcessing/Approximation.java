@@ -1,4 +1,4 @@
-package DataProcessing;
+package dataProcessing;
 
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.complex.Complex;
@@ -17,6 +17,11 @@ import matlabfunctions.Matlab;
 import matlabfunctions.SVTools;
 import userinterface.StatusBar;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class Approximation {
 
 	//================================================================================
@@ -38,7 +43,13 @@ public class Approximation {
 	//================================================================================
 
 	/**
-	 * TODO!!!
+	 * Erstellt einen Butterworth-Filter, mit welchem die Startwerte berechnet werden. Mit dem
+	 * relativen und absoluten Optimum wird ein SimplexOptimizer erstellt und die Zeit- und Schritt-
+	 * daten, wie auch die Ordnung werden dem Target übergeben. Wenn der Optimizer (mit den übergebenen
+	 * anzahl an Iterationen und der Schrittgrösse) gestartet wird, ruft dieser nach jeder Evaluation das Target
+	 * auf, wo der Fehler dem Optimizer zurückgegeben wird. Wenn das vorgegebene Optimum erreicht wurde oder die 
+	 * anzahl an Iterationen überschritten wurden, wird mit den approximierten Polen 
+	 * ein Schritt generiert und zurückgegeben.
 	 * @param timeData Zeitachse.
 	 * @param stepData Zu approximierender Schritt.
 	 * @param order Zu approximiernede Ordnung.

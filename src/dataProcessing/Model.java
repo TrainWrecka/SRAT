@@ -1,12 +1,15 @@
-package DataProcessing;
+package dataProcessing;
 
 import java.util.List;
 import java.util.Observable;
-
 import matlabfunctions.Matlab;
-
 import userinterface.StatusBar;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class Model extends Observable {
 
 	//================================================================================

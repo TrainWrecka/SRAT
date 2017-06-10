@@ -15,7 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
-import DataProcessing.Model;
+import dataProcessing.Model;
 import userinterface.Controller;
 import userinterface.MenuBar;
 import userinterface.StatusBar;
@@ -139,9 +139,6 @@ public class StepResponseApproximationTool extends JFrame {
 							break;
 						case SYSTEM:
 							UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-							break;
-						case NIMROD:
-							UIManager.setLookAndFeel(new MyNimRODLookAndFeel("DarkGray.theme"));
 							break;
 						case NAPKIN:
 							UIManager.setLookAndFeel(new net.sourceforge.napkinlaf.NapkinLookAndFeel());

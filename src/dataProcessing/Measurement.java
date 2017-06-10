@@ -1,4 +1,4 @@
-package DataProcessing;
+package dataProcessing;
 
 import java.util.ArrayList;
 import java.util.Arrays;

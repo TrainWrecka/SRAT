@@ -35,8 +35,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JLabel lbMaxEval = new JLabel("Max Eval length");
 	private JLabel lbNelderMeadSimplexSteps = new JLabel("Nelder Mead Simplex Steps");
 
-	//	private JLabel lbFilterLength=new JLabel("Filter length");
-	//	private JLabel lbFilterErrorMax=new JLabel("Filter Error Max");
 	private JLabel lbFilterSignal = new JLabel("Filter Signal");
 	private JLabel lbShowFilteredSignal = new JLabel("Show filtered Signal");
 
@@ -45,13 +43,11 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
 
-	private JTextField tfLaguerre = new JTextField();
-	private JTextField tfSimplexOptimizerRelative = new JTextField();
-	private JTextField tfSimplexOptimizerAbsolute = new JTextField();
-	private JTextField tfMaxEval = new JTextField();
-	private JTextField tfNelderMeadSimplexSteps = new JTextField();
-	//	private JTextField tfFilterLength=new JTextField();
-	//	private JTextField tfFilterErrorMax=new JTextField();
+	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
+	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
 
 	private JRadioButton rbtFilterSignalYes = new JRadioButton("Yes");
 	private JRadioButton rbtFilterSignalNo = new JRadioButton("No");
@@ -75,7 +71,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	//================================================================================
 	// Constructor
 	//================================================================================
-	
+
 	public SettingsPanel(Controller controller) {
 		super(new GridBagLayout());
 		this.controller = controller;
@@ -114,64 +110,36 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 				new Insets(10, 10, 0, 0), 0, 0));
 		add(tfMaxEval, new GridBagConstraints(1, 5, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		
-		
-		
-		
-//		add(lbFilterLength,new GridBagConstraints(0, 6, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 10, 0, 0), 0, 0));
-//		add(tfFilterLength,new GridBagConstraints(1, 6, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 0, 0, 10), 0, 0));
-//		add(lbFilterErrorMax,new GridBagConstraints(0, 7, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 10, 0, 0), 0, 0));	
-//		add(tfFilterErrorMax,new GridBagConstraints(1, 7, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//				new Insets(10, 0, 0, 10), 0, 0));	
-		
-		
-		
-		add(lbFilterSignal, new GridBagConstraints(0, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 10, 0, 0), 0, 0));
-		add(rbtFilterSignalYes, new GridBagConstraints(1, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 0), 0, 0));
-		add(rbtFilterSignalNo, new GridBagConstraints(2, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
-		
-		add(lbShowFilteredSignal, new GridBagConstraints(0, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 10, 0, 0), 0, 0));
-		add(rbtShowFilteredSignalYes, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 0), 0, 0));
-		add(rbtShowFilteredSignalNo, new GridBagConstraints(2, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
-		
 
+		add(lbFilterSignal, new GridBagConstraints(0, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		add(rbtFilterSignalYes, new GridBagConstraints(1, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 0, 0), 0, 0));
+		add(rbtFilterSignalNo, new GridBagConstraints(2, 8, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 0, 10), 0, 0));
 
-		add(lbAutoFilter, new GridBagConstraints(0, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+		add(lbShowFilteredSignal, new GridBagConstraints(0, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 0), 0, 0));
+		add(rbtShowFilteredSignalYes, new GridBagConstraints(1, 9, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 0, 0), 0, 0));
+		add(rbtShowFilteredSignalNo, new GridBagConstraints(2, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 0, 10), 0, 0));
+
+		add(lbAutoFilter, new GridBagConstraints(0, 10, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 20), 0, 0));
-		add(cbAutoFilter, new GridBagConstraints(1, 11, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+		add(cbAutoFilter, new GridBagConstraints(1, 10, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 20), 0, 0));
 
-
-		add(lbAutoFilter,new GridBagConstraints(0, 10, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 10, 0, 20), 0, 0));
-		add(cbAutoFilter, new GridBagConstraints(1, 10, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 10, 0, 20), 0, 0));
-		
-		
-		
 		add(lbFilter, new GridBagConstraints(0, 11, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 
 				new Insets(10, 10, 0, 20), 0, 0));
 		add(jsFilter, new GridBagConstraints(1, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		
-		
+
 		add(lbFill, new GridBagConstraints(0, 12, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 		add(btDefaults, new GridBagConstraints(1, 12, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-	
-		
-		
 
 		btApply.addActionListener(this);
 		btDefaults.addActionListener(this);
@@ -181,28 +149,29 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		rbtShowFilteredSignalYes.addActionListener(this);
 		rbtShowFilteredSignalNo.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
-		
+
 		tfLaguerre.addFocusListener(this);
 		tfMaxEval.addFocusListener(this);
 		tfNelderMeadSimplexSteps.addFocusListener(this);
 		tfSimplexOptimizerAbsolute.addFocusListener(this);
 		tfSimplexOptimizerRelative.addFocusListener(this);
-		
-	
-		
 
+		//<<<<<<< HEAD
 		jsFilter.addChangeListener(this);
 		jsFilter.setEnabled(false);
+		//=======
+		cbAutoFilter.addItemListener(this);
+		jsFilter.addChangeListener(this);
+
+		//>>>>>>> origin/master
 		initFields();
 		btApply.doClick();
 	}
-	
+
 	//================================================================================
 	// Public Methods
 	//================================================================================
 
-	// Ausgrauen von allen Textfeldern, Labels, Ordnungsauswahl und Combobox bei entsprechender Aktion
-	
 	/**
 	 * Wenn der Default-Button gedrückt wurde werden die Standardwerte geladen, beim Apply-Button werden
 	 * die Werte aller Textfelder dem Controller übergeben.
@@ -218,38 +187,35 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 			//updateValues();
 
 		}
-		
-		if (e.getSource() == cbAutoFilter) {
-			if (cbAutoFilter.isSelected()) {
-				jsFilter.setEnabled(false);
-			} else {
-				jsFilter.setEnabled(true);
-			}
 
-		}
-		
 		updateValues();
-		
+
 	}
 
-	
-
-	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion
-	@Override
+	/**
+	 * Wenn die Checkbox Autofilter ausgewählt wird, wird der Schieberegler für die Filtergenauigkeit disabled.
+	 * Wenn die Checkbox abgewählt wird, wird der Schieberegler enabled
+	 */
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
+		if (cbAutoFilter.isSelected()) {
+			jsFilter.setEnabled(false);
+		} else {
+			jsFilter.setEnabled(true);
+		}
 	}
 
-	@Override
+	/**
+	 * Wenn der Schieberegler für die Filtergenauigkeit verschoben wird, wird der Wert im Textfeld aktualisiert.
+	 */
 	public void stateChanged(ChangeEvent arg0) {
 		lbFilter.setText("Filter accuracy in %   " + jsFilter.getValue());
-			updateValues();
+		updateValues();
 	}
-	
+
 	//================================================================================
 	// Private Methods
 	//================================================================================
-	
+
 	/**
 	 * Lädt Standadtwerte in die Textfelder
 	 */
@@ -268,7 +234,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	@Override
 	public void focusGained(FocusEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -276,8 +242,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		// TODO Auto-generated method stub
 		updateValues();
 	}
-	
-	private void updateValues(){
+
+	private void updateValues() {
 		try {
 			double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
 			double[] simplexOpt = { Double.parseDouble(tfSimplexOptimizerRelative.getText()),
