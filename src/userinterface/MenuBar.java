@@ -37,6 +37,11 @@ import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
 import com.opencsv.CSVReader;
 
 public class MenuBar extends JMenuBar implements Observer, ActionListener {
+	
+	//================================================================================
+	// Properties
+	//================================================================================
+	
 	JMenu menu, optionsmenu;
 	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem, ExamplemenuItem;
 	JFrame frame;
@@ -54,7 +59,11 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	String[] zeilen;
 	JTextArea jtArea;
 	
-
+	
+	//================================================================================
+	// Contructor
+	//================================================================================
+	
 	public MenuBar(Controller controller, JFrame frame) {
 		this.frame = frame;
 		this.controller = controller;
@@ -122,6 +131,10 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		settingsPanel = new SettingsPanel(controller);
 	}
 
+	
+	//================================================================================
+	// Public Methods
+	//================================================================================
 
 	/**
 	 * Wenn Resizable gedrückt wird, aktuelle Grösse des Frames um 100 verkleinern (nur wenn Frame vorher nicht resizable war) 
@@ -183,8 +196,6 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 					(int) (settingsDialog.getPreferredSize().getHeight()) + settingsFrameHeight);
 			
 			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2, (screenSize.height - settingsDialog.getSize().height) / 3);
-//			settingsDialog.setLocation((int) (frame.getLocation().getX() - xPosition),
-//					(int) frame.getLocation().getY());
 		}
 		if (e.getActionCommand().equals("Help")) {
 			helpDialog.setTitle("Help");

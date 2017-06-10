@@ -42,11 +42,19 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
 
-	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
-	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
-	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
-	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
-	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
+	private JEngineerField tfLaguerre = new JEngineerField(3,0);
+	private JEngineerField tfSimplexOptimizerRelative = new JEngineerField(3,0);
+	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3,0);
+	private JEngineerField tfMaxEval = new JEngineerField(3,0);
+	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3,0);
+	
+	
+	
+//	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
+//	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
+//	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
+//	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
+//	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
 
 	private JRadioButton rbtFilterSignalYes = new JRadioButton("Yes");
 	private JRadioButton rbtFilterSignalNo = new JRadioButton("No");
