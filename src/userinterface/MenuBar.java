@@ -40,6 +40,8 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	private int settingsFrameWidth;
 	private int settingsFrameHeight;
 	
+	int cnt = 0;
+	
 	String[] zeilen;
 	JTextArea jtArea;
 
@@ -106,7 +108,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		int cnt = 0;
+		
 		if (e.getActionCommand().equals("Resizable")) {
 			frame.setResizable(true);
 			Dimension dim = frame.getSize();
@@ -117,13 +119,16 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("NotResizable")) {
+			frame.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().width*2/4),(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight()*10/11));
+			frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getSize().height) / 2);
 			frame.setResizable(false);
 			Dimension dim = frame.getSize();
 			if (cnt != 0) {
 				dim.width += 100;
 				cnt--;
+				frame.setSize(dim);
 			}
-			frame.setSize(dim);
+			
 		}
 		if (e.getActionCommand().equals("OnTop")) {
 			StatusBar.showStatus(this, e, e.getActionCommand());
