@@ -12,6 +12,11 @@ import matlabfunctions.SVTools;
 import sun.swing.SwingUtilities2.Section;
 import userinterface.StatusBar;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class Measurement {
 
 	//================================================================================

@@ -3,313 +3,318 @@ package matlabfunctions;
 /**
  * 
  * 
- * @author      »Æ´óÎÀ ,ºúÅÎ£¬±¾ÀàÀ´×Ô»¥ÁªÍø
+ * @author      é»„å¤§å« ,èƒ¡ç›¼ï¼Œæœ¬ç±»æ¥è‡ªäº’è”ç½‘
  * @Email       hhhdddwww@163.com
  * @version     1.0
- * @Time        2016Äê3ÔÂ24ÈÕÏÂÎç4:31:10
+ * @Time        2016å¹´3æœˆ24æ—¥ä¸‹åˆ4:31:10
  * @Description 
  *
  */
 public class Mat {
-
+	
 	/**chl
-	 * ¾ØÕóµÄ×Ó¾ØÕóº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬nÊÇÈ¥µôµÄÁĞºÅ
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóÈ¥µôµÚnÁĞºóµÄ¾ØÕó£©
+	 * çŸ©é˜µçš„å­çŸ©é˜µå‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œnæ˜¯å»æ‰çš„åˆ—å·
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µå»æ‰ç¬¬nåˆ—åçš„çŸ©é˜µï¼‰
 	 */
-	public static double[][] zjz(double[][] a, int n) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie - 1];
-
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < n; j++) {
-				result[i][j] = a[i][j];
+	public static double[][] zjz(double[][] a ,int n){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie-1];
+		
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<n;j++){
+				result[i][j]=a[i][j];
 			}
-			for (int j = n + 1; j < lie; j++) {
-				//				System.out.println(j+"+++++");
-				result[i][j - 1] = a[i][j];
+			for(int j=n+1;j<lie;j++){
+//				System.out.println(j+"+++++");
+				result[i][j-1]=a[i][j];
 			}
 		}
-
+		
 		return result;
 	}
-
-	public static int rank(double[][] b) {
-		int i, j, k, nn, is = 0, js = 0, l;
-		double q, d;
-		double[][] a = new double[b.length][];
-		for (int m = 0; m < b.length; m++) {
-			a[m] = new double[b[m].length];
-			for (int n = 0; n < b[m].length; n++) {
-				a[m][n] = b[m][n];
-			}
-		}
-		/* double[][] b=new double[a.length][a[0].length];
-		
-		for(int m=0;m<a.length;m++){
-			for(int n=0;n<a[0].length;n++){
-				b[m][n]=a[m][n].Clone;
-			}
-		}*/
-		// ÖÈĞ¡ÓÚµÈÓÚĞĞÁĞÊı
+	
+	public static int rank(double[][] b){
+		int i,j,k,nn,is = 0,js = 0,l;
+	    double q,d;
+	    double[][] a=new double[b.length][];
+	    for(int m=0;m<b.length;m++){
+	    	a[m]=new double[b[m].length];
+	    	for(int n=0;n<b[m].length;n++){
+	    		a[m][n]=b[m][n];
+	    	}
+	    }
+	   /* double[][] b=new double[a.length][a[0].length];
+	   
+	    for(int m=0;m<a.length;m++){
+	    	for(int n=0;n<a[0].length;n++){
+	    		b[m][n]=a[m][n].Clone;
+	    	}
+	    }*/
+		// ç§©å°äºç­‰äºè¡Œåˆ—æ•°
 		nn = a.length;
-		if (a.length >= a[0].length) nn = a[0].length;
+	    if (a.length >= a[0].length) 
+			nn =a[0].length;
 
-		k = 0;
+	    k=0;
 
-		// ÏûÔªÇó½â
-		for (l = 0; l <= nn - 1; l++) {
-			q = 0.0;
-			for (i = l; i <= a.length - 1; i++) {
-				for (j = l; j <= a[0].length - 1; j++) {
-
-					d = Math.abs(a[i][j]);
-					if (d > q) {
-						q = d;
-						is = i;
-						js = j;
+		// æ¶ˆå…ƒæ±‚è§£
+	    for (l=0; l<=nn-1; l++)
+	    { 
+			q=0.0;
+	        for (i=l; i<=a.length-1; i++)
+			{
+				for (j=l; j<=a[0].length-1; j++)
+				{ 
+					 
+					d=Math.abs(a[i][j]);
+					if (d>q) 
+					{ 
+						q=d; 
+						is=i; 
+						js=j;
 					}
 				}
 			}
 
-			if (q == 0.0) return (k);
+	        if (q == 0.0) 
+				return(k);
 
-			k = k + 1;
-			if (is != l) {
-				for (j = l; j <= a[0].length - 1; j++) {
-
-					d = a[l][j];
-					a[l][j] = a[is][j];
-					a[is][j] = d;
-				}
-			}
-			if (js != l) {
-				for (i = l; i <= a.length - 1; i++) {
-
-					d = a[i][js];
-					a[i][js] = a[i][l];
-					a[i][l] = d;
-				}
-			}
-
-			for (i = l + 1; i <= a.length - 1; i++) {
-				d = a[i][l] / a[l][l];
-				for (j = l + 1; j <= a[0].length - 1; j++) {
-
-					a[i][j] = a[i][j] - d * a[l][j];
-				}
-			}
-		}
-
-		return (k);
-
+	        k=k+1;
+	        if (is!=l)
+	        { 
+				for (j=l; j<=a[0].length-1; j++)
+	            { 
+				
+	                d=a[l][j]; 
+	                a[l][j]=a[is][j]; 
+	                a[is][j]=d;
+	            }
+	        }
+	        if (js!=l)
+	        { 
+				for (i=l; i<=a.length-1; i++)
+	            { 
+					
+	                d=a[i][js]; 
+	                a[i][js]=a[i][l]; 
+	                a[i][l]=d;
+	            }
+	        }
+	        
+			
+	        for (i=l+1; i<=a.length-1; i++)
+	        { 
+				d=a[i][l]/a[l][l];
+	            for (j=l+1; j<=a[0].length-1; j++)
+	            { 
+					
+	                a[i][j]=a[i][j]-d*a[l][j];
+	            }
+	        }
+	    }
+	    
+		return(k);
+		
 	}
 
 	/**chl
-	 * ¾ØÕóÏà³ËµÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóµÄ³Ë»ı£©
+	 * çŸ©é˜µç›¸ä¹˜çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µçš„ä¹˜ç§¯ï¼‰
 	 */
-	public static double[][] multi(double[][] a, double[][] b) {
-		int hang = a.length;
-		int lie = b[0].length;
+	public static double[][] multi(double[][] a,double[][] b) {
+		int hang=a.length;
+		int lie=b[0].length;
 		double sum;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				sum = 0;
-				for (int k = 0; k < b.length; k++) {
-					sum += a[i][k] * b[k][j];
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+				sum=0;
+				for(int k=0;k<b.length;k++){
+				sum+=a[i][k]*b[k][j];	
 				}
-				result[i][j] = sum;
+				result[i][j]=sum;
 			}
 		}
-		return result;
+        return result;
 	}
-
-	/**zj
-	 * Á½¸öÒ»Î¬Êı×éÏà¼Ó
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄÒ»Î¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍÒ»Î¬¾ØÕó
+    /**zj
+	 * ä¸¤ä¸ªä¸€ç»´æ•°ç»„ç›¸åŠ 
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„ä¸€ç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹ä¸€ç»´çŸ©é˜µ
 	*/
-	public static double[] plus(double[] a, double[] b) {
-		int hang = a.length;
-		double[] result = new double[hang];
-		for (int i = 0; i < hang; i++) {
-
-			result[i] = a[i] + b[i];
-
-		}
-		return result;
-	}
-
-	public static double[] multi(int[][] a, double[] b) {
-		int hang = a.length;
-
+    public static double[] plus(double[] a,double[] b)
+    {
+    	int hang=a.length;
+    	double[] result=new double[hang];
+    	for(int i=0;i<hang;i++){
+    		
+    			result[i]=a[i]+b[i];
+    		
+    	}
+     return	result;
+     }
+	public static double[] multi(int[][] a,double[] b) {
+		int hang=a.length;
+		
 		double sum;
-		double[] result = new double[hang];
-		for (int i = 0; i < hang; i++) {
-			sum = 0;
-			for (int k = 0; k < b.length; k++) {
-				sum += a[i][k] * b[k];
+		double[] result=new double[hang];
+		for(int i=0;i<hang;i++){
+				sum=0;
+				for(int k=0;k<b.length;k++){
+				sum+=a[i][k]*b[k];	
+				}
+				result[i]=sum;
 			}
-			result[i] = sum;
-		}
-
-		return result;
+		
+        return result;
 	}
-
-	public static int[][] multi(int[][] a, int[][] b) {
-		int hang = a.length;
-		int lie = b[0].length;
+	public static int[][] multi(int[][] a,int[][] b) {
+		int hang=a.length;
+		int lie=b[0].length;
 		int sum;
-		int[][] result = new int[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				sum = 0;
-				for (int k = 0; k < b.length; k++) {
-					sum += a[i][k] * b[k][j];
+		int[][] result=new int[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+				sum=0;
+				for(int k=0;k<b.length;k++){
+				sum+=a[i][k]*b[k][j];	
 				}
-				result[i][j] = sum;
+				result[i][j]=sum;
 			}
 		}
-		return result;
+        return result;
 	}
-
-	public static double[][] multi(int[][] a, double[][] b) {
-		int hang = a.length;
-		int lie = b[0].length;
+	public static double[][] multi(int[][] a,double[][] b) {
+		int hang=a.length;
+		int lie=b[0].length;
 		double sum;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				sum = 0;
-				for (int k = 0; k < b.length; k++) {
-					sum += a[i][k] * b[k][j];
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+				sum=0;
+				for(int k=0;k<b.length;k++){
+				sum+=a[i][k]*b[k][j];	
 				}
-				result[i][j] = sum;
+				result[i][j]=sum;
 			}
 		}
-		return result;
+        return result;
 	}
 
 	/**
-	 * ¾ØÕó³ËÊıµÄº¯Êıchl
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄÒ»Î¬Êı×é£¬bÊÇ¸¡µãÊı£»
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍÒ»Î¬Êı×é£¨ÁĞÏòÁ¿a³ËÒÔÊıbµÄ½á¹û£©
+	 * çŸ©é˜µä¹˜æ•°çš„å‡½æ•°chl
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„ä¸€ç»´æ•°ç»„ï¼Œbæ˜¯æµ®ç‚¹æ•°ï¼›
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹ä¸€ç»´æ•°ç»„ï¼ˆåˆ—å‘é‡aä¹˜ä»¥æ•°bçš„ç»“æœï¼‰
 	 */
-	public static double[] multi(double[] a, double b) {
-		int hang = a.length;
-		double[] result = new double[hang];
-		for (int i = 0; i < hang; i++) {
-			result[i] = a[i] * b;
+	public static double[] multi(double[] a,double b){
+		int hang=a.length;
+		double[] result=new double[hang];
+		for(int i=0;i<hang;i++){
+			  result[i]=a[i]*b;
 		}
 		return result;
 	}
-
 	/**chl
-	 * ¾ØÕóÏà³ËµÄº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬aÊÇÒ»Î¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóµÄ³Ë»ı£©
+	 * çŸ©é˜µç›¸ä¹˜çš„å‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œaæ˜¯ä¸€ç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µçš„ä¹˜ç§¯ï¼‰
 	 */
-	public static double[] multi(double[][] a, double[] b) {
-		int hang = a.length;
-
+	public static double[] multi(double[][] a,double[] b) {
+		int hang=a.length;
+		
 		double sum;
-		double[] result = new double[hang];
-		for (int i = 0; i < hang; i++) {
-			sum = 0;
-			for (int k = 0; k < b.length; k++) {
-				sum += a[i][k] * b[k];
-			}
-			result[i] = sum;
-		}
-
-		return result;
-	}
-
-	/**chl
-	 * ¾ØÕóÏà¼ÓµÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaÓëbµÄºÍ£©
-	 */
-	public static double[][] plus(double[][] a, double[][] b) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = a[i][j] + b[i][j];
-			}
-		}
-		return result;
-	}
-
-	/**chl
-	 * ¾ØÕóÏà¼õµÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaÓëbµÄ²î£©
-	 */
-	public static double[][] minus(double[][] a, double[][] b) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = a[i][j] - b[i][j];
-			}
-		}
-		return result;
-	}
-
-	/**chl
-	 * ¾ØÕóÇó·´º¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaµÄ¸º¾ØÕó£©
-	 */
-	public static double[][] minus(double[][] a) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = -a[i][j];
-			}
-		}
-		return result;
-	}
-
-	/**chl
-	 * ¾ØÕóµÄ×Ó¾ØÕóº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬mÊÇÒªÈ¥µôµÄĞĞºÅ£¬nÊÇÈ¥µôµÄÁĞºÅ
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóÈ¥µôµÚmĞĞºÍnÁĞºóµÄ¾ØÕó£©
-	 */
-	public static double[][] zjz(double[][] a, int m, int n) {
-		int hang = a.length;
-		double[][] result = new double[hang - 1][hang - 1];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < hang; j++) {
-				if (i < m && j < n) {
-					result[i][j] = a[i][j];
+		double[] result=new double[hang];
+		for(int i=0;i<hang;i++){
+				sum=0;
+				for(int k=0;k<b.length;k++){
+				sum+=a[i][k]*b[k];	
 				}
-				if (i > m && j < n) {
-					result[i - 1][j] = a[i][j];
+				result[i]=sum;
+			}
+		
+        return result;
+	}
+	/**chl
+	 * çŸ©é˜µç›¸åŠ çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaä¸bçš„å’Œï¼‰
+	 */
+	public static double[][] plus(double[][] a,double[][] b){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=a[i][j]+b[i][j];
+			}
+		}
+		return result;
+	}
+	/**chl
+	 * çŸ©é˜µç›¸å‡çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaä¸bçš„å·®ï¼‰
+	 */
+	public static double[][] minus(double[][] a,double[][] b){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=a[i][j]-b[i][j];
+			}
+		}
+		return result;
+	}
+	/**chl
+	 * çŸ©é˜µæ±‚åå‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaçš„è´ŸçŸ©é˜µï¼‰
+	 */
+	public static double[][] minus(double[][] a){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=-a[i][j];
+			}
+		}
+		return result;
+	}
+	/**chl
+	 * çŸ©é˜µçš„å­çŸ©é˜µå‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œmæ˜¯è¦å»æ‰çš„è¡Œå·ï¼Œnæ˜¯å»æ‰çš„åˆ—å·
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µå»æ‰ç¬¬mè¡Œå’Œnåˆ—åçš„çŸ©é˜µï¼‰
+	 */
+	public static double[][] zjz(double[][] a ,int m,int n){
+		int hang=a.length;
+		double[][] result=new double[hang-1][hang-1];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<hang;j++){
+				if (i<m && j<n){
+					result[i][j]=a[i][j];
 				}
-				if (i < m && j > n) {
-					result[i][j - 1] = a[i][j];
+				if (i>m && j<n){
+					result[i-1][j]=a[i][j];
 				}
-				if (i > m && j > n) {
-					result[i - 1][j - 1] = a[i][j];
+				if (i<m && j>n){
+					result[i][j-1]=a[i][j];
+				}
+				if (i>m && j>n){
+					result[i-1][j-1]=a[i][j];
 				}
 			}
 		}
-		return result;
-	}
+		return result;		
+	} 
 	/**chl
-	 * ¾ØÕóµÄĞĞÁĞÊ½µÄº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãÊı£¨¾ØÕóaµÄĞĞÁĞÊ½£©
+	 * çŸ©é˜µçš„è¡Œåˆ—å¼çš„å‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹æ•°ï¼ˆçŸ©é˜µaçš„è¡Œåˆ—å¼ï¼‰
 	 */
 	/*public static double det(double[][] a){
 		double result=0;
@@ -327,11 +332,10 @@ public class Mat {
 		return result;
 	}*/
 	/**chl
-	 * ¾ØÕóµÄ°éËæ¾ØÕóµÄº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaµÄ°éËæ¾ØÕó£©
+	 * çŸ©é˜µçš„ä¼´éšçŸ©é˜µçš„å‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaçš„ä¼´éšçŸ©é˜µï¼‰
 	 */
-
 	/*public static double[][] bs(double[][] a){
 		int hang = a.length;
 		//double sign=-1;
@@ -348,388 +352,375 @@ public class Mat {
 		return result;
 	}*/
 	/**chl
-	 * ¾ØÕóµÄ×ªÖÃ¾ØÕóµÄº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaµÄ×ªÖÃ¾ØÕó£©
+	 * çŸ©é˜µçš„è½¬ç½®çŸ©é˜µçš„å‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaçš„è½¬ç½®çŸ©é˜µï¼‰
 	 */
-	public static double[][] zhz(double[][] a) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[lie][hang];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[j][i] = a[i][j];
+	public static double[][] zhz(double[][] a){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[lie][hang];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[j][i]=a[i][j];
 			}
 		}
 		return result;
 	}
-
 	/**
-	 * ¾ØÕó³ËÊıµÄº¯Êıchl
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬bÊÇ¸¡µãÊı£»
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóa³ËÒÔÊıbµÄ½á¹û£©
+	 * çŸ©é˜µä¹˜æ•°çš„å‡½æ•°chl
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œbæ˜¯æµ®ç‚¹æ•°ï¼›
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaä¹˜ä»¥æ•°bçš„ç»“æœï¼‰
 	 */
-	public static double[][] multi(double[][] a, double b) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = a[i][j] * b;
+	public static double[][] multi(double[][] a,double b){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=a[i][j]*b;
 			}
 		}
 		return result;
 	}
 
-	public static double[][] multi(double b, double[][] a) {
-		int hang = a.length;
-		int lie = a[0].length;
+        public static double[][] multi(double b,double[][] a){
+		int hang=a.length;
+		int lie=a[0].length;
 		//System.out.println(hang+"^^^^^^^^^^^^^"+lie);
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = a[i][j] * b;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=a[i][j]*b;
 			}
 		}
 		return result;
 	}
-
 	/**chl
-	 * ¾ØÕó³ıÊıµÄº¯Êı
-	 * @param args ²ÎÊıa£¬ÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬bÊÇ¸¡µãÊı
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóa³ıÒÔÊıbµÄ½á¹û£©
+	 * çŸ©é˜µé™¤æ•°çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œbæ˜¯æµ®ç‚¹æ•°
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaé™¤ä»¥æ•°bçš„ç»“æœï¼‰
 	 */
-	public static double[][] divide(double[][] a, double b) {
-		int hang = a.length;
-		int lie = a[0].length;
-		double[][] result = new double[hang][lie];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < lie; j++) {
-				result[i][j] = a[i][j] / b;
+	public static double[][] divide(double[][] a,double b){
+		int hang=a.length;
+		int lie=a[0].length;
+		double[][] result=new double[hang][lie];
+		for(int i=0;i<hang;i++){
+			for(int j=0;j<lie;j++){
+			  result[i][j]=a[i][j]/b;
 			}
 		}
 		return result;
 	}
-
 	/**chl
-	 * ¾ØÕó³ı·¨µÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóa³ıÒÔbµÄ½á¹û£©
+	 * çŸ©é˜µé™¤æ³•çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaé™¤ä»¥bçš„ç»“æœï¼‰
 	 */
-	public static double[][] divide(double[][] a, double[][] b) {
+	public static double[][] divide(double[][] a,double[][] b){
 		double[][] result = new double[a.length][b.length];
-		result = multi(a, inv(b));
+		result=multi(a,inv(b));
 		return result;
 	}
-
 	/**chl
-	 * ¾ØÕóÇóÄæµÄº¯Êı
-	 * @param args ²ÎÊıaÊÇ¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬Êı×é£¨¾ØÕóaµÄÄæ¾ØÕó£©
+	 * çŸ©é˜µæ±‚é€†çš„å‡½æ•°
+	 * @param args å‚æ•°aæ˜¯ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼Œ
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´æ•°ç»„ï¼ˆçŸ©é˜µaçš„é€†çŸ©é˜µï¼‰
 	 */
 	/*public static double[][] inv(double[][] a){
 		double[][] result = new double[a.length][a.length];
 		result=divide(bs(a),det(a));
 		return result;
 	}*/
-	public static double absMax(double a[]) {
-		int K = a.length;
-		double result = 0;
-		if (a.length != 0) {
-			if (a.length == 1) {
-				result = Math.abs(a[0]);
-			} else {
-				result = Math.abs(a[0]);
-				for (int i = 1; i < K; i++) {
-					if (Math.abs(a[i]) > result) {
-						result = Math.abs(a[i]);
-					}
-				}
+	public static double absMax(double a[]){
+		int K=a.length;
+		double result=0;
+		if(a.length!=0){
+			if(a.length==1){
+				result =Math.abs(a[0]);	
 			}
-		}
+			else{
+				result =Math.abs(a[0]);	
+		        for(int i=1;i<K;i++){	
+			        if(Math.abs(a[i])>result){		
+			             result=Math.abs(a[i]);		
+			        }
+		        }
+		    }
+		}		
 		return result;
 	}
-
 	/**zj
-	 * ĞĞÏòÁ¿³ËÒÔÁĞÏòÁ¿µÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄÒ»Î¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍÊıÖµ
+	 * è¡Œå‘é‡ä¹˜ä»¥åˆ—å‘é‡çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„ä¸€ç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹æ•°å€¼
 	*/
-	public static double multi_data(double[] a, double[] b) {
-		int lie = a.length;
-		double result = 0;
-		for (int i = 0; i < lie; i++) {
-			result += a[i] * b[i];
-
-		}
-		return result;
+	public static double multi_data(double[] a,double[] b){
+	  int lie=a.length;
+	  double result=0;
+	  for(int i=0;i<lie;i++){
+		  result+=a[i]*b[i];
+		  
+	  }
+	  return result;
 	}
-
 	/**zj
-	 * ÁĞÏòÁ¿³ËÒÔĞĞÏòÁ¿µÄº¯Êı
-	 * @param args ²ÎÊıa£¬bÊÇÁ½¸ö¸¡µãĞÍ£¨double£©µÄÒ»Î¬Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÎ¬¾ØÕó
+	 * åˆ—å‘é‡ä¹˜ä»¥è¡Œå‘é‡çš„å‡½æ•°
+	 * @param args å‚æ•°aï¼Œbæ˜¯ä¸¤ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„ä¸€ç»´æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒç»´çŸ©é˜µ
 	*/
-	public static double[][] multi_mat(double[] a, double[] b) {
-		int hang = a.length;
-		double[][] result = new double[hang][hang];
-		for (int i = 0; i < hang; i++) {
-			for (int j = 0; j < hang; j++) {
-				result[i][j] = a[i] * b[j];
-			}
-		}
-		return result;
-	}
+    public static double[][] multi_mat(double[] a,double[] b)
+    {
+    	int hang=a.length;
+    	double[][] result=new double[hang][hang];
+    	for(int i=0;i<hang;i++){
+    		for(int j=0;j<hang;j++){
+    			result[i][j]=a[i]*b[j];
+    		}
+    	}
+     return	result;
+     }
+    //å­™æ³¢ ( 2009-03-11  16:51:29)
+    /**
+     * æ±‚çŸ©é˜µçš„é€†
+     * @param matrix
+     * @return
+     */
+    public static double[][]inv(double[][]matrix){
+    		int n=matrix.length;
+    		double[][] matrix1=new double[n][2*n];
+    		double[][] result=new double[n][n];
+    		for(int i=0;i<n;i++){
+    			for(int j=0;j<n;j++){
+    				matrix1[i][j]=matrix[i][j];
+    			}
+    		}
+    		for(int k=0;k<n;k++){
+    			   for(int t=n;t<n*2;t++){
+    			    if((t-k)==n) {
+    			    	matrix1[k][t]=1.0;
+    			     }
+    			    else{
+    			    	matrix1[k][t]=0;
+    			     }
+    			    }
+    			   }  
+//    		get the change of the array
+    		for(int k=0;k<n;k++){
+    		   if(matrix1[k][k]!=1){
+    		    double bs = matrix1[k][k];
+    		    matrix1[k][k]=1;
+    		   for(int p=k;p<n*2;p++)   {
+    			   matrix1[k][p]/=bs;
+    		    }
+    		   }
+    		   for(int q=0;q<n;q++) {
+    		    if(q!=k) {
+    		     double bs = matrix1[q][k];
+    		     for(int p=0;p<n*2;p++)   {
+    		    	 matrix1[q][p]-=bs*matrix1[k][p];
+    		      }
+    		     }
+    		    else {
+    		     continue;
+    		     }
+    		    }
+    		   }
+    		for(int x=0;x<n;x++){
 
-	//Ëï²¨ ( 2009-03-11  16:51:29)
-	/**
-	 * Çó¾ØÕóµÄÄæ
-	 * @param matrix
-	 * @return
-	 */
-	public static double[][] inv(double[][] matrix) {
-		int n = matrix.length;
-		double[][] matrix1 = new double[n][2 * n];
-		double[][] result = new double[n][n];
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				matrix1[i][j] = matrix[i][j];
-			}
-		}
-		for (int k = 0; k < n; k++) {
-			for (int t = n; t < n * 2; t++) {
-				if ((t - k) == n) {
-					matrix1[k][t] = 1.0;
-				} else {
-					matrix1[k][t] = 0;
-				}
-			}
-		}
-		//    		get the change of the array
-		for (int k = 0; k < n; k++) {
-			if (matrix1[k][k] != 1) {
-				double bs = matrix1[k][k];
-				matrix1[k][k] = 1;
-				for (int p = k; p < n * 2; p++) {
-					matrix1[k][p] /= bs;
-				}
-			}
-			for (int q = 0; q < n; q++) {
-				if (q != k) {
-					double bs = matrix1[q][k];
-					for (int p = 0; p < n * 2; p++) {
-						matrix1[q][p] -= bs * matrix1[k][p];
-					}
-				} else {
-					continue;
-				}
-			}
-		}
-		for (int x = 0; x < n; x++) {
+    			   for(int y=n;y<n*2;y++){
+    				   result[x][y-n]=matrix1[x][y];
+    			    }
+    		}
 
-			for (int y = n; y < n * 2; y++) {
-				result[x][y - n] = matrix1[x][y];
-			}
-		}
+    			
+           return result;
+    	}
 
-		return result;
-	}
-
-	public static double det(double[][] a) {//Guass ÏûÈ¥
-		double k = 0;
-		double arrangerResult = 1.0;
-		for (int p = 0; p < a[0].length - 1; p++) {
-			for (int r = p + 1; r < a.length; r++) {
-				k = a[r][p] / a[p][p];
-				a[r][p] = 0;
-				for (int c = p + 1; c < a[0].length; c++) {
-					a[r][c] = a[r][c] - k * a[p][c];
-				}
-			}
+	public static double det(double[][] a){//Guass æ¶ˆå»
+		double k=0;
+	    double arrangerResult=1.0;
+		for (int p = 0; p<a[0].length-1; p++) { 
+		    for (int r =p+1; r<a.length; r++) {
+		       k=a[r][p]/a[p][p];
+		       a[r][p]=0;
+		       for (int c = p+1; c<a[0].length; c++) {
+		           a[r][c]=a[r][c]-k*a[p][c];
+		       }
+		    }
 		}
-		for (int i = 0; i < a.length; i++) {
-			for (int j = 0; j < a[0].length; j++) {
-				if (i == j) {
-					arrangerResult = arrangerResult * a[i][j];
-				} //¼ÆËãÖ÷¶Ô½ÇÏßÏà³ËµÄ½á¹û
-			}
+		for (int i = 0; i<a.length; i++) {
+		    for (int j = 0; j<a[0].length; j++) {
+		       if (i==j) {arrangerResult=arrangerResult*a[i][j];}//è®¡ç®—ä¸»å¯¹è§’çº¿ç›¸ä¹˜çš„ç»“æœ
+		    }
 		}
 		return arrangerResult;
 	}
-
-	public static double[] multi(double[] a, double[][] b) {
-		int lie = b[0].length;
-		int hang = a.length;
-		double result[] = new double[lie];
-		for (int j = 0; j < lie; j++) {
-			for (int i = 0; i < hang; i++) {
-				result[j] += a[i] * b[i][j];
+	public static double[] multi(double[] a,double[][] b){
+		int lie=b[0].length;
+		int hang=a.length;
+		double result[]=new double[lie];
+		for(int j=0;j<lie;j++){
+			for(int i=0;i<hang;i++){
+				result[j]+=a[i]*b[i][j];
 			}
 		}
 		return result;
 	}
-
-	public static double[] zjz(double[] a, int n) {
-		int hang = a.length;
-		double[] result = new double[hang - 1];
-		for (int i = 0; i < hang; i++) {
-			if (i < n) {
-				result[i] = a[i];
-			}
-			if (i > n) {
-				result[i - 1] = a[i];
+	public static double[] zjz(double[] a ,int n){
+		int hang=a.length;
+		double[] result=new double[hang-1];
+		for(int i=0;i<hang;i++){
+			if (i<n){
+				result[i]=a[i];
+				}
+			if (i>n){
+				result[i-1]=a[i];
 			}
 		}
 		return result;
 	}
-
-	//	Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´Ó´óµ½Ğ¡ÅÅĞò
+//	å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å¤§åˆ°å°æ’åº
 	/**zj
-	 * Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´Ó´óµ½Ğ¡ÅÅĞò
-	 * @param args ²ÎÊıb¸¡µãĞÍ£¨double£©Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÊı×é
+	 * å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å¤§åˆ°å°æ’åº
+	 * @param args å‚æ•°bæµ®ç‚¹å‹ï¼ˆdoubleï¼‰æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒæ•°ç»„
 	 */
-	public static double[] MaxToMin(double[] b) {
-		double temp = 0;
-		for (int i = 0; i < b.length - 1; i++) {
-			for (int j = 0; j < b.length - 1; j++) {
-				if (b[j + 1] > b[j]) {
-					temp = b[j];
-					b[j] = b[j + 1];
-					b[j + 1] = temp;
-				}
-			}
-		}
-		return b;
+	public static double[] MaxToMin(double[] b){
+		double temp=0;
+    	for(int i=0;i<b.length-1;i++){
+    		for(int j=0;j<b.length-1;j++){
+    			if(b[j+1]>b[j]){
+    				temp=b[j];
+    				b[j]=b[j+1];
+    				b[j+1]=temp;
+    			}
+    		}
+    	}
+    	return b;
 	}
-
-	//	Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´ÓĞ¡µ½´óÅÅĞò
+//	å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å°åˆ°å¤§æ’åº
 	/**zj
-	 * Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´ÓĞ¡µ½´óÅÅĞò
-	 * @param args ²ÎÊıb¸¡µãĞÍ£¨double£©Êı×é
-	 * @return ·µ»ØÖµÊÇÒ»¸ö¸¡µãĞÍ¶şÊı×é
+	 * å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å°åˆ°å¤§æ’åº
+	 * @param args å‚æ•°bæµ®ç‚¹å‹ï¼ˆdoubleï¼‰æ•°ç»„
+	 * @return è¿”å›å€¼æ˜¯ä¸€ä¸ªæµ®ç‚¹å‹äºŒæ•°ç»„
 	 */
-	public static double[] MinToMax(double[] b) {
-		double temp = 0;
-		for (int i = 0; i < b.length - 1; i++) {
-			for (int j = 0; j < b.length - 1; j++) {
-				if (b[j + 1] < b[j]) {
-					temp = b[j];
-					b[j] = b[j + 1];
-					b[j + 1] = temp;
-				}
-			}
-		}
-		return b;
+	public static double[] MinToMax(double[] b){
+		double temp=0;
+    	for(int i=0;i<b.length-1;i++){
+    		for(int j=0;j<b.length-1;j++){
+    			if(b[j+1]<b[j]){
+    				temp=b[j];
+    				b[j]=b[j+1];
+    				b[j+1]=temp;
+    			}
+    		}
+    	}
+    	return b;
 	}
-
 	public static void main(String[] args) {
-		double[] a = { 3, 2, 1, 4, 5, 6, 9, 8 };
-		double[][] pp = MaxToMin1(a);
-		System.out.println("ĞÂµÄÅÅĞò·½·¨£º");
-		for (int i = 0; i < pp[0].length; i++) {
-			System.out.println(pp[0][i] + "¸ÃÔªËØÔÚÔ­Êı×éÖĞµÄÎ»ÖÃÎª£º" + pp[1][i]);
-		}
+        double[] a={3,2,1,4,5,6,9,8};
+        double[][] pp=MaxToMin1(a);
+        System.out.println("æ–°çš„æ’åºæ–¹æ³•ï¼š");
+        for(int i=0;i<pp[0].length;i++){
+            System.out.println(pp[0][i]+"è¯¥å…ƒç´ åœ¨åŸæ•°ç»„ä¸­çš„ä½ç½®ä¸ºï¼š"+pp[1][i]);
+        }
 	}
-
-	//Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´Ó´óµ½Ğ¡ÅÅĞò,²¢¼ÇÂ¼ÅÅĞòºóÔªËØÔÚÊı×éÖĞµÄÎ»ÖÃ
+    //å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å¤§åˆ°å°æ’åº,å¹¶è®°å½•æ’åºåå…ƒç´ åœ¨æ•°ç»„ä¸­çš„ä½ç½®
 	/**zj
-	 * Ã°Åİ·¨¶ÔÊı×éÖĞµÄÔªËØ´Ó´óµ½Ğ¡ÅÅĞò
-	 * @param args ²ÎÊıb¸¡µãĞÍ£¨double£©µÄÒ»Î¬Êı×é
-	 * @return ·µ»ØÖµaÊÇÒ»¸ö¸¡µãĞÍ£¨double£©µÄ¶şÎ¬Êı×é£¬ÆÚÖĞµÚÒ»¼ÇÂ¼ĞÂµÄÅÅĞò£¬µÚ¶şÁĞ¼ÇÂ¼Ô­Î»ÖÃ
+	 * å†’æ³¡æ³•å¯¹æ•°ç»„ä¸­çš„å…ƒç´ ä»å¤§åˆ°å°æ’åº
+	 * @param args å‚æ•°bæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„ä¸€ç»´æ•°ç»„
+	 * @return è¿”å›å€¼aæ˜¯ä¸€ä¸ªæµ®ç‚¹å‹ï¼ˆdoubleï¼‰çš„äºŒç»´æ•°ç»„ï¼ŒæœŸä¸­ç¬¬ä¸€è®°å½•æ–°çš„æ’åºï¼Œç¬¬äºŒåˆ—è®°å½•åŸä½ç½®
 	 */
-	public static double[][] MaxToMin1(double[] b) {
-		double[][] a = new double[2][b.length];
-		for (int i = 0; i < a[0].length; i++) {
-			a[0][i] = b[i];
-			a[1][i] = i;
+	public static double[][] MaxToMin1(double[] b){
+		double[][] a=new double[2][b.length];
+		for(int i=0;i<a[0].length;i++){
+			a[0][i]=b[i];
+			a[1][i]=i;
 		}
-		double temp = 0;
-		double location = 0;
-		for (int i = 0; i < a[1].length - 1; i++) {
-			for (int j = 0; j < a[1].length - 1; j++) {
-				if (a[0][j + 1] > a[0][j]) {
-					temp = a[1][j];
-					a[1][j] = a[1][j + 1];
-					a[1][j + 1] = temp;
-					location = a[0][j];
-					a[0][j] = a[0][j + 1];
-					a[0][j + 1] = location;
-
-				}
-			}
-		}
+		double temp=0;
+		double location=0;
+		for(int i=0;i<a[1].length-1;i++){
+    		for(int j=0;j<a[1].length-1;j++){
+    			if(a[0][j+1]>a[0][j]){
+    				temp=a[1][j];
+    				a[1][j]=a[1][j+1];
+    				a[1][j+1]=temp;
+    				location=a[0][j];
+    				a[0][j]=a[0][j+1];
+    				a[0][j+1]=location;
+    				
+    			}
+    		}
+    	}
 		return a;
 	}
-
-	public static double[][] MaxToMin1_abs(double[] b) {
-		double[][] a = new double[2][b.length];
-		for (int i = 0; i < a[0].length; i++) {
-			a[0][i] = Math.abs(b[i]);
-			a[1][i] = i;
+	public static double[][] MaxToMin1_abs(double[] b){
+		double[][] a=new double[2][b.length];
+		for(int i=0;i<a[0].length;i++){
+			a[0][i]=Math.abs(b[i]);
+			a[1][i]=i;
 		}
-		double temp = 0;
-		double location = 0;
-		for (int i = 0; i < a[1].length - 1; i++) {
-			for (int j = 0; j < a[1].length - 1; j++) {
-				if (a[0][j + 1] > a[0][j]) {
-					temp = a[1][j];
-					a[1][j] = a[1][j + 1];
-					a[1][j + 1] = temp;
-					location = a[0][j];
-					a[0][j] = a[0][j + 1];
-					a[0][j + 1] = location;
-
-				}
-			}
-		}
+		double temp=0;
+		double location=0;
+		for(int i=0;i<a[1].length-1;i++){
+    		for(int j=0;j<a[1].length-1;j++){
+    			if(a[0][j+1]>a[0][j]){
+    				temp=a[1][j];
+    				a[1][j]=a[1][j+1];
+    				a[1][j+1]=temp;
+    				location=a[0][j];
+    				a[0][j]=a[0][j+1];
+    				a[0][j+1]=location;
+    				
+    			}
+    		}
+    	}
 		return a;
 	}
-
-	// È¥µôÄ³Ò»ĞĞÔªËØºóµÄÏòÁ¿
-	public static double[] zxl(double[] a, int place) {
-		double[] b = new double[a.length - 1];
-		for (int i = 0; i < place; i++) {
-			b[i] = a[i];
+    // å»æ‰æŸä¸€è¡Œå…ƒç´ åçš„å‘é‡
+	public static double[] zxl( double[] a, int place){
+		double[] b=new double[a.length-1];
+		for(int i=0;i<place;i++){
+			b[i]=a[i];
 		}
-		for (int i = place; i < a.length - 1; i++) {
-			b[i] = a[i + 1];
+		for(int i=place;i<a.length-1;i++){
+			b[i]=a[i+1];
 		}
 		return b;
 	}
-
-	// È¥µôÄ³Ò»ĞĞÔªËØºóµÄ×Ó¾ØÕó
-	public static double[][] zjz_qh(double[][] a, int place) {
-		double[][] b = new double[a.length - 1][a[0].length];
-		for (int i = 0; i < place; i++) {
-			for (int j = 0; j < a[0].length; j++) {
-				b[i][j] = a[i][j];
+    // å»æ‰æŸä¸€è¡Œå…ƒç´ åçš„å­çŸ©é˜µ
+	public static double[][] zjz_qh( double[][] a, int place){
+		double[][] b=new double[a.length-1][a[0].length];
+		for(int i=0;i<place;i++){
+			for(int j=0;j<a[0].length;j++){
+				b[i][j]=a[i][j];
 			}
 		}
-		for (int i = place; i < a.length - 1; i++) {
-			for (int j = 0; j < a[0].length; j++) {
-				b[i][j] = a[i + 1][j];
+		for(int i=place;i<a.length-1;i++){
+			for(int j=0;j<a[0].length;j++){
+				b[i][j]=a[i+1][j];
 			}
 		}
 		return b;
 	}
-
 	/**zj
-	 * Éú³Éµ¥Î»Õó
-	 * @param args ²ÎÊıaÊÇÒ»¸öÕûĞÍµÄÊı£¬ÊÇÒªÊä³öµ¥Î»ÕóµÄĞĞÁĞÊı
-	 * @return     IÊÇµ¥Î»¾ØÕó     
+	 * ç”Ÿæˆå•ä½é˜µ
+	 * @param args å‚æ•°aæ˜¯ä¸€ä¸ªæ•´å‹çš„æ•°ï¼Œæ˜¯è¦è¾“å‡ºå•ä½é˜µçš„è¡Œåˆ—æ•°
+	 * @return     Iæ˜¯å•ä½çŸ©é˜µ     
 	 */
-	public static double[][] I(int a) {
-		double[][] I = new double[a][a];
-		for (int i = 0; i < a; i++) {
-			for (int j = 0; j < a; j++) {
-				if (i == j) {
-					I[i][j] = 1;
-				} else {
-					I[i][j] = 0;
+	public static double[][] I(int a){
+		double[][] I=new double[a][a];
+		for(int i=0;i<a;i++){
+			for(int j=0;j<a;j++){
+				if(i==j){
+					I[i][j]=1;
+					}
+				else{
+					I[i][j]=0;
 				}
 			}
 		}
-		return I;
+			return I;
 	}
 }

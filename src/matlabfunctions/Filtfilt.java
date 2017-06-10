@@ -3,14 +3,14 @@ package matlabfunctions;
 import java.util.ArrayList;
 
 /**
- * ÁãÏàÎ»ÂË²¨º¯Êı
+ * é›¶ç›¸ä½æ»¤æ³¢å‡½æ•°
  * 
- * @author »Æ´óÎÀ,ºúÅÎ
+ * @author é»„å¤§å«,èƒ¡ç›¼
  * @Email hhhdddwww@163.com
  * @version 1.0
- * @Time 2016Äê3ÔÂ23ÈÕÏÂÎç9:04:28
- * @Description µ÷ÓÃstatic·½·¨£ºdoFiltfiltÖ´ĞĞÂË²¨
- * @copyright °²»Õ´óÑ§ iiphci ÊµÑéÊÒ
+ * @Time 2016å¹´3æœˆ23æ—¥ä¸‹åˆ9:04:28
+ * @Description è°ƒç”¨staticæ–¹æ³•ï¼šdoFiltfiltæ‰§è¡Œæ»¤æ³¢
+ * @copyright å®‰å¾½å¤§å­¦ iiphci å®éªŒå®¤
  * 
  */
 
@@ -19,12 +19,12 @@ public class Filtfilt {
 	/**
 	 * 
 	 * @param B
-	 *            ÂË²¨Æ÷²ÎÊıB
+	 *            æ»¤æ³¢å™¨å‚æ•°B
 	 * @param A
-	 *            ÂË²¨Æ÷²ÎÊıA
+	 *            æ»¤æ³¢å™¨å‚æ•°A
 	 * @param input
-	 *            ÒªÂË²¨µÄÊı×é £º ÒªÇóÊÇÒ»Î¬£¬³¤¶ÈÒª´óÓÚBÊı×é¡£
-	 * @return ÂË²¨ºóµÄ½á¹û ·µ»ØdoubleÊı×é¡£
+	 *            è¦æ»¤æ³¢çš„æ•°ç»„ ï¼š è¦æ±‚æ˜¯ä¸€ç»´ï¼Œé•¿åº¦è¦å¤§äºBæ•°ç»„ã€‚
+	 * @return æ»¤æ³¢åçš„ç»“æœ è¿”å›doubleæ•°ç»„ã€‚
 	 */
 	public static ArrayList<Double> doFiltfilt(ArrayList<Double> B, ArrayList<Double> A, ArrayList<Double> X) {
 
@@ -158,7 +158,7 @@ public class Filtfilt {
 
 	public static void filter(ArrayList<Double> B, ArrayList<Double> A, ArrayList<Double> X, ArrayList<Double> Y,
 			ArrayList<Double> Zi) {
-		if (A.size() == 0) throw new RuntimeException("A Êı×éÎª¿Õ£¡");
+		if (A.size() == 0) throw new RuntimeException("A ÃŠÃ½Ã—Ã©ÃÂªÂ¿Ã•Â£Â¡");
 		boolean flagA = true;
 		for (Double doubleA : A) {
 			if (doubleA != 0) {
@@ -166,10 +166,10 @@ public class Filtfilt {
 			}
 		}
 		if (flagA) {
-			throw new RuntimeException("A Êı×éÖÁÉÙÒªÓĞÒ»¸öÊı²»ÎªÁã£¡");
+			throw new RuntimeException("A ÃŠÃ½Ã—Ã©Ã–ÃÃ‰Ã™Ã’ÂªÃ“ÃÃ’Â»Â¸Ã¶ÃŠÃ½Â²Â»ÃÂªÃÃ£Â£Â¡");
 		}
 		if (A.get(0) == 0) {
-			throw new RuntimeException("A Êı×éµÚÒ»¸öÔªËØ²»ÄÜÎªÁã£¡");
+			throw new RuntimeException("A ÃŠÃ½Ã—Ã©ÂµÃšÃ’Â»Â¸Ã¶Ã”ÂªÃ‹Ã˜Â²Â»Ã„ÃœÃÂªÃÃ£Â£Â¡");
 		}
 		changeArray(A, A.get(0));
 		changeArray(B, A.get(0));

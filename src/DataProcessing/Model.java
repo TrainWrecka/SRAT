@@ -1,9 +1,8 @@
-package model;
+package DataProcessing;
 
 import java.util.List;
 import java.util.Observable;
 
-import DataProcessing.Measurement;
 import matlabfunctions.Matlab;
 
 import userinterface.StatusBar;

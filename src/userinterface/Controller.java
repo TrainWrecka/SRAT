@@ -2,8 +2,8 @@ package userinterface;
 
 import java.util.List;
 
+import DataProcessing.Model;
 import StepResponseApproximationTool.StepResponseApproximationTool;
-import model.Model;
 
 public class Controller {
 

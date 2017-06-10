@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -19,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class SettingsPanel extends JPanel implements ActionListener, ItemListener, ChangeListener {
+public class SettingsPanel extends JPanel implements ActionListener, ItemListener, ChangeListener, FocusListener {
 
 	//================================================================================
 	// Properties
@@ -68,7 +70,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	static final int SlideValueMax = 100;
 	static final int SlideValueInit = 100;
 
-	private JSlider Filter = new JSlider(JSlider.HORIZONTAL, SlideValueMin, SlideValueMax, SlideValueInit);
+	private JSlider jsFilter = new JSlider(JSlider.HORIZONTAL, SlideValueMin, SlideValueMax, SlideValueInit);
 
 	//================================================================================
 	// Constructor
@@ -78,13 +80,13 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		super(new GridBagLayout());
 		this.controller = controller;
 
-		Filter.setMajorTickSpacing(20);
-		Filter.setMinorTickSpacing(10);
-		Filter.setPaintTicks(true);
-		Filter.setPaintLabels(true);
-		Filter.setSnapToTicks(true);
+		jsFilter.setMajorTickSpacing(20);
+		jsFilter.setMinorTickSpacing(10);
+		jsFilter.setPaintTicks(true);
+		jsFilter.setPaintLabels(true);
+		jsFilter.setSnapToTicks(true);
 
-		lbFilter.setText("Filter accuracy in %    " + Filter.getValue());
+		lbFilter.setText("Filter accuracy in %    " + jsFilter.getValue());
 
 		groupFilterSignal.add(rbtFilterSignalYes);
 		groupFilterSignal.add(rbtFilterSignalNo);
@@ -159,27 +161,38 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		add(lbFilter, new GridBagConstraints(0, 11, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 
 				new Insets(10, 10, 0, 20), 0, 0));
-		add(Filter, new GridBagConstraints(1, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(jsFilter, new GridBagConstraints(1, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 		
 		
 		add(lbFill, new GridBagConstraints(0, 12, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		add(btDefaults, new GridBagConstraints(1, 12, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(btDefaults, new GridBagConstraints(1, 12, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		btApply.setPreferredSize(btDefaults.getMinimumSize());
-		
-		add(btApply, new GridBagConstraints(2, 12, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(10, 0, 0, 10), 0, 0));
+	
 		
 		
 
 		btApply.addActionListener(this);
 		btDefaults.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
+		rbtFilterSignalYes.addActionListener(this);
+		rbtFilterSignalNo.addActionListener(this);
+		rbtShowFilteredSignalYes.addActionListener(this);
+		rbtShowFilteredSignalNo.addActionListener(this);
+		cbAutoFilter.addActionListener(this);
+		
+		tfLaguerre.addFocusListener(this);
+		tfMaxEval.addFocusListener(this);
+		tfNelderMeadSimplexSteps.addFocusListener(this);
+		tfSimplexOptimizerAbsolute.addFocusListener(this);
+		tfSimplexOptimizerRelative.addFocusListener(this);
+		
+	
+		
 
-		Filter.addChangeListener(this);
-
+		jsFilter.addChangeListener(this);
+		jsFilter.setEnabled(false);
 		initFields();
 		btApply.doClick();
 	}
@@ -198,37 +211,25 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btDefaults) {
 			initFields();
+			//updateValues();
 		}
 
 		if (e.getSource() == btApply) {
-			try {
-				double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
-				double[] simplexOpt = { Double.parseDouble(tfSimplexOptimizerRelative.getText()),
-						Double.parseDouble(tfSimplexOptimizerAbsolute.getText()) };
-				double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
-				int maxEval = Integer.parseInt(tfMaxEval.getText());
-				boolean doFilter = rbtFilterSignalYes.isSelected();
-				boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
-				boolean autoFilter = cbAutoFilter.isSelected();
-				int filterPercentage = Filter.getValue();
-
-				controller.setSettings(new Object[] { LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered,
-						autoFilter, filterPercentage });
-			} catch (NumberFormatException e2) {
-				// TODO: handle exception
-				StatusBar.showStatus("Wrong number format");
-			}
+			//updateValues();
 
 		}
 		
 		if (e.getSource() == cbAutoFilter) {
 			if (cbAutoFilter.isSelected()) {
-				Filter.setEnabled(false);
+				jsFilter.setEnabled(false);
 			} else {
-				Filter.setEnabled(true);
+				jsFilter.setEnabled(true);
 			}
 
 		}
+		
+		updateValues();
+		
 	}
 
 	
@@ -241,8 +242,8 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		lbFilter.setText("Filter accuracy in %   " + Filter.getValue());
-
+		lbFilter.setText("Filter accuracy in %   " + jsFilter.getValue());
+			updateValues();
 	}
 	
 	//================================================================================
@@ -258,8 +259,41 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfSimplexOptimizerAbsolute.setText("1e-24");
 		tfNelderMeadSimplexSteps.setText("0.1");
 		tfMaxEval.setText("5000");
+		cbAutoFilter.setSelected(true);
 		rbtFilterSignalYes.setSelected(true);
 		rbtShowFilteredSignalNo.setSelected(true);
-		Filter.setValue(100);
+		jsFilter.setValue(100);
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+		updateValues();
+	}
+	
+	private void updateValues(){
+		try {
+			double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
+			double[] simplexOpt = { Double.parseDouble(tfSimplexOptimizerRelative.getText()),
+					Double.parseDouble(tfSimplexOptimizerAbsolute.getText()) };
+			double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
+			int maxEval = Integer.parseInt(tfMaxEval.getText());
+			boolean doFilter = rbtFilterSignalYes.isSelected();
+			boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
+			boolean autoFilter = cbAutoFilter.isSelected();
+			int filterPercentage = jsFilter.getValue();
+
+			controller.setSettings(new Object[] { LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered,
+					autoFilter, filterPercentage });
+		} catch (NumberFormatException e2) {
+			// TODO: handle exception
+			StatusBar.showStatus("Wrong number format");
+		}
 	}
 }
