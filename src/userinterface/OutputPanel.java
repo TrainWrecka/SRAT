@@ -14,10 +14,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import JFreeChart.ErrorPlot;
+import DataProcessing.Model;
 import JFreeChart.PlotData;
 import JFreeChart.Plots;
-import model.Model;
 
 public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
 
@@ -27,8 +26,6 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 	private JPanel DefaultPanel = new JPanel(new GridBagLayout());
-
-	public ErrorPlot Errorplot = new ErrorPlot("ERROR");
 
 	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
@@ -124,9 +121,9 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 			if (model.approximated()) {
 				errorData.removePlotData();
 				stepData.setYData(model.getApproxData(), "Apprximation");
-				
+
 				//renderer.setSeriesPaint(0, new Color(0, 0, 255, 0));
-				
+
 				errorData.setXData(model.getTimeData());
 				errorData.setYData(model.getErrorData(), "Error");
 				ErrorPanel.addData(errorData.getPlotData()[0]);

@@ -28,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.opencsv.CSVReader;
 
-import model.Model;
+import DataProcessing.Model;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
@@ -176,6 +176,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		btCancel.addActionListener(this);
 		btRun.setEnabled(false);
 		btCancel.setEnabled(false);
+		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
 
 	}
@@ -203,8 +204,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
 				try {
 					controller.setMeasurement(readCSV());
-					rbtAutomatically.setSelected(true);
-					rbtManually.setEnabled(false);
+					rbtAutomatically.setEnabled(true);
+					rbtManually.setEnabled(true);
 
 				} catch (RuntimeException e1) {
 					StatusBar.showStatus(e1.getMessage());
@@ -339,7 +340,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		if (model.approximated()) {
 			//btRun.setEnabled(true);
-			rbtManually.setEnabled(true);
+		//	rbtManually.setEnabled(true);
 
 			for (int i = 0; i < tfwp.length; i++) {
 				if (i < model.getWqp()[0].length) {

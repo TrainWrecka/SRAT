@@ -15,7 +15,6 @@ import matlabfunctions.Filter;
 import matlabfunctions.FilterFactory;
 import matlabfunctions.Matlab;
 import matlabfunctions.SVTools;
-import sun.swing.SwingUtilities2.Section;
 import userinterface.StatusBar;
 
 public class Approximation {

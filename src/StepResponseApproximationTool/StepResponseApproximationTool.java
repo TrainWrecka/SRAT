@@ -15,7 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
-import model.Model;
+import DataProcessing.Model;
 import userinterface.Controller;
 import userinterface.MenuBar;
 import userinterface.StatusBar;

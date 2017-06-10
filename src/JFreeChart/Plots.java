@@ -13,11 +13,16 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
 
+
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
 public class Plots extends JPanel {
 
 	//================================================================================
@@ -36,6 +41,7 @@ public class Plots extends JPanel {
 	//================================================================================
 	// Constructor
 	//================================================================================
+
 
 	public Plots(String title, String xylineOderscatter, String xAchse, String yAchse) {
 		this.setLayout(new GridBagLayout());
