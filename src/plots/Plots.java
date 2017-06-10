@@ -31,14 +31,11 @@ public class Plots extends JPanel {
 	// Properties
 	//================================================================================
 	
-	// create a dataset...
 	public XYSeriesCollection dataset = new XYSeriesCollection();
 
 	public ChartPanel stepresponseChartPanel;
 	public ChartPanel zeroesChartPanel;
 	public ChartPanel errorChartPanel;
-
-	private static int count = 0;
 	
 	//================================================================================
 	// Constructor

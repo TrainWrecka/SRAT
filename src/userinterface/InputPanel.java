@@ -19,11 +19,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.opencsv.CSVReader;
@@ -181,15 +179,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
 
-	}
-
-	private double[] stringToCoeff(String s) {
-		String[] tokens = s.split("[, ]+");
-		double[] z = new double[tokens.length];
-		for (int i = 0; i < z.length; i++) {
-			z[i] = Double.parseDouble(tokens[i]);
-		}
-		return z;
 	}
 
 	/**

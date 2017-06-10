@@ -3,7 +3,6 @@ package userinterface;
 import java.util.List;
 
 import dataProcessing.Model;
-import stepResponseApproximationTool.StepResponseApproximationTool;
 
 public class Controller {
 
@@ -15,7 +14,6 @@ public class Controller {
 	private View view;
 
 	private Thread threadApproximation;
-	private Thread threadUpdateCheck;
 
 	//================================================================================
 	// Constructor

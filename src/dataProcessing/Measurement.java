@@ -9,8 +9,6 @@ import org.apache.commons.math3.complex.Complex;
 import mathUtilites.Filtfilt;
 import mathUtilites.Matlab;
 import mathUtilites.SVTools;
-import sun.swing.SwingUtilities2.Section;
-import userinterface.StatusBar;
 
 /**
  * 

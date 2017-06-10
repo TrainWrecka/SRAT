@@ -21,6 +21,11 @@ import userinterface.MenuBar;
 import userinterface.StatusBar;
 import userinterface.View;
 
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
 public class StepResponseApproximationTool extends JFrame {
 
 	private enum Mode {
