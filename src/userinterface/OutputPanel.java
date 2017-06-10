@@ -14,12 +14,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import JFreeChart.ErrorPlot;
 import JFreeChart.PlotData;
 import JFreeChart.Plots;
 import model.Model;
 
-public class OutputPanel extends JPanel implements ActionListener, ChangeListener {
+public class OutputPanel extends JPanel implements ChangeListener {
 
 	//================================================================================
 	// Properties
@@ -27,8 +26,6 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 	private JPanel DefaultPanel = new JPanel(new GridBagLayout());
-
-	public ErrorPlot Errorplot = new ErrorPlot("ERROR");
 
 	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
@@ -57,7 +54,6 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	public OutputPanel() {
 		super(new GridBagLayout());
-		//		setFont(myFont);
 
 		DefaultPanel.add(StepresponsePanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
@@ -145,12 +141,11 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
-	}
-
+	/**
+	 * Wenn Tab wechselt, wird entsprechendes Panel auf den neuen Tab gesetzt und vom alten entfernt.
+	 */
+	
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();

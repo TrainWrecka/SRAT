@@ -12,7 +12,7 @@ import java.util.Observer;
 import javax.swing.JPanel;
 
 
-public class View extends JPanel implements Observer, ActionListener {
+public class View extends JPanel implements Observer {
 	
 	//================================================================================
 	// Properties
@@ -48,10 +48,4 @@ public class View extends JPanel implements Observer, ActionListener {
 		outputPanel.update(obs, obj);
 		inputPanel.update(obs, obj);
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub	
-	}
-
 }
