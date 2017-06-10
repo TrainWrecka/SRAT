@@ -10,6 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,10 +34,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+import com.opencsv.CSVReader;
 
 public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	JMenu menu, optionsmenu;
-	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem;
+	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem, ExamplemenuItem;
 	JFrame frame;
 	Controller controller;
 	JDialog settingsDialog = new JDialog();
@@ -87,8 +96,16 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		helpmenuItem.setActionCommand("Help");
 		helpmenuItem.addActionListener(this);
 
+
+		exampleItem = new JMenuItem("Load Example");
+		exampleItem.setMnemonic(KeyEvent.VK_E);
+		exampleItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.ALT_MASK));
+		exampleItem.setActionCommand("Load Example");
+		exampleItem.addActionListener(this);
+
 		optionsmenu.add(settingsmenuItem);
 		optionsmenu.add(helpmenuItem);
+		optionsmenu.add(exampleItem);
 		add(optionsmenu);
 
 		if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() >= 3700) {
@@ -127,6 +144,7 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 				dim.width += 100;
 				cnt--;
 				frame.setSize(dim);
+
 			}
 			
 		}
@@ -166,6 +184,21 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			helpDialog.add(bildPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
 					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			
+		}
+
+		if (e.getActionCommand().equals("Load Example")) {
+			URL url = Utility.class.getClassLoader().getResource("resources/Signal7.csv");
+			CSVReader reader = null;
+
+			try {
+				reader = new CSVReader(new InputStreamReader(url.openStream()));
+				controller.setMeasurement(reader.readAll());
+				reader.close();
+			} catch (FileNotFoundException e1) {
+				throw new RuntimeException("File does not exist");
+			} catch (IOException e2) {
+				throw new RuntimeException("IO Problem when reading file");
+			}
 		}
 	}
 }

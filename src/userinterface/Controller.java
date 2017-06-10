@@ -60,34 +60,13 @@ public class Controller {
 			@Override
 			public void run() {
 				view.inputPanel.btRun.setEnabled(false);
+				view.inputPanel.btCancel.setEnabled(true);
 				model.approximateAuto();
 				view.inputPanel.btRun.setEnabled(true);
+				view.inputPanel.btCancel.setEnabled(false);
 			}
 		});
 		threadApproximation.start();
-
-		/*threadUpdateCheck = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				//boolean check = true;
-				while(true){
-					if(model.checkRunning()){
-						try {
-							TimeUnit.SECONDS.sleep(1);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					} else {
-						threadApproximation.interrupt();
-						view.inputPanel.btRun.setEnabled(true);
-						break;
-					}
-				}
-			}
-		});
-		
-		threadUpdateCheck.start();*/
 	}
 
 	/**
@@ -104,6 +83,7 @@ public class Controller {
 	public void stopApproximation() {
 		threadApproximation.interrupt();
 		view.inputPanel.btRun.setEnabled(true);
+		view.inputPanel.btCancel.setEnabled(false);
 	}
 	
 	//================================================================================

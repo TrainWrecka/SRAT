@@ -32,12 +32,16 @@ import model.Model;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
+	//================================================================================
+	// Properties
+	//================================================================================
+	
 	private int wpPlacement = 5;
 	private int qpPlacement = 6;
 	// Buttons
 	private JButton btLoad = new JButton("Load");
 	public JButton btRun = new JButton("Run");
-	private JButton btCancel = new JButton("Cancel");
+	public JButton btCancel = new JButton("Cancel");
 
 	private JRadioButton rbtAutomatically = new JRadioButton("Automatically");
 	private JRadioButton rbtManually = new JRadioButton("Manually");
@@ -177,7 +181,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		rbtManually.addActionListener(this);
 		btCancel.addActionListener(this);
 		btRun.setEnabled(false);
-
+		btCancel.setEnabled(false);
 		rbtManually.setEnabled(false);
 
 	}
@@ -234,6 +238,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					} else {
 						sigma = Double.parseDouble(tfSigma.getText());
 					}
+					
+					
 					controller.setK(K);
 					controller.setSigma(sigma);
 					controller.setWqp(wqp);
@@ -320,6 +326,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			StatusBar.clear();
 			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
 			CSVReader reader = new CSVReader(new FileReader(file));
+			
 			measurementList = reader.readAll();
 			reader.close();
 			StatusBar.clear();
