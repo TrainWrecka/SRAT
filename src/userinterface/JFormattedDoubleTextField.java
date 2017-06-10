@@ -69,7 +69,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 						value = v;
 					edited = false;
 					if (txtField.formatter != null) {
-						setText(txtField.formatter.format(value));
+						setText(txtField.formatter.format(value).toLowerCase());
 					} else if (digits != 0) {
 						setText(toStringENG(value, digits));
 					}

@@ -1,25 +1,33 @@
 package userinterface;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
-public class MenuBar extends JMenuBar implements Observer, ActionListener{
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+
+public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	JMenu menu, optionsmenu;
 	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem;
 	JFrame frame;
@@ -32,13 +40,15 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 	private int settingsFrameWidth;
 	private int settingsFrameHeight;
 	
+	int cnt = 0;
+	
 	String[] zeilen;
 	JTextArea jtArea;
-	
+
 	public MenuBar(Controller controller, JFrame frame) {
 		this.frame = frame;
 		this.controller = controller;
-		menu = new JMenu("Datei");
+		menu = new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_D);
 
 		menu.addSeparator();
@@ -61,61 +71,64 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 		menuItemNotResizable.addActionListener(this);
 		menu.add(menuItemNotResizable);
 		add(menu);
-		
-		optionsmenu=new JMenu("Options");
+
+		optionsmenu = new JMenu("Options");
 		optionsmenu.setMnemonic(KeyEvent.VK_O);
-		
-		settingsmenuItem=new JMenuItem("Settings");
+
+		settingsmenuItem = new JMenuItem("Settings");
 		settingsmenuItem.setMnemonic(KeyEvent.VK_S);
 		settingsmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
 		settingsmenuItem.setActionCommand("Settings");
 		settingsmenuItem.addActionListener(this);
-	
+
 		helpmenuItem = new JMenuItem("Help");
 		helpmenuItem.setMnemonic(KeyEvent.VK_H);
 		helpmenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.ALT_MASK));
 		helpmenuItem.setActionCommand("Help");
 		helpmenuItem.addActionListener(this);
-		
+
 		optionsmenu.add(settingsmenuItem);
 		optionsmenu.add(helpmenuItem);
 		add(optionsmenu);
-		
-		if(Toolkit.getDefaultToolkit().getScreenSize().getWidth()>=3700){
-			xPosition=710;
-			settingsFrameWidth=50;
-			settingsFrameHeight=100;
+
+		if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() >= 3700) {
+			xPosition = 710;
+			settingsFrameWidth = 50;
+			settingsFrameHeight = 100;
+		} else {
+			xPosition = 350;
+			settingsFrameWidth = 0;
+			settingsFrameHeight = 50;
 		}
-		else{
-			xPosition=350;
-			settingsFrameWidth=0;
-			settingsFrameHeight=50;			
-		}
-		
+
 		settingsPanel = new SettingsPanel(controller);
 	}
 
-	public void update(Observable o, Object obj) {}
+	public void update(Observable o, Object obj) {
+	}
 
 	public void actionPerformed(ActionEvent e) {
-		int cnt = 0;
+		
 		if (e.getActionCommand().equals("Resizable")) {
 			frame.setResizable(true);
 			Dimension dim = frame.getSize();
-			if(cnt==0){
-			dim.width -= 100;
-			cnt++;
+			if (cnt == 0) {
+				dim.width -= 100;
+				cnt++;
 			}
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("NotResizable")) {
+			frame.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().width*2/4),(int) (Toolkit.getDefaultToolkit().getScreenSize().getHeight()*10/11));
+			frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getSize().height) / 2);
 			frame.setResizable(false);
 			Dimension dim = frame.getSize();
-			if(cnt !=0){
-			dim.width += 100;
-			cnt--;
+			if (cnt != 0) {
+				dim.width += 100;
+				cnt--;
+				frame.setSize(dim);
 			}
-			frame.setSize(dim);
+			
 		}
 		if (e.getActionCommand().equals("OnTop")) {
 			StatusBar.showStatus(this, e, e.getActionCommand());
@@ -129,22 +142,30 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener{
 				menuItemOnTop.setText("Not allways on Top");
 			}
 		}
-		if(e.getActionCommand().equals("Settings")){			
+		if (e.getActionCommand().equals("Settings")) {
 			settingsDialog.setTitle("Settings");
 			settingsDialog.setVisible(true);
 			settingsDialog.setResizable(false);
 			settingsDialog.setLayout(new GridBagLayout());
-			settingsDialog.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-					new Insets(0, 0, 0, 0), 0, 0));
+			settingsDialog.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
-			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth())+settingsFrameWidth, (int) (settingsDialog.getPreferredSize().getHeight())+settingsFrameHeight);
-			settingsDialog.setLocation((int) (frame.getLocation().getX()-xPosition), (int) frame.getLocation().getY());
+			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth()) + settingsFrameWidth,
+					(int) (settingsDialog.getPreferredSize().getHeight()) + settingsFrameHeight);
+			settingsDialog.setLocation((int) (frame.getLocation().getX() - xPosition),
+					(int) frame.getLocation().getY());
 		}
-		if(e.getActionCommand().equals("Help")){
+		if (e.getActionCommand().equals("Help")) {
 			helpDialog.setTitle("Help");
-			helpDialog.setVisible(true);	
+			helpDialog.setVisible(true);
 			helpDialog.setResizable(true);
+			helpDialog.setLayout(new GridBagLayout());
+			helpDialog.setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().height/Math.sqrt(2)),Toolkit.getDefaultToolkit().getScreenSize().height);
+			BufferedImage[] bim = Utility.loadResourcePDF("USERGUIDE.pdf");
+			ImagePanel bildPanel = new ImagePanel(bim[0]);
+			helpDialog.add(bildPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+			
 		}
 	}
 }
-

@@ -32,9 +32,9 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 
 	private VariablePanel DefaultVariablePanel = new VariablePanel();
 
-	private Plots ErrorPlot = new Plots("error", "xyline", "time", "In/Out");
-	private Plots StepresponsePlot = new Plots("stepresponse", "xyline", "time", "In/Out");
-	private Plots ZeroesPlot = new Plots("poles", "scatter", "", "");
+	private Plots ErrorPlot = new Plots("Error", "xyline", "time", "In/Out");
+	private Plots StepresponsePlot = new Plots("Stepresponse", "xyline", "time", "In/Out");
+	private Plots ZeroesPlot = new Plots("Poles", "scatter", "", "");
 
 	private DataPanel StepresponsePanel = new DataPanel(StepresponsePlot);
 	private DataPanel ZeroesPanel = new DataPanel(ZeroesPlot);
@@ -79,8 +79,8 @@ public class OutputPanel extends JPanel implements ActionListener, ChangeListene
 				GridBagConstraints.BOTH, new Insets(5, 5, 10, 5), 0, 0));
 
 		tabpane.addTab("Default", DefaultPanel);
-		tabpane.addTab("StepresponsePanel", TabStepresponsePanel);
-		tabpane.addTab("Zeroes", TabZeroesPanel);
+		tabpane.addTab("Stepresponse", TabStepresponsePanel);
+		tabpane.addTab("Poles", TabZeroesPanel);
 		tabpane.addTab("Error", TabErrorPanel);
 
 		add(tabpane, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.BOTH,
