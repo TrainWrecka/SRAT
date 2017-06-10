@@ -2,7 +2,8 @@ package dataProcessing;
 
 import java.util.List;
 import java.util.Observable;
-import matlabfunctions.Matlab;
+
+import mathUtilites.Matlab;
 import userinterface.StatusBar;
 
 /**

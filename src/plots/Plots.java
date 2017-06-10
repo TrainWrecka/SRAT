@@ -1,4 +1,4 @@
-package JFreeChart;
+package plots;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -16,6 +16,8 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
+
+import programUtilites.JFreeChartDPIFix;
 
 
 /**

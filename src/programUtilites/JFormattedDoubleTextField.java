@@ -1,4 +1,4 @@
-package userinterface;
+package programUtilites;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -69,7 +69,7 @@ public class JFormattedDoubleTextField extends JTextField implements
 						value = v;
 					edited = false;
 					if (txtField.formatter != null) {
-						setText(txtField.formatter.format(value).toLowerCase());
+						setText(txtField.formatter.format(value));
 					} else if (digits != 0) {
 						setText(toStringENG(value, digits));
 					}

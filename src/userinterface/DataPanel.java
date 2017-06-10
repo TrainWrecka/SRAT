@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 
 import org.jfree.data.xy.XYSeries;
 
-import JFreeChart.Plots;
+import plots.Plots;
+import programUtilites.MyBorderFactory;
 
 public class DataPanel extends JPanel{
 

@@ -11,10 +11,10 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 
-import matlabfunctions.Filter;
-import matlabfunctions.FilterFactory;
-import matlabfunctions.Matlab;
-import matlabfunctions.SVTools;
+import mathUtilites.Filter;
+import mathUtilites.FilterFactory;
+import mathUtilites.Matlab;
+import mathUtilites.SVTools;
 import userinterface.StatusBar;
 
 /**

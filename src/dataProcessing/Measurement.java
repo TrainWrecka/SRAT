@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.commons.math3.complex.Complex;
 
-import matlabfunctions.Filtfilt;
-import matlabfunctions.Matlab;
-import matlabfunctions.SVTools;
+import mathUtilites.Filtfilt;
+import mathUtilites.Matlab;
+import mathUtilites.SVTools;
 import sun.swing.SwingUtilities2.Section;
 import userinterface.StatusBar;
 

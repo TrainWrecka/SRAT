@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import programUtilites.JFormattedDoubleTextField;
+
 public class SettingsPanel extends JPanel implements ActionListener, ItemListener, ChangeListener, FocusListener {
 
 	//================================================================================

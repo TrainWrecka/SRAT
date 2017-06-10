@@ -14,9 +14,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import JFreeChart.PlotData;
-import JFreeChart.Plots;
 import dataProcessing.Model;
+import plots.PlotData;
+import plots.Plots;
+import programUtilites.MyBorderFactory;
 
 public class OutputPanel extends JPanel implements ChangeListener {
 

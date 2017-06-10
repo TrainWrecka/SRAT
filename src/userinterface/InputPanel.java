@@ -29,6 +29,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.opencsv.CSVReader;
 
 import dataProcessing.Model;
+import programUtilites.JFormattedDoubleTextField;
+import programUtilites.MyBorderFactory;
 
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 

@@ -1,4 +1,4 @@
-package StepResponseApproximationTool;
+package programUtilites;
 
 import java.awt.Dimension;
 import java.awt.Font;

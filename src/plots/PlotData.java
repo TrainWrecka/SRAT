@@ -1,4 +1,4 @@
-package JFreeChart;
+package plots;
 
 import org.jfree.data.xy.XYSeries;
 

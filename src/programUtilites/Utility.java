@@ -1,4 +1,4 @@
-package userinterface;
+package programUtilites;
 
 import java.awt.Container;
 import java.awt.Cursor;

@@ -1,4 +1,4 @@
-package matlabfunctions;
+package mathUtilites;
 
 import org.apache.commons.math3.complex.Complex;
 
