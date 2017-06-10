@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import model.Model;
 
-public class VariablePanel extends JPanel implements ActionListener {
+public class VariablePanel extends JPanel {
 
 	//================================================================================
 	// Properties
@@ -128,11 +128,4 @@ public class VariablePanel extends JPanel implements ActionListener {
 		}
 
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
