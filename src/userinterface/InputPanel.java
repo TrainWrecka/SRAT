@@ -53,7 +53,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	DecimalFormat f = new DecimalFormat("##0.0#E0");
 	
-	DecimalFormat fd = new DecimalFormat("##00.0#E0");
+//	DecimalFormat fd = new DecimalFormat("##00.0#E0");
 
 
 	// Labels
@@ -66,11 +66,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
 	// Textfields
-	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
-	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
+	private JEngineerField[] tfwp = new JEngineerField[5];
+	private JEngineerField[] tfqp = new JEngineerField[5];
 
-	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
-	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
+	private JEngineerField tfSigma = new JEngineerField(3, 0);
+	private JEngineerField tfK = new JEngineerField(3, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -80,9 +80,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private String Ordnung;
 	private double Ordnung1;
 
-
-	//	private StatusBar statusBar = new StatusBar();
-
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
 	public InputPanel() {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder("Input"));
@@ -125,7 +126,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JFormattedDoubleTextField(fd, 0);
+			tfwp[i] = new JEngineerField(3, 0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -138,7 +139,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JFormattedDoubleTextField(fd, 0);
+			tfqp[i] = new JEngineerField(3, 0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -180,15 +181,12 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	}
 
-	private double[] stringToCoeff(String s) {
-		String[] tokens = s.split("[, ]+");
-		double[] z = new double[tokens.length];
-		for (int i = 0; i < z.length; i++) {
-			z[i] = Double.parseDouble(tokens[i]);
-		}
-		return z;
-	}
 
+
+	//================================================================================
+	// Public Methods
+	//================================================================================
+	
 	/**
 	 * setzt controller
 	 * @param controller
@@ -225,9 +223,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				} catch (RuntimeException e1) {
 					StatusBar.showStatus(e1.getMessage());
 				}
-
 			}
-
 		}
 
 		if (e.getSource() == btRun) {
@@ -249,7 +245,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 						sigma = Double.parseDouble(tfSigma.getText());
 					}
 					
-					
 					controller.setK(K);
 					controller.setSigma(sigma);
 					controller.setWqp(wqp);
@@ -262,7 +257,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			} else {
 				controller.approximateAuto();
 			}
-
 		}
 		if (e.getSource() == btCancel) {
 			controller.stopApproximation();
@@ -297,7 +291,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		}
 	}
 
-	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion
 
 	/**
 	 * Wenn Ordnung ändert und Manually ausgewählt ist, Textfelder und Labels (K, wp, qp und Sigma) 
@@ -330,28 +323,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfSigma.setEnabled(false);
 		}
 
-	}
-
-	private List<String[]> readCSV() {
-		List<String[]> measurementList = null;
-
-		try {
-			File file = fileChooser.getSelectedFile();
-			StatusBar.clear();
-			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
-			CSVReader reader = new CSVReader(new FileReader(file));
-			
-			measurementList = reader.readAll();
-			reader.close();
-			StatusBar.clear();
-			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loaded");
-		} catch (FileNotFoundException e1) {
-			throw new RuntimeException("File does not exist");
-		} catch (IOException e2) {
-			throw new RuntimeException("IO Problem when reading file");
-		}
-
-		return measurementList;
 	}
 
 	/**
@@ -392,5 +363,41 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfK.setText("");
 			tfSigma.setText("");
 		}
+		
+	}
+	
+	//================================================================================
+	// Private Methods
+	//================================================================================
+	
+	private List<String[]> readCSV() {
+		List<String[]> measurementList = null;
+
+		try {
+			File file = fileChooser.getSelectedFile();
+			StatusBar.clear();
+			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
+			CSVReader reader = new CSVReader(new FileReader(file));
+			
+			measurementList = reader.readAll();
+			reader.close();
+			StatusBar.clear();
+			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loaded");
+		} catch (FileNotFoundException e1) {
+			throw new RuntimeException("File does not exist");
+		} catch (IOException e2) {
+			throw new RuntimeException("IO Problem when reading file");
+		}
+
+		return measurementList;
+	}
+	
+	private double[] stringToCoeff(String s) {
+		String[] tokens = s.split("[, ]+");
+		double[] z = new double[tokens.length];
+		for (int i = 0; i < z.length; i++) {
+			z[i] = Double.parseDouble(tokens[i]);
+		}
+		return z;
 	}
 }

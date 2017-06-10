@@ -156,7 +156,7 @@ public class StepResponseApproximationTool extends JFrame {
 					frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
 				}
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setTitle("MVCFramework");
+				frame.setTitle("SRAT");
 				frame.init();
 				frame.setVisible(true);
 			}
