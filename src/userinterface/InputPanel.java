@@ -19,25 +19,31 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.opencsv.CSVReader;
 
-import DataProcessing.Model;
+import dataProcessing.Model;
+import programUtilities.JFormattedDoubleTextField;
+import programUtilities.MyBorderFactory;
 
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
 public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	//================================================================================
 	// Properties
 	//================================================================================
-	
+
 	private int wpPlacement = 5;
 	private int qpPlacement = 6;
+	
 	// Buttons
 	private JButton btLoad = new JButton("Load");
 	public JButton btRun = new JButton("Run");
@@ -45,53 +51,54 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	private JRadioButton rbtAutomatically = new JRadioButton("Automatically");
 	private JRadioButton rbtManually = new JRadioButton("Manually");
+	
 	// Buttongroup
-	private ButtonGroup gruppeAuto_Manual = new ButtonGroup();
+	private ButtonGroup groupAutoManual = new ButtonGroup();
+	
 	// JCombobox
-	private String comboBoxListe[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
-	private JComboBox cbOrdnungsauswahl = new JComboBox(comboBoxListe);
+	private String comboBoxList[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
+	private JComboBox cbOrder = new JComboBox(comboBoxList);
 
-	DecimalFormat f = new DecimalFormat("##0.##E0");
+	DecimalFormat f = new DecimalFormat("##0.0#E0");
+
+	DecimalFormat fd = new DecimalFormat("##00.0#E0");
 
 	// Labels
-
-	private JLabel[] lbwp = new JLabel[5];
-	private JLabel[] lbqp = new JLabel[5];
+	private JLabel[] lbWp = new JLabel[5];
+	private JLabel[] lbQp = new JLabel[5];
 
 	private JLabel lbK = new JLabel("K:");
-	private JLabel lbOrdnung = new JLabel("Ordnung:");
+	private JLabel lbOrder = new JLabel("Order:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
-	private JLabel Output = new JLabel("");
 	// Textfields
-	private JTextField[] tfwp = new JTextField[5];
-	private JTextField[] tfqp = new JTextField[5];
+	private JEngineerField[] tfWp = new JEngineerField[5];
+	private JEngineerField[] tfQp = new JEngineerField[5];
 
-	private JTextField tfSigma = new JTextField();
-	private JTextField tfK = new JTextField();
+	private JEngineerField tfSigma = new JEngineerField(3, 0);
+	private JEngineerField tfK = new JEngineerField(3, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
 
 	private Controller controller;
 
-	private String Ordnung;
-	private double Ordnung1;
+	private double order;
 
-	private JFrame settingsFrame;
-
-	//	private StatusBar statusBar = new StatusBar();
-
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
 	public InputPanel() {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder("Input"));
+		
 		// create Buttongroup
 		rbtAutomatically.setSelected(true);
-		gruppeAuto_Manual.add(rbtAutomatically);
-		gruppeAuto_Manual.add(rbtManually);
+		groupAutoManual.add(rbtAutomatically);
+		groupAutoManual.add(rbtManually);
 
 		// add Buttons to Panel
-
 		add(btLoad, new GridBagConstraints(0, 0, 2, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 5, 0, 10), 0, 0));
 
@@ -106,12 +113,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(10, 5, 0, 10), 0, 0));
 
 		// add Labels to Panel	
-		add(lbOrdnung, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+		add(lbOrder, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
-
-		//add action listener
-		btLoad.addActionListener(this);
-		btRun.addActionListener(this);
 
 		// Label und Texfield für k platzieren
 		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -123,34 +126,37 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
-			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfwp[i] = new JTextField();
-			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
+			lbWp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
+			tfWp[i] = new JEngineerField(3, 0);
+			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
-			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+			add(tfWp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 
-			lbwp[i].setEnabled(false);
-			tfwp[i].setEnabled(false);
+			lbWp[i].setEnabled(false);
+			tfWp[i].setEnabled(false);
 			wpPlacement = wpPlacement + 2;
 		}
+		
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
-			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfqp[i] = new JTextField();
-			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
+			lbQp[i] = new JLabel("qp" + (i + 1) + ":");
+			tfQp[i] = new JEngineerField(3, 0);
+			add(lbQp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
-			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+			add(tfQp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
-			lbqp[i].setEnabled(false);
-			tfqp[i].setEnabled(false);
+			lbQp[i].setEnabled(false);
+			tfQp[i].setEnabled(false);
 			qpPlacement = qpPlacement + 2;
 		}
-
+		
 		lbSigma.setEnabled(false);
 		tfSigma.setEnabled(false);
-		cbOrdnungsauswahl.setEnabled(true);
-		lbOrdnung.setEnabled(true);
 
 		// Label und Textfeld Sigma platzieren
 		add(lbSigma, new GridBagConstraints(0, 25, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -159,64 +165,125 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
-		//		cbOrdnungsauswahl.setPreferredSize(new Dimension(50, 20));
-		add(cbOrdnungsauswahl, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+		add(cbOrder, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
-		//	fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
-
-		cbOrdnungsauswahl.addItemListener(this);
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV- and Text-Files", "csv", "txt"));
+		
+		//add action listener
+		btLoad.addActionListener(this);
+		btRun.addActionListener(this);
 		rbtAutomatically.addActionListener(this);
 		rbtManually.addActionListener(this);
 		btCancel.addActionListener(this);
+		cbOrder.addItemListener(this);
+
+		// Buttons und labels deaktivieren für Userführung
+		lbOrder.setEnabled(false);
 		btRun.setEnabled(false);
 		btCancel.setEnabled(false);
 		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
 
+		cbOrder.setEnabled(false);
 	}
 
-	private double[] stringToCoeff(String s) {
-		String[] tokens = s.split("[, ]+");
-		double[] z = new double[tokens.length];
-		for (int i = 0; i < z.length; i++) {
-			z[i] = Double.parseDouble(tokens[i]);
+
+	
+
+
+
+	//================================================================================
+	// Public Methods
+	//================================================================================
+
+	
+	/**
+	 * Falls deine Approximation durchgeführt wurde, werden die Werte aus dem Model in die 
+	 * entsprechenden Textfelder geschrieben. Im anderen Fall wird der Text zurückgesetzt.
+	 * @param obs the observable object.
+	 * @param obj an argument passed to the notifyObservers method.
+	 */
+	public void update(Observable obs, Object obj) {
+		Model model = (Model) obs;
+
+		if (model.approximated()) {
+			rbtManually.setEnabled(true);
+
+			for (int i = 0; i < tfWp.length; i++) {
+				if (i < model.getWqp()[0].length) {
+					tfWp[i].setValue(model.getWqp()[0][i]);
+					tfQp[i].setValue(model.getWqp()[1][i]);
+				} else {
+					tfWp[i].setText("");
+					tfQp[i].setText("");
+				}
+			}
+
+			tfK.setValue(model.getK());
+			
+			if (model.getOrder() % 2 == 1) {
+				tfSigma.setValue(model.getSigma());
+			} else {
+				tfSigma.setText("");
+			}
+		} else {
+			for (int i = 0; i < tfWp.length; i++) {
+				tfWp[i].setText("");
+				tfQp[i].setText("");
+			}
+
+			tfK.setText("");
+			tfSigma.setText("");
 		}
-		return z;
 	}
+	
+	//================================================================================
+	// Events
+	//================================================================================
 
-	public void setController(Controller controller) {
-		this.controller = controller;
-	}
-
-	// Ausgrauen von allen Textfeldern, Labels, Ordnungsauswahl und Combobox bei entsprechender Aktion
-	@Override
+	/**
+	 *  Wenn Load gedrückt wird Open Dialog öffnen für Signalauswahl und CSVReader starten. Buttons und Labels deaktivieren
+	 *  für Userführung, bei erfolgreicher Einlesung.
+	 *  Wenn Run gedrückt wird, Berechnungen starten.
+	 *  Wenn Cancel gedrückt wird, Berechnungen abbrechen.
+	 *  Wenn Automatically ausgewählt ist, Textfelder, Labels (K, wp, qp und Sigma) deaktivieren.
+	 *  Wenn Manually ausgewählt, Textfelder, Labels(K, wp, qp und Sigma) für die gewählte Ordnung aktivieren
+	 *  und die Anderen deaktivieren.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
-		Ordnung1 = Double.parseDouble(Ordnung);
+		order = Double.parseDouble((String) cbOrder.getSelectedItem());
 
 		if (e.getSource() == btLoad) {
 			if (fileChooser.showOpenDialog(getParent()) == JFileChooser.APPROVE_OPTION) {
+				cbOrder.setEnabled(false);
+				lbOrder.setEnabled(false);
+				rbtAutomatically.setEnabled(false);
+				rbtManually.setEnabled(false);
 				try {
 					controller.setMeasurement(readCSV());
+					
 					rbtAutomatically.setEnabled(true);
-					rbtManually.setEnabled(true);
-
-				} catch (RuntimeException e1) {
-					StatusBar.showStatus(e1.getMessage());
+					cbOrder.setEnabled(true);
+					lbOrder.setEnabled(true);
+					
+				} catch (NumberFormatException e1) {
+					StatusBar.showStatus("Wrong number format");
+				} catch (ArrayIndexOutOfBoundsException e2) {
+					StatusBar.showStatus("Wrong data format");
+				} catch (RuntimeException e3) {
+					StatusBar.showStatus(e3.getMessage());
 				}
-
 			}
-
 		}
 
 		if (e.getSource() == btRun) {
-			int order = Integer.parseInt((String) cbOrdnungsauswahl.getSelectedItem());
+			int order = Integer.parseInt((String) cbOrder.getSelectedItem());
 			controller.setOrder(order);
 			if (rbtManually.isSelected() == true) {
 				double[][] wqp = new double[2][(int) Math.floor(order / 2)];
@@ -224,8 +291,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				try {
 					double K = Double.parseDouble(tfK.getText());
 					for (int i = 0; i < wqp[0].length; i++) {
-						wqp[0][i] = Double.parseDouble(tfwp[i].getText());
-						wqp[1][i] = Double.parseDouble(tfqp[i].getText());
+						wqp[0][i] = Double.parseDouble(tfWp[i].getText());
+						wqp[1][i] = Double.parseDouble(tfQp[i].getText());
 					}
 
 					if (order % 2 == 0) {
@@ -233,96 +300,119 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					} else {
 						sigma = Double.parseDouble(tfSigma.getText());
 					}
-					
-					
+
 					controller.setK(K);
 					controller.setSigma(sigma);
 					controller.setWqp(wqp);
 					controller.approximateManual();
 				} catch (NumberFormatException e2) {
-					// TODO: handle exception
 					StatusBar.showStatus("Wrong number format");
 				}
 
 			} else {
 				controller.approximateAuto();
 			}
-
 		}
 		if (e.getSource() == btCancel) {
 			controller.stopApproximation();
 		}
 
-		if (/*e.getSource() == rbtAutomatically*/ rbtAutomatically.isSelected()) {
+		if (rbtAutomatically.isSelected()) {
 			lbK.setEnabled(false);
 			tfK.setEnabled(false);
 
 			for (int i = 0; i < 5; i++) {
-				lbwp[i].setEnabled(false);
-				lbqp[i].setEnabled(false);
-				tfwp[i].setEnabled(false);
-				tfqp[i].setEnabled(false);
+				lbWp[i].setEnabled(false);
+				lbQp[i].setEnabled(false);
+				tfWp[i].setEnabled(false);
+				tfQp[i].setEnabled(false);
 			}
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
-		} else if (e.getSource() == rbtManually) {
+		} else if (rbtManually.isSelected()) {
 			lbK.setEnabled(true);
 			tfK.setEnabled(true);
 
-			for (int i = 0; i < Math.floor(Ordnung1 / 2); i++) {
-				lbwp[i].setEnabled(true);
-				lbqp[i].setEnabled(true);
-				tfwp[i].setEnabled(true);
-				tfqp[i].setEnabled(true);
+			for (int i = 0; i < Math.floor(order / 2); i++) {
+				lbWp[i].setEnabled(true);
+				lbQp[i].setEnabled(true);
+				tfWp[i].setEnabled(true);
+				tfQp[i].setEnabled(true);
 			}
-			if (Ordnung1 % 2 == 1) {
+			if (order % 2 == 1) {
 				lbSigma.setEnabled(true);
 				tfSigma.setEnabled(true);
 			}
 		}
 	}
 
-	// Ausgrauen von Textfeldern und Labels bei entsprechender Aktion
-	@Override
+	/**
+	 * Wenn Ordnung ändert und Manually ausgewählt ist, Textfelder und Labels (K, wp, qp und Sigma) 
+	 * für die entsprechende Ordnung aktivieren und die restlichen Labels deaktivieren.
+	 */
 	public void itemStateChanged(ItemEvent e) {
-		Ordnung = "0";
-		Ordnung = (String) cbOrdnungsauswahl.getSelectedItem();
-		Ordnung1 = Double.parseDouble(Ordnung);
+		order = Double.parseDouble((String)cbOrder.getSelectedItem());
 
 		for (int i = 0; i < 5; i++) {
 
-			if (i < Math.floor(Ordnung1 / 2) & rbtAutomatically.isSelected() == false) {
-				lbwp[i].setEnabled(true);
-				lbqp[i].setEnabled(true);
-				tfwp[i].setEnabled(true);
-				tfqp[i].setEnabled(true);
+			if (i < Math.floor(order / 2) & rbtManually.isSelected()) {
+				lbWp[i].setEnabled(true);
+				lbQp[i].setEnabled(true);
+				tfWp[i].setEnabled(true);
+				tfQp[i].setEnabled(true);
 			} else {
-				lbwp[i].setEnabled(false);
-				lbqp[i].setEnabled(false);
-				tfwp[i].setEnabled(false);
-				tfqp[i].setEnabled(false);
+				lbWp[i].setEnabled(false);
+				lbQp[i].setEnabled(false);
+				tfWp[i].setEnabled(false);
+				tfQp[i].setEnabled(false);
 			}
 		}
-		if ((Ordnung1 % 2) != 0 & rbtAutomatically.isSelected() == false) {
+		
+		if ((order % 2) != 0 & rbtManually.isSelected()) {
 			lbSigma.setEnabled(true);
 			tfSigma.setEnabled(true);
 		} else {
 			lbSigma.setEnabled(false);
 			tfSigma.setEnabled(false);
 		}
-
 	}
-
+	
+	//================================================================================
+	// Private Methods
+	//================================================================================
+	
 	private List<String[]> readCSV() {
 		List<String[]> measurementList = null;
+		CSVReader reader = null;
+		char[] separator = { ',', ' ', '\t' };
+		boolean leave = false;
+
 
 		try {
 			File file = fileChooser.getSelectedFile();
 			StatusBar.clear();
 			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loading");
-			CSVReader reader = new CSVReader(new FileReader(file));
+
+			for (int i = 0; i < separator.length; i++) {
+				try {
+					leave = true;
+					reader = new CSVReader(new FileReader(file), separator[i]);
+					measurementList = reader.readAll();
+					String text = measurementList.get(0)[0];
+					Double.parseDouble(measurementList.get(0)[0].trim());
+				} catch (NumberFormatException e) {
+					leave = false;
+				}
+
+				if (leave) {
+					break;
+				}
+			}
 			
-			measurementList = reader.readAll();
+			if(!leave){
+				throw new RuntimeException("Wrong separator in data");
+			}
+
 			reader.close();
 			StatusBar.clear();
 			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loaded");
@@ -334,39 +424,13 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		return measurementList;
 	}
+	
 
-	public void update(Observable obs, Object obj) {
-		Model model = (Model) obs;
+	//================================================================================
+	// Setter and Getter
+	//================================================================================
 
-		if (model.approximated()) {
-			//btRun.setEnabled(true);
-		//	rbtManually.setEnabled(true);
-
-			for (int i = 0; i < tfwp.length; i++) {
-				if (i < model.getWqp()[0].length) {
-					tfwp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
-					tfqp[i].setText(f.format(model.getWqp()[1][i]).toLowerCase());
-				} else {
-					tfwp[i].setText("");
-					tfqp[i].setText("");
-				}
-			}
-
-			tfK.setText(f.format(model.getK()).toLowerCase());
-
-			if (model.getOrder() % 2 == 1) {
-				tfSigma.setText(f.format(model.getSigma()).toLowerCase());
-			} else {
-				tfSigma.setText("");
-			}
-		} else {
-			for (int i = 0; i < tfwp.length; i++) {
-				tfwp[i].setText("");
-				tfqp[i].setText("");
-			}
-
-			tfK.setText("");
-			tfSigma.setText("");
-		}
+	public void setController(Controller controller) {
+		this.controller = controller;
 	}
 }

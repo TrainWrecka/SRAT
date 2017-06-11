@@ -1,15 +1,19 @@
 package userinterface;
 
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
 import org.jfree.data.xy.XYSeries;
 
-import JFreeChart.Plots;
+import plots.Plots;
+import programUtilities.MyBorderFactory;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class DataPanel extends JPanel{
 
 	//================================================================================

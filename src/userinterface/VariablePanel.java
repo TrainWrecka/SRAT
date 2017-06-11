@@ -3,17 +3,21 @@ package userinterface;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Observable;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import DataProcessing.Model;
+import dataProcessing.Model;
+import programUtilities.MyBorderFactory;
 
-public class VariablePanel extends JPanel implements ActionListener {
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
+public class VariablePanel extends JPanel {
 
 	//================================================================================
 	// Properties
@@ -21,7 +25,7 @@ public class VariablePanel extends JPanel implements ActionListener {
 
 	private JLabel lbK = new JLabel("K:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
-	private JLabel lbError = new JLabel("Error:");
+	private JLabel lbError = new JLabel("Max |Error|:");
 	private JLabel[] lbwp = new JLabel[5];
 	private JLabel[] lbqp = new JLabel[5];
 
@@ -127,13 +131,5 @@ public class VariablePanel extends JPanel implements ActionListener {
 			lbSigmaValues.setText("-");
 			lbErrorValues.setText("-");
 		}
-
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

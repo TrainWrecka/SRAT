@@ -8,15 +8,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -28,7 +24,17 @@ import javax.swing.KeyStroke;
 
 import com.opencsv.CSVReader;
 
-public class MenuBar extends JMenuBar implements Observer, ActionListener {
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
+public class MenuBar extends JMenuBar implements ActionListener {
+
+	//================================================================================
+	// Properties
+	//================================================================================
+
 	JMenu menu, optionsmenu;
 	JMenuItem menuItemOnTop, exampleItem, settingsmenuItem, helpmenuItem, ExamplemenuItem;
 	JFrame frame;
@@ -41,13 +47,19 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 	private int settingsFrameWidth;
 	private int settingsFrameHeight;
 
+	int cnt = 0;
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	String[] zeilen;
 	JTextArea jtArea;
+
+	//================================================================================
+	// Constructor
+	//================================================================================
 
 	public MenuBar(Controller controller, JFrame frame) {
 		this.frame = frame;
 		this.controller = controller;
-		menu = new JMenu("Datei");
+		menu = new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_D);
 
 		menu.addSeparator();
@@ -110,10 +122,23 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		settingsPanel = new SettingsPanel(controller);
 	}
 
-	public void update(Observable o, Object obj) {}
+	//================================================================================
+	// Events
+	//================================================================================
 
+	/**
+	 * Wenn Resizable gedrückt wird, aktuelle Grösse des Frames um 100 verkleinern (nur wenn Frame vorher nicht resizable war) 
+	 * und Frame resizable setzen.
+	 * Wenn NotResizable gedrückt wird, aktuelle Grösse des Frames wieder auf Startgrösse und Position setzen
+	 * und Frame nicht resizable setzen.
+	 * Wenn Allways on top gedrückt wird, Frame allways on top true setzen und Text in Not allways on top ändern.
+	 * Wenn Not allways on top gedrückt wird, Frame allways on top false setzen und Text in Allways on top ändern.
+	 * Wenn Settings gedrückt wird, Settings-Dialog öffnen.
+	 * Wenn Help gedrückt wird, Help-Dialog öffnen.
+	 * Wenn Load example gedrückt wird, Beispiel laden.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		int cnt = 0;
+
 		if (e.getActionCommand().equals("Resizable")) {
 			frame.setResizable(true);
 			Dimension dim = frame.getSize();
@@ -124,16 +149,14 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("NotResizable")) {
+			frame.setSize((int) (screenSize.width * 2 / 4), (int) (screenSize.height * 10 / 11));
+			frame.setLocation((screenSize.width - frame.getSize().width) / 2, (screenSize.height - frame.getSize().height) / 2);
 			frame.setResizable(false);
-			Dimension dim = frame.getSize();
 			if (cnt != 0) {
-				dim.width += 100;
 				cnt--;
 			}
-			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("OnTop")) {
-			StatusBar.showStatus(this, e, e.getActionCommand());
 			if (((JFrame) this.getTopLevelAncestor()).isAlwaysOnTop()) {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(false);
 				settingsDialog.setAlwaysOnTop(false);
@@ -154,16 +177,29 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
 			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth()) + settingsFrameWidth,
 					(int) (settingsDialog.getPreferredSize().getHeight()) + settingsFrameHeight);
-			settingsDialog.setLocation((int) (frame.getLocation().getX() - xPosition), (int) frame.getLocation().getY());
+			
+			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2, (screenSize.height - settingsDialog.getSize().height) / 3);
 		}
+
 		if (e.getActionCommand().equals("Help")) {
 			helpDialog.setTitle("Help");
 			helpDialog.setVisible(true);
 			helpDialog.setResizable(true);
+			helpDialog.setLayout(new GridBagLayout());
+			helpDialog.setSize((int) (screenSize.height / Math.sqrt(2)), screenSize.height);
+			helpDialog.setLocation((screenSize.width - helpDialog.getSize().width) / 2,
+					(screenSize.height - helpDialog.getSize().height) / 2);
+			BufferedImage[] bim = Utility.loadResourcePDF("USERGUIDE.pdf");
+			ImagePanel bildPanel = new ImagePanel(bim[0]);
+			helpDialog.add(bildPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
+					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+			helpDialog.setLocation((screenSize.width - helpDialog.getSize().width) / 2,
+					(screenSize.height - helpDialog.getSize().height) / 2);
 		}
 
 		if (e.getActionCommand().equals("Load Example")) {
-			URL url = Utility.class.getClassLoader().getResource("resources/Signal7.csv");
+
+			URL url = Utility.class.getResource("resources/Signal7.csv");
 			CSVReader reader = null;
 
 			try {
@@ -178,4 +214,3 @@ public class MenuBar extends JMenuBar implements Observer, ActionListener {
 		}
 	}
 }
-

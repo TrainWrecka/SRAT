@@ -16,6 +16,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import programUtilities.MyBorderFactory;
+
 public class StatusBar extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static JTextArea textArea = new JTextArea(5, 50);

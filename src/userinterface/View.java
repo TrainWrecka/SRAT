@@ -3,16 +3,13 @@ package userinterface;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JPanel;
 
 
-public class View extends JPanel implements Observer, ActionListener {
+public class View extends JPanel implements Observer {
 	
 	//================================================================================
 	// Properties
@@ -48,10 +45,4 @@ public class View extends JPanel implements Observer, ActionListener {
 		outputPanel.update(obs, obj);
 		inputPanel.update(obs, obj);
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub	
-	}
-
 }

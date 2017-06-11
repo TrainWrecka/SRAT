@@ -1,7 +1,12 @@
-package JFreeChart;
+package plots;
 
 import org.jfree.data.xy.XYSeries;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class PlotData {
 	
 	//================================================================================

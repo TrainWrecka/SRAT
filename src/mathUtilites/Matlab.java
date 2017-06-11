@@ -1,4 +1,4 @@
-package matlabfunctions;
+package mathUtilites;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -677,5 +677,17 @@ public class Matlab {
 		}
 		return Math.sqrt(sum);
 	}
-
+	
+	/**
+	 * Berechnet den Absolutwert jeder Arrayelemente
+	 * @param data Arraydaten
+	 * @return Array mit Absolutwerten
+	 */
+	public static double[] abs(double[] data){
+		double[] absArray = new double[data.length];
+		for (int i = 0; i < data.length; i++) {
+			absArray[i] = Math.abs(data[i]);
+		}
+		return absArray;
+	}
 }

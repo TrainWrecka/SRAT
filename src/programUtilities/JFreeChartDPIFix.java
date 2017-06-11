@@ -1,12 +1,10 @@
-package JFreeChart;
+package programUtilities;
 
 import java.awt.Font;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.plot.Plot;
-
-import StepResponseApproximationTool.DPIFixV3;
 
 public class JFreeChartDPIFix extends JFreeChart {
 

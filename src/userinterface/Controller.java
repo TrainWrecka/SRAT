@@ -2,9 +2,13 @@ package userinterface;
 
 import java.util.List;
 
-import DataProcessing.Model;
-import StepResponseApproximationTool.StepResponseApproximationTool;
+import dataProcessing.Model;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class Controller {
 
 	//================================================================================
@@ -15,7 +19,6 @@ public class Controller {
 	private View view;
 
 	private Thread threadApproximation;
-	private Thread threadUpdateCheck;
 
 	//================================================================================
 	// Constructor
