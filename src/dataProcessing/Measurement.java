@@ -33,7 +33,7 @@ public class Measurement {
 	private double K;
 	private double wqp[][];
 	private double sigma;
-	private double meanError;
+	private double maxAbsError;
 
 	private int stepIndex;
 
@@ -147,7 +147,7 @@ public class Measurement {
 		polesData = convertPoles(polesComplex);
 
 		errorData = calculateDifference(approxData, stepDataOriginal);
-		meanError = Matlab.mean(errorData);
+		maxAbsError = Matlab.max(Matlab.abs((errorData)));
 	}
 
 	/**
@@ -180,8 +180,8 @@ public class Measurement {
 	 */
 	public void recalculateError() {
 		errorData = calculateDifference(approxData, stepData);
-		meanError = Matlab.mean(errorData);
-	}
+		maxAbsError = Matlab.max(Matlab.abs((errorData)));
+		}
 
 	//================================================================================
 	// Private Methods
@@ -217,7 +217,7 @@ public class Measurement {
 			input = false;
 			index = 1;
 		} else {
-			throw new RuntimeException();
+			throw new RuntimeException("Incorrect data columns");
 		}
 
 		for (int i = 0; i < timeData.length; i++) {
@@ -432,8 +432,8 @@ public class Measurement {
 			wqp[1][i] = (-(temp1 / temp2));
 		}
 
-		meanError = Matlab.mean(errorData);
-
+		maxAbsError = Matlab.max(Matlab.abs((errorData)));
+		
 		if (order % 2 == 1) {
 			sigma = poles[poles.length - 1].getReal();
 		}
@@ -530,6 +530,6 @@ public class Measurement {
 	}
 
 	public double getMeanError() {
-		return meanError;
+		return maxAbsError;
 	}
 }

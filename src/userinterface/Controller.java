@@ -4,6 +4,11 @@ import java.util.List;
 
 import dataProcessing.Model;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class Controller {
 
 	//================================================================================

@@ -120,8 +120,6 @@ public class OutputPanel extends JPanel implements ChangeListener {
 				errorData.removePlotData();
 				stepData.setYData(model.getApproxData(), "Apprximation");
 
-				//renderer.setSeriesPaint(0, new Color(0, 0, 255, 0));
-
 				errorData.setXData(model.getTimeData());
 				errorData.setYData(model.getErrorData(), "Error");
 				ErrorPanel.addData(errorData.getPlotData()[0]);
@@ -135,16 +133,16 @@ public class OutputPanel extends JPanel implements ChangeListener {
 			for (int i = 0; i < stepData.getPlotData().length; i++) {
 				StepresponsePanel.addData(stepData.getPlotData()[i]);
 			}
-
 		}
-
 	}
-
+	
+	//================================================================================
+	// Events
+	//================================================================================
 
 	/**
 	 * Wenn Tab wechselt, wird entsprechendes Panel auf den neuen Tab gesetzt und vom alten entfernt.
 	 */
-	
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();

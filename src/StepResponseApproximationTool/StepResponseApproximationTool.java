@@ -29,11 +29,10 @@ import userinterface.View;
 public class StepResponseApproximationTool extends JFrame {
 
 	private enum Mode {
-		FIXED, PACKED, FIXEDRESIZABLE, PACKEDRESIZABLE, CHRIS
+		FIXED, PACKED, FIXEDRESIZABLE, PACKEDRESIZABLE
 	};
 
 	private Mode mode = Mode.FIXED;
-//	private int width = 1200, height = 800;
 	private Model model = new Model();
 	private Controller controller = new Controller(model);
 	private View view = new View(controller);
@@ -42,7 +41,7 @@ public class StepResponseApproximationTool extends JFrame {
 	Dimension screenSize= Toolkit.getDefaultToolkit().getScreenSize();	// ScreenSize Problem
 	int screenRes= Toolkit.getDefaultToolkit().getScreenResolution();	// ScreenSize Problem
 
-	int height =screenSize.height*10/11 ;			// ScreenSize Problem
+	int height =screenSize.height*10/11 ;		// ScreenSize Problem
 	int width = screenSize.width *2/4;			// ScreenSize Problem
 
 	
@@ -59,20 +58,16 @@ public class StepResponseApproximationTool extends JFrame {
 		
 		
 		model.addObserver(view);
-		model.addObserver(menuBar);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(view, BorderLayout.CENTER);
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 		setJMenuBar(menuBar);
 		
 		System.out.println(width);
-//		D
 
-		
 		pack();
 		
 		synchronized (getTreeLock()) {
-//			setAllFonts(getComponents(), getFont().deriveFont(12.0f));
 			setAllFonts(getComponents(), getFont().deriveFont((float)Toolkit.getDefaultToolkit().getScreenSize().getHeight()/80));
 		}
 		
@@ -99,14 +94,8 @@ public class StepResponseApproximationTool extends JFrame {
 				setMinimumSize(getPreferredSize());
 				setResizable(true);
 				break;
-			case CHRIS:
-				setPreferredSize(new Dimension((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2,(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()-300));
-				setMinimumSize(getPreferredSize());
-				setSize(getPreferredSize());
-				setMaximumSize(getPreferredSize());
-				validate();
-				break;
 		}
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = getSize();
 		if (frameSize.height > screenSize.height) {

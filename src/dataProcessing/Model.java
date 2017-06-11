@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Observable;
 
 import mathUtilites.Matlab;
-import userinterface.StatusBar;
 
 /**
  * 
@@ -50,25 +49,16 @@ public class Model extends Observable {
 
 		measurementLoaded = false;
 
-		try {
-			measurement = new Measurement();
-			measurement.setMeasurement(measurementList);
-			if (doFilter) {
-				filtMeasurement();
-			}
-			measurementLoaded = true;
-
-		} catch (NumberFormatException e) {
-			StatusBar.showStatus("Wrong Number format");
-		} catch (ArrayIndexOutOfBoundsException e) {
-			StatusBar.showStatus("Wrong Data format");
-		} catch (RuntimeException e) {
-			StatusBar.showStatus("Incorrect data columns");
+		measurement = new Measurement();
+		measurement.setMeasurement(measurementList);
+		
+		if (doFilter) {
+			filtMeasurement();
 		}
+		measurementLoaded = true;
 
 		notifyObservers();
 	}
-
 
 	/**
 	 * Approximiert die Schrittantwort automatisch anhand der gesetzten Einstellungen. 

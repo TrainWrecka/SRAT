@@ -9,6 +9,11 @@ import org.jfree.data.xy.XYSeries;
 import plots.Plots;
 import programUtilites.MyBorderFactory;
 
+/**
+ * 
+ * @author Thomas Frei
+ *
+ */
 public class DataPanel extends JPanel{
 
 	//================================================================================

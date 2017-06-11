@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
+
 public class ImagePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Image bild;
@@ -27,11 +28,11 @@ public class ImagePanel extends JPanel {
 				int bildHoehe = (int) (bild.getHeight(panel) * min);
 				randLinks = (panel.getWidth() - bildBreite) / 2;
 				randOben = (panel.getHeight() - bildHoehe) / 2;
-				
+
 				System.out.println(min);
-				
+
 				System.out.println(bildBreite);
-				
+
 				img = bild.getScaledInstance(bildBreite, -1, Image.SCALE_SMOOTH);
 				img.getWidth(panel);
 			}

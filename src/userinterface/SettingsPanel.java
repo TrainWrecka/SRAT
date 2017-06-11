@@ -58,7 +58,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private ButtonGroup groupFilterSignal = new ButtonGroup();
 	private ButtonGroup groupShowFilteredSignal = new ButtonGroup();
 
-	private JButton btApply = new JButton("Apply");
 	private JButton btDefaults = new JButton("Defaults");
 
 	private JCheckBox cbAutoFilter = new JCheckBox();
@@ -142,7 +141,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		add(btDefaults, new GridBagConstraints(1, 12, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 
-		btApply.addActionListener(this);
 		btDefaults.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
 		rbtFilterSignalYes.addActionListener(this);
@@ -150,47 +148,32 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		rbtShowFilteredSignalYes.addActionListener(this);
 		rbtShowFilteredSignalNo.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
-
 		tfLaguerre.addFocusListener(this);
 		tfMaxEval.addFocusListener(this);
 		tfNelderMeadSimplexSteps.addFocusListener(this);
 		tfSimplexOptimizerAbsolute.addFocusListener(this);
 		tfSimplexOptimizerRelative.addFocusListener(this);
-
-		//<<<<<<< HEAD
-		jsFilter.addChangeListener(this);
-		jsFilter.setEnabled(false);
-		//=======
+		jsFilter.setEnabled(false);	
 		cbAutoFilter.addItemListener(this);
 		jsFilter.addChangeListener(this);
-
-		//>>>>>>> origin/master
+		
 		initFields();
-		btApply.doClick();
 	}
 
 	//================================================================================
-	// Public Methods
+	// Events
 	//================================================================================
 
 	/**
-	 * Wenn der Default-Button gedrückt wurde werden die Standardwerte geladen, beim Apply-Button werden
-	 * die Werte aller Textfelder dem Controller übergeben.
+	 * Wenn der Default-Button gedrückt wurde werden die Standardwerte geladen. Bei jedem ActionEvent
+	 * werden die aktuellen werte dem Controller übergeben.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btDefaults) {
 			initFields();
-			//updateValues();
 		}
-
-		if (e.getSource() == btApply) {
-			//updateValues();
-
-		}
-
 		updateValues();
-
 	}
 
 	/**
@@ -212,14 +195,21 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		lbFilter.setText("Filter accuracy in %   " + jsFilter.getValue());
 		updateValues();
 	}
+	
+	@Override
+	public void focusGained(FocusEvent e) {
+
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		updateValues();
+	}
 
 	//================================================================================
 	// Private Methods
 	//================================================================================
 
-	/**
-	 * Lädt Standadtwerte in die Textfelder
-	 */
 	private void initFields() {
 		tfLaguerre.setText("1e-5");
 		tfSimplexOptimizerRelative.setText("1e-24");
@@ -230,18 +220,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		rbtFilterSignalYes.setSelected(true);
 		rbtShowFilteredSignalNo.setSelected(true);
 		jsFilter.setValue(100);
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
-		updateValues();
 	}
 
 	private void updateValues() {

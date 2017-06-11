@@ -12,6 +12,11 @@ import javax.swing.JPanel;
 import dataProcessing.Model;
 import programUtilites.MyBorderFactory;
 
+/**
+ * 
+ * @author Lukas Loosli
+ *
+ */
 public class VariablePanel extends JPanel {
 
 	//================================================================================
@@ -20,7 +25,7 @@ public class VariablePanel extends JPanel {
 
 	private JLabel lbK = new JLabel("K:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
-	private JLabel lbError = new JLabel("Error:");
+	private JLabel lbError = new JLabel("Max |Error|:");
 	private JLabel[] lbwp = new JLabel[5];
 	private JLabel[] lbqp = new JLabel[5];
 
@@ -126,6 +131,5 @@ public class VariablePanel extends JPanel {
 			lbSigmaValues.setText("-");
 			lbErrorValues.setText("-");
 		}
-
 	}
 }
