@@ -177,9 +177,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
 			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth()) + settingsFrameWidth,
 					(int) (settingsDialog.getPreferredSize().getHeight()) + settingsFrameHeight);
-
-			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2,
-					(screenSize.height - settingsDialog.getSize().height) / 3);
+			
+			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2, (screenSize.height - settingsDialog.getSize().height) / 3);
 		}
 
 		if (e.getActionCommand().equals("Help")) {

@@ -72,11 +72,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
 	// Textfields
-	private JFormattedDoubleTextField[] tfWp = new JFormattedDoubleTextField[5];
-	private JFormattedDoubleTextField[] tfQp = new JFormattedDoubleTextField[5];
+	private JEngineerField[] tfWp = new JEngineerField[5];
+	private JEngineerField[] tfQp = new JEngineerField[5];
 
-	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
-	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
+	private JEngineerField tfSigma = new JEngineerField(3, 0);
+	private JEngineerField tfK = new JEngineerField(3, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -84,11 +84,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private Controller controller;
 
 	private double order;
-	
-	//================================================================================
-	// Public Methods (excl. Setter and Getter)
-	//================================================================================
 
+	//================================================================================
+	// Constructor
+	//================================================================================
+	
 	public InputPanel() {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder("Input"));
@@ -126,9 +126,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
+
 			lbWp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfWp[i] = new JFormattedDoubleTextField(fd, 0);
-			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+			tfWp[i] = new JEngineerField(3, 0);
+			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfWp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
@@ -140,9 +142,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
+
 			lbQp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfQp[i] = new JFormattedDoubleTextField(fd, 0);
+			tfQp[i] = new JEngineerField(3, 0);
 			add(lbQp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfQp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
@@ -185,8 +189,18 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		btCancel.setEnabled(false);
 		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
+
 		cbOrder.setEnabled(false);
 	}
+
+
+	
+
+
+
+	//================================================================================
+	// Public Methods
+	//================================================================================
 
 	
 	/**
@@ -298,7 +312,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			} else {
 				controller.approximateAuto();
 			}
-
 		}
 		if (e.getSource() == btCancel) {
 			controller.stopApproximation();
@@ -363,7 +376,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfSigma.setEnabled(false);
 		}
 	}
-
+	
 	//================================================================================
 	// Private Methods
 	//================================================================================
@@ -373,6 +386,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		CSVReader reader = null;
 		char[] separator = { ',', ' ', '\t' };
 		boolean leave = false;
+
 
 		try {
 			File file = fileChooser.getSelectedFile();
@@ -393,6 +407,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					break;
 				}
 			}
+
 			reader.close();
 			StatusBar.clear();
 			StatusBar.showStatus(fileChooser.getSelectedFile().getName() + " loaded");
@@ -405,6 +420,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		return measurementList;
 	}
 	
+
 	//================================================================================
 	// Setter and Getter
 	//================================================================================
