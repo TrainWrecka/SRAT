@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 import dataProcessing.Model;
 import plots.PlotData;
 import plots.Plots;
-import programUtilites.MyBorderFactory;
+import programUtilities.MyBorderFactory;
 
 public class OutputPanel extends JPanel implements ChangeListener {
 

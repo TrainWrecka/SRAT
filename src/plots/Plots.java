@@ -17,7 +17,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.ShapeUtilities;
 
-import programUtilites.JFreeChartDPIFix;
+import programUtilities.JFreeChartDPIFix;
 
 
 /**

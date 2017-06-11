@@ -1,4 +1,4 @@
-package programUtilites;
+package programUtilities;
 
 import java.awt.Dimension;
 import java.awt.Font;

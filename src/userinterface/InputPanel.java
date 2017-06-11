@@ -27,8 +27,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.opencsv.CSVReader;
 
 import dataProcessing.Model;
-import programUtilites.JFormattedDoubleTextField;
-import programUtilites.MyBorderFactory;
+import programUtilities.JFormattedDoubleTextField;
+import programUtilities.MyBorderFactory;
 
 /**
  * 
@@ -129,7 +129,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 			lbWp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
 			tfWp[i] = new JEngineerField(3, 0);
-			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfWp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -217,18 +217,18 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 			for (int i = 0; i < tfWp.length; i++) {
 				if (i < model.getWqp()[0].length) {
-					tfWp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
-					tfQp[i].setText(f.format(model.getWqp()[1][i]).toLowerCase());
+					tfWp[i].setValue(model.getWqp()[0][i]);
+					tfQp[i].setValue(model.getWqp()[1][i]);
 				} else {
 					tfWp[i].setText("");
 					tfQp[i].setText("");
 				}
 			}
 
-			tfK.setText(f.format(model.getK()).toLowerCase());
-
+			tfK.setValue(model.getK());
+			
 			if (model.getOrder() % 2 == 1) {
-				tfSigma.setText(f.format(model.getSigma()).toLowerCase());
+				tfSigma.setValue(model.getSigma());
 			} else {
 				tfSigma.setText("");
 			}

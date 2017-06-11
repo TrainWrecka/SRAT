@@ -1,4 +1,4 @@
-package programUtilites;
+package programUtilities;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;

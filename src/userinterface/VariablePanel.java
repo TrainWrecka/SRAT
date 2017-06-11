@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dataProcessing.Model;
-import programUtilites.MyBorderFactory;
+import programUtilities.MyBorderFactory;
 
 /**
  * 

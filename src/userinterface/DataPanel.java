@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import org.jfree.data.xy.XYSeries;
 
 import plots.Plots;
-import programUtilites.MyBorderFactory;
+import programUtilities.MyBorderFactory;
 
 /**
  * 

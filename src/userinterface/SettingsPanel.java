@@ -20,7 +20,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import programUtilites.JFormattedDoubleTextField;
+import programUtilities.JFormattedDoubleTextField;
 
 public class SettingsPanel extends JPanel implements ActionListener, ItemListener, ChangeListener, FocusListener {
 
@@ -44,17 +44,17 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
 
-	private JEngineerField tfLaguerre = new JEngineerField(3,0);
-	private JEngineerField tfSimplexOptimizerRelative = new JEngineerField(3,0);
-	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3,0);
-	private JEngineerField tfMaxEval = new JEngineerField(3,0);
-	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3,0);
-	
-//	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
-//	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
-//	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
-//	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
-//	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
+	private JEngineerField tfLaguerre = new JEngineerField(3, 0);
+	private JEngineerField tfSimplexOptimizerRelative = new JEngineerField(3, 0);
+	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3, 0);
+	private JEngineerField tfMaxEval = new JEngineerField(3, 0);
+	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3, 0);
+
+	//	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
+	//	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
+	//	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
+	//	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
+	//	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
 
 	private JRadioButton rbtFilterSignalYes = new JRadioButton("Yes");
 	private JRadioButton rbtFilterSignalNo = new JRadioButton("No");
@@ -159,11 +159,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		tfNelderMeadSimplexSteps.addFocusListener(this);
 		tfSimplexOptimizerAbsolute.addFocusListener(this);
 		tfSimplexOptimizerRelative.addFocusListener(this);
-		jsFilter.setEnabled(false);	
+		jsFilter.setEnabled(false);
 		cbAutoFilter.addItemListener(this);
 		jsFilter.addChangeListener(this);
-		
+
 		initFields();
+		updateValues();
 	}
 
 	//================================================================================
@@ -201,7 +202,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		lbFilter.setText("Filter accuracy in %   " + jsFilter.getValue());
 		updateValues();
 	}
-	
+
 	@Override
 	public void focusGained(FocusEvent e) {
 
@@ -217,34 +218,29 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	//================================================================================
 
 	private void initFields() {
-		tfLaguerre.setText("1e-5");
-		tfSimplexOptimizerRelative.setText("1e-24");
-		tfSimplexOptimizerAbsolute.setText("1e-24");
-		tfNelderMeadSimplexSteps.setText("0.1");
-		tfMaxEval.setText("5000");
+		tfLaguerre.setValue(1e-5);
+		tfSimplexOptimizerRelative.setValue(1e-24);
+		tfSimplexOptimizerAbsolute.setValue(1e-24);
+		tfNelderMeadSimplexSteps.setValue(0.1);
+		tfMaxEval.setValue(5000);
 		cbAutoFilter.setSelected(true);
 		rbtFilterSignalYes.setSelected(true);
 		rbtShowFilteredSignalNo.setSelected(true);
 		jsFilter.setValue(100);
+
 	}
 
 	private void updateValues() {
-		try {
-			double LaguerreAcc = Double.parseDouble(tfLaguerre.getText());
-			double[] simplexOpt = { Double.parseDouble(tfSimplexOptimizerRelative.getText()),
-					Double.parseDouble(tfSimplexOptimizerAbsolute.getText()) };
-			double nelderSteps = Double.parseDouble(tfNelderMeadSimplexSteps.getText());
-			int maxEval = Integer.parseInt(tfMaxEval.getText());
-			boolean doFilter = rbtFilterSignalYes.isSelected();
-			boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
-			boolean autoFilter = cbAutoFilter.isSelected();
-			int filterPercentage = jsFilter.getValue();
+		double LaguerreAcc = tfLaguerre.getValue();
+		double[] simplexOpt = { tfSimplexOptimizerRelative.getValue(), tfSimplexOptimizerAbsolute.getValue() };
+		double nelderSteps = tfNelderMeadSimplexSteps.getValue();
+		int maxEval = (int) tfMaxEval.getValue();
+		boolean doFilter = rbtFilterSignalYes.isSelected();
+		boolean showFiltered = rbtShowFilteredSignalYes.isSelected();
+		boolean autoFilter = cbAutoFilter.isSelected();
+		int filterPercentage = jsFilter.getValue();
 
-			controller.setSettings(new Object[] { LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered,
-					autoFilter, filterPercentage });
-		} catch (NumberFormatException e2) {
-			// TODO: handle exception
-			StatusBar.showStatus("Wrong number format");
-		}
+		controller.setSettings(new Object[] { LaguerreAcc, simplexOpt, nelderSteps, maxEval, doFilter, showFiltered, autoFilter,
+				filterPercentage });
 	}
 }

@@ -1,4 +1,4 @@
-package programUtilites;
+package programUtilities;
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
