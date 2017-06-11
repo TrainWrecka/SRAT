@@ -173,7 +173,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV- and Text-Files", "csv", "txt"));
 		
 		//add action listener
 		btLoad.addActionListener(this);
@@ -398,7 +398,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					leave = true;
 					reader = new CSVReader(new FileReader(file), separator[i]);
 					measurementList = reader.readAll();
-					Double.parseDouble(measurementList.get(0)[0]);
+					String text = measurementList.get(0)[0];
+					Double.parseDouble(measurementList.get(0)[0].trim());
 				} catch (NumberFormatException e) {
 					leave = false;
 				}
@@ -406,6 +407,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				if (leave) {
 					break;
 				}
+			}
+			
+			if(!leave){
+				throw new RuntimeException("Wrong separator in data");
 			}
 
 			reader.close();
