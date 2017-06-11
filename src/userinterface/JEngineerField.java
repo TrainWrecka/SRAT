@@ -707,7 +707,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 
 	@Override
 	protected void fireActionPerformed() {
-		System.out.println("fireActionPerformed");
+//		System.out.println("fireActionPerformed");
 		if (verifyer.verify(this))
 			super.fireActionPerformed();
 	}

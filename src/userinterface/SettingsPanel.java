@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -27,6 +28,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 
 	private Controller controller;
 
+	
+	DecimalFormat f = new DecimalFormat("####0");
+	
 	private JLabel lbLaguerre = new JLabel("Laguerrefilter Accuracy");
 	private JLabel lbSimplexOptimizerRelative = new JLabel("Simplex Optimizer relative Optimum");
 	private JLabel lbSimplexOptimizerAbsolute = new JLabel("Simplex Optimizer absolute Optimum");
@@ -45,7 +49,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JEngineerField tfLaguerre = new JEngineerField(3,0);
 	private JEngineerField tfSimplexOptimizerRelative = new JEngineerField(3,0);
 	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3,0);
-	private JEngineerField tfMaxEval = new JEngineerField(3,0);
+	private JEngineerField tfMaxEval = new JEngineerField(f,0);
 	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3,0);
 	
 	
@@ -156,6 +160,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		
 		add(btApply, new GridBagConstraints(2, 12, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
+		
+		tfLaguerre.setRange(1e-30, 1000e30);
+		tfMaxEval.setRange(1, 1000e30);
+		tfNelderMeadSimplexSteps.setRange(1e-30, 1000e30);
+		tfSimplexOptimizerAbsolute.setRange(1e-30,1000e30);
+		tfSimplexOptimizerRelative.setRange(1e-30,1000e30);
 		
 		
 

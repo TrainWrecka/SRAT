@@ -53,7 +53,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	DecimalFormat f = new DecimalFormat("##0.0#E0");
 	
-	DecimalFormat fd = new DecimalFormat("##00.0#E0");
 
 
 	// Labels
@@ -62,21 +61,22 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JLabel[] lbqp = new JLabel[5];
 
 	private JLabel lbK = new JLabel("K:");
+//	private JLabel lbOrdnung = new JLabel("<html>Polynomial <br>order: </html>");
 	private JLabel lbOrdnung = new JLabel("Order:");
 	private JLabel lbSigma = new JLabel("\u03C3:");
 
 	// Textfields
-//	private JEngineerField[] tfwp = new JEngineerField[5];
-//	private JEngineerField[] tfqp = new JEngineerField[5];
-//
-//	private JEngineerField tfSigma = new JEngineerField(3, 0);
-//	private JEngineerField tfK = new JEngineerField(3, 0);
-	
-	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
-	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
+	private JEngineerField[] tfwp = new JEngineerField[5];
+	private JEngineerField[] tfqp = new JEngineerField[5];
 
-	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
-	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
+	private JEngineerField tfSigma = new JEngineerField(4, 0);
+	private JEngineerField tfK = new JEngineerField(4, 0);
+	
+//	private JFormattedDoubleTextField[] tfwp = new JFormattedDoubleTextField[5];
+//	private JFormattedDoubleTextField[] tfqp = new JFormattedDoubleTextField[5];
+//
+//	private JFormattedDoubleTextField tfSigma = new JFormattedDoubleTextField(fd, 0);
+//	private JFormattedDoubleTextField tfK = new JFormattedDoubleTextField(fd, 0);
 
 
 	//file chooser
@@ -133,8 +133,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		// Array für wp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbwp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-//			tfwp[i] = new JEngineerField(3, 0);
-			tfwp[i] = new JFormattedDoubleTextField(fd, 0);
+			tfwp[i] = new JEngineerField(4, 0);
+//			tfwp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbwp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfwp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
@@ -142,19 +142,21 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 			lbwp[i].setEnabled(false);
 			tfwp[i].setEnabled(false);
+			tfwp[i].setRange(1e-30, 100e30);
 			wpPlacement = wpPlacement + 2;
 		}
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 			lbqp[i] = new JLabel("qp" + (i + 1) + ":");
-//			tfqp[i] = new JEngineerField(3, 0);
-			tfqp[i] = new JFormattedDoubleTextField(fd, 0);
+			tfqp[i] = new JEngineerField(4, 0);
+//			tfqp[i] = new JFormattedDoubleTextField(fd, 0);
 			add(lbqp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
 			add(tfqp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 			lbqp[i].setEnabled(false);
 			tfqp[i].setEnabled(false);
+			tfqp[i].setRange(1e-30, 100e30);
 			qpPlacement = qpPlacement + 2;
 		}
 
@@ -170,7 +172,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
-		add(cbOrdnungsauswahl, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+		add(cbOrdnungsauswahl, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_END,
 				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
@@ -187,6 +189,9 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		btRun.setEnabled(false);
 		btCancel.setEnabled(false);
 		rbtManually.setEnabled(false);
+		
+		tfK.setRange(1e-30, 100e30);
+		tfSigma.setRange(-100e30, -1e-30);
 
 	}
 
@@ -324,7 +329,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				tfqp[i].setEnabled(false);
 			}
 		}
-		if ((Ordnung1 % 2) != 0 & rbtManually.isSelected() == false) {
+		if ((Ordnung1 % 2) != 0 & rbtManually.isSelected()) {
 			lbSigma.setEnabled(true);
 			tfSigma.setEnabled(true);
 		} else {
@@ -348,18 +353,21 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 			for (int i = 0; i < tfwp.length; i++) {
 				if (i < model.getWqp()[0].length) {
-					tfwp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
-					tfqp[i].setText(f.format(model.getWqp()[1][i]).toLowerCase());
+//					tfwp[i].setText(f.format(model.getWqp()[0][i]).toLowerCase());
+//					tfqp[i].setText(f.format(model.getWqp()[1][i]).toLowerCase());
+					tfwp[i].setValue(model.getWqp()[0][i]);
+					tfqp[i].setValue(model.getWqp()[1][i]);
 				} else {
 					tfwp[i].setText("");
 					tfqp[i].setText("");
 				}
 			}
 
-			tfK.setText(f.format(model.getK()).toLowerCase());
+			tfK.setValue(model.getK());
 
 			if (model.getOrder() % 2 == 1) {
-				tfSigma.setText(f.format(model.getSigma()).toLowerCase());
+//				tfSigma.setText(f.format(model.getSigma()).toLowerCase());
+				tfSigma.setValue(model.getSigma());
 			} else {
 				tfSigma.setText("");
 			}
