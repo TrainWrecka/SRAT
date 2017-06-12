@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
@@ -19,6 +20,7 @@ import dataProcessing.Model;
 import userinterface.Controller;
 import userinterface.MenuBar;
 import userinterface.StatusBar;
+import userinterface.Utility;
 import userinterface.View;
 
 /**
@@ -40,6 +42,7 @@ public class StepResponseApproximationTool extends JFrame {
 	private StatusBar statusBar = new StatusBar();
 	Dimension screenSize= Toolkit.getDefaultToolkit().getScreenSize();	// ScreenSize Problem
 	int screenRes= Toolkit.getDefaultToolkit().getScreenResolution();	// ScreenSize Problem
+	private Image icon = Utility.loadResourceImage("SRAT_LOGO.png");
 
 	int height =screenSize.height*10/11 ;		// ScreenSize Problem
 	int width = screenSize.width *2/4;			// ScreenSize Problem
@@ -54,7 +57,8 @@ public class StepResponseApproximationTool extends JFrame {
 
 	public void init() {
 		setPreferredSize(new Dimension(width,height));
-
+		setTitle("SRAT - Step Response Approximation Tool");
+		setIconImage(icon);
 		
 		
 		model.addObserver(view);

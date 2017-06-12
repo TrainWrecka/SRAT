@@ -43,7 +43,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	private int wpPlacement = 5;
 	private int qpPlacement = 6;
-	
+
 	// Buttons
 	private JButton btLoad = new JButton("Load");
 	public JButton btRun = new JButton("Run");
@@ -51,10 +51,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 	private JRadioButton rbtAutomatically = new JRadioButton("Automatically");
 	private JRadioButton rbtManually = new JRadioButton("Manually");
-	
+
 	// Buttongroup
 	private ButtonGroup groupAutoManual = new ButtonGroup();
-	
+
 	// JCombobox
 	private String comboBoxList[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
 	private JComboBox cbOrder = new JComboBox(comboBoxList);
@@ -88,11 +88,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	//================================================================================
 	// Constructor
 	//================================================================================
-	
+
 	public InputPanel() {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder("Input"));
-		
+
 		// create Buttongroup
 		rbtAutomatically.setSelected(true);
 		groupAutoManual.add(rbtAutomatically);
@@ -113,8 +113,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(10, 5, 0, 10), 0, 0));
 
 		// add Labels to Panel	
-		add(lbOrder, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
+		add(lbOrder, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
+				new Insets(10, 0, 0, 0), 0, 0));
 
 		// Label und Texfield für k platzieren
 		add(lbK, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START, GridBagConstraints.NONE,
@@ -139,7 +139,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfWp[i].setEnabled(false);
 			wpPlacement = wpPlacement + 2;
 		}
-		
+
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 
@@ -154,7 +154,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfQp[i].setEnabled(false);
 			qpPlacement = qpPlacement + 2;
 		}
-		
+
 		lbSigma.setEnabled(false);
 		tfSigma.setEnabled(false);
 
@@ -165,8 +165,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
-		add(cbOrder, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(10, 0, 0, 0), 0, 0));
+		add(cbOrder, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+				new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -174,7 +174,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV- and Text-Files", "csv", "txt"));
-		
+
 		//add action listener
 		btLoad.addActionListener(this);
 		btRun.addActionListener(this);
@@ -193,16 +193,10 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		cbOrder.setEnabled(false);
 	}
 
-
-	
-
-
-
 	//================================================================================
 	// Public Methods
 	//================================================================================
 
-	
 	/**
 	 * Falls deine Approximation durchgeführt wurde, werden die Werte aus dem Model in die 
 	 * entsprechenden Textfelder geschrieben. Im anderen Fall wird der Text zurückgesetzt.
@@ -226,7 +220,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			}
 
 			tfK.setValue(model.getK());
-			
+
 			if (model.getOrder() % 2 == 1) {
 				tfSigma.setValue(model.getSigma());
 			} else {
@@ -242,7 +236,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfSigma.setText("");
 		}
 	}
-	
+
 	//================================================================================
 	// Events
 	//================================================================================
@@ -267,11 +261,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				rbtManually.setEnabled(false);
 				try {
 					controller.setMeasurement(readCSV());
-					
+
 					rbtAutomatically.setEnabled(true);
 					cbOrder.setEnabled(true);
 					lbOrder.setEnabled(true);
-					
+
 				} catch (NumberFormatException e1) {
 					StatusBar.showStatus("Wrong number format");
 				} catch (ArrayIndexOutOfBoundsException e2) {
@@ -288,27 +282,22 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			if (rbtManually.isSelected() == true) {
 				double[][] wqp = new double[2][(int) Math.floor(order / 2)];
 				double sigma = 0;
-				try {
-					double K = Double.parseDouble(tfK.getText());
-					for (int i = 0; i < wqp[0].length; i++) {
-						wqp[0][i] = Double.parseDouble(tfWp[i].getText());
-						wqp[1][i] = Double.parseDouble(tfQp[i].getText());
-					}
-
-					if (order % 2 == 0) {
-						sigma = 0;
-					} else {
-						sigma = Double.parseDouble(tfSigma.getText());
-					}
-
-					controller.setK(K);
-					controller.setSigma(sigma);
-					controller.setWqp(wqp);
-					controller.approximateManual();
-				} catch (NumberFormatException e2) {
-					StatusBar.showStatus("Wrong number format");
+				double K = tfK.getValue();
+				for (int i = 0; i < wqp[0].length; i++) {
+					wqp[0][i] = tfWp[i].getValue();
+					wqp[1][i] = tfQp[i].getValue();
 				}
 
+				if (order % 2 == 0) {
+					sigma = 0;
+				} else {
+					sigma = tfSigma.getValue();
+				}
+
+				controller.setK(K);
+				controller.setSigma(sigma);
+				controller.setWqp(wqp);
+				controller.approximateManual();
 			} else {
 				controller.approximateAuto();
 			}
@@ -351,7 +340,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	 * für die entsprechende Ordnung aktivieren und die restlichen Labels deaktivieren.
 	 */
 	public void itemStateChanged(ItemEvent e) {
-		order = Double.parseDouble((String)cbOrder.getSelectedItem());
+		order = Double.parseDouble((String) cbOrder.getSelectedItem());
 
 		for (int i = 0; i < 5; i++) {
 
@@ -367,7 +356,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				tfQp[i].setEnabled(false);
 			}
 		}
-		
+
 		if ((order % 2) != 0 & rbtManually.isSelected()) {
 			lbSigma.setEnabled(true);
 			tfSigma.setEnabled(true);
@@ -376,17 +365,16 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			tfSigma.setEnabled(false);
 		}
 	}
-	
+
 	//================================================================================
 	// Private Methods
 	//================================================================================
-	
+
 	private List<String[]> readCSV() {
 		List<String[]> measurementList = null;
 		CSVReader reader = null;
 		char[] separator = { ',', ' ', '\t' };
 		boolean leave = false;
-
 
 		try {
 			File file = fileChooser.getSelectedFile();
@@ -399,7 +387,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					reader = new CSVReader(new FileReader(file), separator[i]);
 					measurementList = reader.readAll();
 					String text = measurementList.get(0)[0];
-					Double.parseDouble(measurementList.get(0)[0].trim());
+					Double.parseDouble(measurementList.get(0)[0]);
 				} catch (NumberFormatException e) {
 					leave = false;
 				}
@@ -408,8 +396,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					break;
 				}
 			}
-			
-			if(!leave){
+
+			if (!leave) {
 				throw new RuntimeException("Wrong separator in data");
 			}
 
@@ -424,7 +412,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 
 		return measurementList;
 	}
-	
 
 	//================================================================================
 	// Setter and Getter

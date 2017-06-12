@@ -25,12 +25,6 @@ import userinterface.StatusBar;
 public class Approximation {
 
 	//================================================================================
-	// Properties
-	//================================================================================
-
-	private boolean running;
-
-	//================================================================================
 	// Constructor 
 	//================================================================================
 
@@ -88,16 +82,6 @@ public class Approximation {
 		StatusBar.showStatus("Evaluations: " + target.evals);
 
 		return generateStep(approxPoles, timeData, order);
-	}
-
-	/**
-	 * Überprüft ob die Approximation noch am laufen ist.
-	 * @return false falls die Approximaiton steckengeblieben ist.
-	 */
-	public boolean checkRunning() {
-		boolean ret = running;
-		running = false;
-		return ret;
 	}
 
 	//================================================================================
@@ -184,8 +168,6 @@ public class Approximation {
 			this.t = t;
 			this.y_soll = y_soll;
 			this.order = order;
-
-			running = true;
 		}
 
 		public double value(double[] variables) {
