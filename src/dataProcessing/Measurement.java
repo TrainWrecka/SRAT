@@ -168,14 +168,6 @@ public class Measurement {
 	}
 
 	/**
-	 * Prüft ob die Approximation noch am laufen ist.
-	 * @return false falls der LaguerreSolver das Programm blockiert.
-	 */
-	public boolean checkRunning() {
-		return approximation.checkRunning();
-	}
-
-	/**
 	 * Aktualisiert den Error.
 	 */
 	public void recalculateError() {

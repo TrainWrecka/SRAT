@@ -125,14 +125,6 @@ public class Model extends Observable {
 	}
 
 	/**
-	 * Prüft ob die Approximation noch am laufen ist.
-	 * @return false falls der LaguerreSolver das Programm blockiert.
-	 */
-	public boolean checkRunning() {
-		return measurement.checkRunning();
-	}
-
-	/**
 	 * Prüft ob eine Messung geladen ist.
 	 * @return false falls keine Messung geladen ist.
 	 */
