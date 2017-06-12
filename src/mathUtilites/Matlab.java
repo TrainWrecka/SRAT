@@ -486,7 +486,7 @@ public class Matlab {
 	}
 
 	public static final Complex[] roots(double[] poly) {
-		final LaguerreSolver solver = new LaguerreSolver(laguerreAccuracy/*1e-16,1e-10*/);
+		final LaguerreSolver solver = new LaguerreSolver(laguerreAccuracy);
 		double[] p = new double[poly.length];
 
 		// Koeffizient der höchsten Potenz auf durch Multiplikation mit einer

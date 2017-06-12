@@ -75,8 +75,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private JEngineerField[] tfWp = new JEngineerField[5];
 	private JEngineerField[] tfQp = new JEngineerField[5];
 
-	private JEngineerField tfSigma = new JEngineerField(3, 0);
-	private JEngineerField tfK = new JEngineerField(3, 0);
+	private JEngineerField tfSigma = new JEngineerField(4, 0);
+	private JEngineerField tfK = new JEngineerField(4, 0);
 
 	//file chooser
 	private JFileChooser fileChooser = new JFileChooser();
@@ -128,7 +128,7 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		for (int i = 0; i < 5; i++) {
 
 			lbWp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfWp[i] = new JEngineerField(3, 0);
+			tfWp[i] = new JEngineerField(4, 0);
 			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
@@ -138,13 +138,15 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbWp[i].setEnabled(false);
 			tfWp[i].setEnabled(false);
 			wpPlacement = wpPlacement + 2;
+			
+			tfWp[i].setRange(1e-30, 100e30);
 		}
 
 		// Array für qp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 
 			lbQp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfQp[i] = new JEngineerField(3, 0);
+			tfQp[i] = new JEngineerField(4, 0);
 			add(lbQp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
@@ -153,6 +155,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			lbQp[i].setEnabled(false);
 			tfQp[i].setEnabled(false);
 			qpPlacement = qpPlacement + 2;
+			
+			tfQp[i].setRange(1e-30, 100e30);
 		}
 
 		lbSigma.setEnabled(false);
@@ -189,8 +193,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		btCancel.setEnabled(false);
 		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
-
 		cbOrder.setEnabled(false);
+		
+		tfK.setRange(1e-30, 100e30);		
+		tfSigma.setRange(-100e30, -1e-30);		
+
 	}
 
 	//================================================================================

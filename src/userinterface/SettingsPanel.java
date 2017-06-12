@@ -9,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -35,19 +36,18 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JLabel lbSimplexOptimizerAbsolute = new JLabel("Simplex Optimizer absolute Optimum");
 	private JLabel lbMaxEval = new JLabel("Max Eval length");
 	private JLabel lbNelderMeadSimplexSteps = new JLabel("Nelder Mead Simplex Steps");
-
 	private JLabel lbFilterSignal = new JLabel("Filter Signal");
 	private JLabel lbShowFilteredSignal = new JLabel("Show filtered Signal");
-
 	private JLabel lbFill = new JLabel("");
 	private JLabel lbFilter = new JLabel();
-
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
+	
+	DecimalFormat f = new DecimalFormat("####0");
 
 	private JEngineerField tfLaguerre = new JEngineerField(3, 0);
 	private JEngineerField tfSimplexOptimizerRelative = new JEngineerField(3, 0);
 	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3, 0);
-	private JEngineerField tfMaxEval = new JEngineerField(3, 0);
+	private JEngineerField tfMaxEval = new JEngineerField(f, 0);
 	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3, 0);
 
 	//	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
@@ -146,6 +146,12 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 				new Insets(10, 0, 0, 10), 0, 0));
 		add(btDefaults, new GridBagConstraints(1, 12, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
+		
+		tfLaguerre.setRange(1e-30,1);		
+		tfMaxEval.setRange(1, 1000e30);		
+		tfNelderMeadSimplexSteps.setRange(1e-30, 1);		
+		tfSimplexOptimizerAbsolute.setRange(1e-30, 1);		
+		tfSimplexOptimizerRelative.setRange(1e-30, 1);
 
 		btDefaults.addActionListener(this);
 		cbAutoFilter.addActionListener(this);
