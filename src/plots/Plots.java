@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Shape;
+import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
@@ -19,7 +20,6 @@ import org.jfree.util.ShapeUtilities;
 
 import programUtilities.JFreeChartDPIFix;
 
-
 /**
  * 
  * @author Lukas Loosli
@@ -30,17 +30,16 @@ public class Plots extends JPanel {
 	//================================================================================
 	// Properties
 	//================================================================================
-	
+
 	public XYSeriesCollection dataset = new XYSeriesCollection();
 
 	public ChartPanel stepresponseChartPanel;
 	public ChartPanel zeroesChartPanel;
 	public ChartPanel errorChartPanel;
-	
+
 	//================================================================================
 	// Constructor
 	//================================================================================
-
 
 	public Plots(String title, String xylineOderscatter, String xAchse, String yAchse) {
 		this.setLayout(new GridBagLayout());
@@ -52,14 +51,14 @@ public class Plots extends JPanel {
 				createErrorPlot(title, xAchse, yAchse);
 			}
 
-		}else if (xylineOderscatter.toLowerCase() == "scatter") {
+		} else if (xylineOderscatter.toLowerCase() == "scatter") {
 			createPolesPlot(title);
 		}
 	}
 	//================================================================================
 	// Public Methods
 	//================================================================================
-	
+
 	/**
 	 * Fügt dem Plot eine Serie mit Daten hinzu.
 	 * @param series Serie mit Daten.
@@ -74,12 +73,12 @@ public class Plots extends JPanel {
 	public void clearSeries() {
 		dataset.removeAllSeries();
 	}
-	
+
 	//================================================================================
 	// Private Methods
 	//================================================================================
-	
-	private void createStepresponsePlot(String title, String xAchse, String yAchse){
+
+	private void createStepresponsePlot(String title, String xAchse, String yAchse) {
 		JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
 		JFreeChartDPIFix.applyChartTheme(chart);
 		stepresponseChartPanel = new ChartPanel(chart);
@@ -92,13 +91,13 @@ public class Plots extends JPanel {
 		plot.setDomainGridlinePaint(Color.black);
 		plot.setRangeGridlinePaint(Color.black);
 	}
-	
-	private void createErrorPlot(String title, String xAchse, String yAchse){
+
+	private void createErrorPlot(String title, String xAchse, String yAchse) {
 		JFreeChart chart = ChartFactory.createXYLineChart(title, xAchse, yAchse, dataset);
 		errorChartPanel = new ChartPanel(chart);
 		JFreeChartDPIFix.applyChartTheme(chart);
-		add(errorChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		add(errorChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0));
 		errorChartPanel.setMouseWheelEnabled(true);
 		errorChartPanel.setMouseZoomable(true);
 		XYPlot plot = (XYPlot) chart.getPlot();
@@ -106,13 +105,13 @@ public class Plots extends JPanel {
 		plot.setDomainGridlinePaint(Color.black);
 		plot.setRangeGridlinePaint(Color.black);
 	}
-	
-	private void createPolesPlot(String title){
+
+	private void createPolesPlot(String title) {
 		JFreeChart chart = ChartFactory.createScatterPlot(title, "Real", "Imaginary", dataset);
 		JFreeChartDPIFix.applyChartTheme(chart);
 		zeroesChartPanel = new ChartPanel(chart);
-		add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+		add(zeroesChartPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0));
 		XYPlot plot = (XYPlot) chart.getPlot();
 		zeroesChartPanel.setMouseWheelEnabled(true);
 		zeroesChartPanel.setMouseZoomable(true);
@@ -120,7 +119,13 @@ public class Plots extends JPanel {
 		plot.setDomainGridlinePaint(Color.black);
 		plot.setRangeGridlinePaint(Color.black);
 
-		Shape cross = ShapeUtilities.createDiagonalCross(15, 3.0f);
+		Shape cross;
+
+		if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() >= 3700) {
+			cross = ShapeUtilities.createDiagonalCross(15, 3.0f);
+		} else {
+			cross = ShapeUtilities.createDiagonalCross(10, 1.5f);
+		}
 		XYItemRenderer renderer = plot.getRenderer();
 		renderer.setSeriesShape(0, cross);
 	}

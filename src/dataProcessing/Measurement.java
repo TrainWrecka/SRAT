@@ -173,7 +173,7 @@ public class Measurement {
 	public void recalculateError() {
 		errorData = calculateDifference(approxData, stepData);
 		maxAbsError = Matlab.max(Matlab.abs((errorData)));
-		}
+	}
 
 	//================================================================================
 	// Private Methods
@@ -425,7 +425,7 @@ public class Measurement {
 		}
 
 		maxAbsError = Matlab.max(Matlab.abs((errorData)));
-		
+
 		if (order % 2 == 1) {
 			sigma = poles[poles.length - 1].getReal();
 		}

@@ -14,7 +14,7 @@ import programUtilities.MyBorderFactory;
  * @author Thomas Frei
  *
  */
-public class DataPanel extends JPanel{
+public class DataPanel extends JPanel {
 
 	//================================================================================
 	// Properties
@@ -25,17 +25,17 @@ public class DataPanel extends JPanel{
 	//================================================================================
 	// Constructor
 	//================================================================================
-	
+
 	public DataPanel(Plots plot) {
 		super(new GridBagLayout());
 		setBorder(MyBorderFactory.createMyBorder(""));
 		this.plot = plot;
 	}
-	
+
 	//================================================================================
 	// Public Methods
 	//================================================================================
-	
+
 	/**
 	 * Fügt dem Plot eine Serie mit Daten hinzu.
 	 * @param series Serie mit Daten.
@@ -43,11 +43,11 @@ public class DataPanel extends JPanel{
 	public void addData(XYSeries series) {
 		plot.addSeries(series);
 	}
-	
+
 	/**
 	 * Löscht alle Daten der Serie vom Plot.
 	 */
-	public void clearData(){
+	public void clearData() {
 		plot.clearSeries();
 	}
 }

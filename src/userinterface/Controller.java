@@ -31,7 +31,7 @@ public class Controller {
 	//================================================================================
 	// Public Methods (excl. Setter and Getter)
 	//================================================================================
-	
+
 	/**
 	 * Übergibt dem Controller die View zum Ein- und Ausschalten der Buttons.
 	 * @param view view der Applikation.
@@ -88,11 +88,11 @@ public class Controller {
 		view.inputPanel.btRun.setEnabled(true);
 		view.inputPanel.btCancel.setEnabled(false);
 	}
-	
+
 	//================================================================================
 	// Setter and Getter
 	//================================================================================
-	
+
 	public void setSettings(Object[] settings) {
 		model.setSettings(settings);
 	}

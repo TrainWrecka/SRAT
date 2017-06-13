@@ -18,7 +18,7 @@ public class Matlab {
 	static final SplineInterpolator interpolator = new SplineInterpolator();
 
 	public static double laguerreAccuracy = 1e-6;
-	
+
 	public static double acosh(double x) {
 		return Math.log(x + Math.sqrt(x * x - 1.0));
 	}
@@ -537,24 +537,24 @@ public class Matlab {
 
 		res = sort(res);
 
-//		// Imaginärteil von NS, die nich konjugiert komplex vorkommen, auf Null
-//		// setzen.
-//		boolean[] cc = new boolean[res.length];
-//		for (int j = 0; j < res.length - 1; j++) {
-//			if (assertEq(res[j].getReal(), res[j + 1].getReal(), 10)
-//					&& assertEq(res[j].getImaginary(), -res[j + 1].getImaginary(), 10)) {
-//				cc[j] = cc[j + 1] = true;
-//			}
-//		}
-//		for (int j = 0; j < cc.length; j++) {
-//			if (!cc[j])
-//				res[j] = new Complex(res[j].getReal(), 0.0);
-//			else {
-//				res[j] = new Complex((res[j].getReal() + res[j + 1].getReal()) / 2.0,
-//						(res[j].getImaginary() - res[j + 1].getImaginary()) / 2.0);
-//				res[j + 1] = new Complex(res[j].getReal(), -res[j++].getImaginary());
-//			}
-//		}
+		//		// Imaginärteil von NS, die nich konjugiert komplex vorkommen, auf Null
+		//		// setzen.
+		//		boolean[] cc = new boolean[res.length];
+		//		for (int j = 0; j < res.length - 1; j++) {
+		//			if (assertEq(res[j].getReal(), res[j + 1].getReal(), 10)
+		//					&& assertEq(res[j].getImaginary(), -res[j + 1].getImaginary(), 10)) {
+		//				cc[j] = cc[j + 1] = true;
+		//			}
+		//		}
+		//		for (int j = 0; j < cc.length; j++) {
+		//			if (!cc[j])
+		//				res[j] = new Complex(res[j].getReal(), 0.0);
+		//			else {
+		//				res[j] = new Complex((res[j].getReal() + res[j + 1].getReal()) / 2.0,
+		//						(res[j].getImaginary() - res[j + 1].getImaginary()) / 2.0);
+		//				res[j + 1] = new Complex(res[j].getReal(), -res[j++].getImaginary());
+		//			}
+		//		}
 
 		return res;
 	}
@@ -626,17 +626,6 @@ public class Matlab {
 		return p;
 	}
 
-	public static void main(String[] args) {
-		Filter filter = FilterFactory.createButter(4, 1.0);
-
-		Complex[] rA = roots(filter.A);
-
-		for (int i = 0; i < rA.length; i++) {
-			System.out.println(rA[i]);
-		}
-
-	}
-
 	/**
 	 * Gibt das Maximum aus einem Datensatz zurück.
 	 * @param data Datensatz.
@@ -677,17 +666,21 @@ public class Matlab {
 		}
 		return Math.sqrt(sum);
 	}
-	
+
 	/**
 	 * Berechnet den Absolutwert jeder Arrayelemente
 	 * @param data Arraydaten
 	 * @return Array mit Absolutwerten
 	 */
-	public static double[] abs(double[] data){
+	public static double[] abs(double[] data) {
 		double[] absArray = new double[data.length];
 		for (int i = 0; i < data.length; i++) {
 			absArray[i] = Math.abs(data[i]);
 		}
 		return absArray;
+	}
+
+	public static void main(String[] args) {
+
 	}
 }

@@ -110,19 +110,4 @@ public class SVTools {
 
 		return new Object[] { h, t };
 	}
-
-	public static void main(String[] args) {
-		double[] A = { 1.0, Math.sqrt(2.0), 1.0 };
-		double[] B = { 1.0 };
-
-		Object[] results = step(B, A, Matlab.linspace(0.0, 15.0, 100));
-		double[] h = (double[]) results[0];
-		double[] t = (double[]) results[1];
-
-		for (int i = 0; i < h.length; i++) {
-			System.out.println("" + h[i]);
-		}
-
-	}
-
 }

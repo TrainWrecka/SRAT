@@ -23,8 +23,7 @@ public class JFreeChartDPIFix extends JFreeChart {
 	}
 
 	public static void applyChartTheme(JFreeChart chart) {
-		final StandardChartTheme chartTheme = (StandardChartTheme) org.jfree.chart.StandardChartTheme
-				.createJFreeTheme();
+		final StandardChartTheme chartTheme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
 
 		final Font oldExtraLargeFont = chartTheme.getExtraLargeFont();
 		final Font oldLargeFont = chartTheme.getLargeFont();

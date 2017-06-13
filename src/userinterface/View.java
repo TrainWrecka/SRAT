@@ -8,9 +8,8 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-
 public class View extends JPanel implements Observer {
-	
+
 	//================================================================================
 	// Properties
 	//================================================================================
@@ -22,7 +21,7 @@ public class View extends JPanel implements Observer {
 	//================================================================================
 	// Constructor
 	//================================================================================
-	
+
 	public View(Controller controller) {
 		super(new GridBagLayout());
 		controller.setView(this);
@@ -37,7 +36,7 @@ public class View extends JPanel implements Observer {
 	//================================================================================
 	// Public Methods
 	//================================================================================
-	
+
 	/**
 	 * Updated das Input- und Output Panel.
 	 */

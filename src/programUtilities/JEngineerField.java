@@ -41,8 +41,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	public static final int ALL = 0, POS = 1, NEG = 2, NOZERO = 3, POSNOZERO = 4, NEGNOZERO = 5;
 	private static final long serialVersionUID = 1L;
 	private static final String[] UNITS = { "f", "p", "n", "u", "m", " ", "k", "M", "G", "T", "P" };
-	private static final String[] EXP_UNITS = { "e-15", "e-12", "e-9", "e-6", "e-3", "e0", "e3", "e6", "e9", "e12",
-			"e15" };
+	private static final String[] EXP_UNITS = { "e-15", "e-12", "e-9", "e-6", "e-3", "e0", "e3", "e6", "e9", "e12", "e15" };
 	private JEngineerField txtField = this;
 	private JCheckBoxMenuItem cbmenuInputExp;
 	private JCheckBoxMenuItem cbmenuInputUnit;
@@ -103,8 +102,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	 */
 	public JEngineerField(int digits, int col) {
 		super(col);
-		if (digits < 3 || digits > 16)
-			throw new IllegalArgumentException();
+		if (digits < 3 || digits > 16) throw new IllegalArgumentException();
 		this.digits = digits;
 		init();
 	}
@@ -124,8 +122,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	 */
 	public JEngineerField(int digits, int col, int outputmode) {
 		super(col);
-		if (digits < 3 || digits > 16)
-			throw new IllegalArgumentException();
+		if (digits < 3 || digits > 16) throw new IllegalArgumentException();
 		this.digits = digits;
 		this.outputMode = outputmode;
 		init();
@@ -133,12 +130,10 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 
 	public JEngineerField(int digits, int col, String stEReihe) {
 		super(col);
-		if (digits < 3 || digits > 16)
-			throw new IllegalArgumentException();
+		if (digits < 3 || digits > 16) throw new IllegalArgumentException();
 		this.digits = digits;
 		try {
 			String[] s = stEReihe.trim().toUpperCase().split("[E ]+");
-			System.out.println(s);
 			nEReihe = Integer.parseInt(s[1]);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException();
@@ -173,35 +168,32 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 		DecimalFormatSymbols symbol = new DecimalFormatSymbols();
 		final char systemDecimalSeperator = symbol.getDecimalSeparator();
 		String returnVal = "";
-		if (val == 0)
-			return String.format("%1." + (digits - 1) + "f", 0.0);
+		if (val == 0) return String.format("%1." + (digits - 1) + "f", 0.0);
 		int exp = (int) Math.floor(Math.log10(Math.abs(val)));
 		int engExp = (int) Math.floor(exp / 3.0) * 3;
 		int preFix = (((exp + 330) % 3) + 1);
 		double engVal = val / Math.pow(10.0, engExp);
 		String stFormatter = "";
 		switch (outputmode) {
-		case JEngineerField.FLOAT:
-			stFormatter = "%." + (digits) + "f";
-			returnVal = (String.format(stFormatter, val)).trim();
-			break;
-		case JEngineerField.ENG:
-			stFormatter = "%" + preFix + "." + (digits - preFix) + "f";
-			if (engExp != 0)
-				stFormatter += "e%d";
-			returnVal = (String.format(stFormatter, engVal, engExp)).trim();
-			break;
-		case JEngineerField.UNIT:
-			stFormatter = "%" + preFix + "." + (digits - preFix) + "f";
-			try {
-				String unit = JEngineerField.UNITS[5 + engExp / 3];
-				returnVal = (String.format(stFormatter, engVal) + unit.trim()).trim();
-			} catch (Exception ex) {
-				if (engExp != 0)
-					stFormatter += "e%d";
+			case JEngineerField.FLOAT:
+				stFormatter = "%." + (digits) + "f";
+				returnVal = (String.format(stFormatter, val)).trim();
+				break;
+			case JEngineerField.ENG:
+				stFormatter = "%" + preFix + "." + (digits - preFix) + "f";
+				if (engExp != 0) stFormatter += "e%d";
 				returnVal = (String.format(stFormatter, engVal, engExp)).trim();
-			}
-			break;
+				break;
+			case JEngineerField.UNIT:
+				stFormatter = "%" + preFix + "." + (digits - preFix) + "f";
+				try {
+					String unit = JEngineerField.UNITS[5 + engExp / 3];
+					returnVal = (String.format(stFormatter, engVal) + unit.trim()).trim();
+				} catch (Exception ex) {
+					if (engExp != 0) stFormatter += "e%d";
+					returnVal = (String.format(stFormatter, engVal, engExp)).trim();
+				}
+				break;
 		}
 		returnVal = returnVal.replace('.', systemDecimalSeperator);
 		return returnVal;
@@ -258,12 +250,10 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 
 		if (nEReihe != 0) {
 			if (e.getWheelRotation() < 0) {
-				if (index == mEReihe.length - 1)
-					exp *= 10.0;
+				if (index == mEReihe.length - 1) exp *= 10.0;
 				setValue(mEReihe[(nEReihe + index + 1) % nEReihe] * exp);
 			} else {
-				if (index == 0)
-					exp /= 10.0;
+				if (index == 0) exp /= 10.0;
 				setValue(mEReihe[(nEReihe + index - 1) % nEReihe] * exp);
 			}
 		}
@@ -365,8 +355,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	 *            The new disabled text.
 	 */
 	public void setDisabledText(String disabledText) {
-		if (disabledText != null)
-			this.disabledText = disabledText;
+		if (disabledText != null) this.disabledText = disabledText;
 	}
 
 	/**
@@ -405,8 +394,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	 *            The new error text.
 	 */
 	public void setErrorText(String errText) {
-		if (errText != null)
-			this.errorText = errText;
+		if (errText != null) this.errorText = errText;
 	}
 
 	/**
@@ -468,48 +456,48 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	 */
 	public void setRange(int rangeSpecifyer) {
 		switch (rangeSpecifyer) {
-		case ALL:
-			minValue = -Double.MAX_VALUE;
-			maxValue = Double.MAX_VALUE;
-			zeroEnabled = true;
-			setToolTipText("Wert \u2208 {\u211D}");
-			break;
-		case POS:
-			minValue = 0;
-			maxValue = Double.MAX_VALUE;
-			zeroEnabled = true;
-			setToolTipText("Wert \u2265 0");
-			break;
-		case NEG:
-			minValue = -Double.MAX_VALUE;
-			maxValue = 0;
-			zeroEnabled = true;
-			setToolTipText("Wert \u2264 0");
-			break;
-		case NOZERO:
-			minValue = -Double.MAX_VALUE;
-			maxValue = Double.MAX_VALUE;
-			zeroEnabled = false;
-			setToolTipText("Wert \u2208 {\u211D\\0}");
-			break;
-		case POSNOZERO:
-			minValue = 0;
-			maxValue = Double.MAX_VALUE;
-			zeroEnabled = false;
-			setToolTipText("Wert > 0");
-			break;
-		case NEGNOZERO:
-			minValue = -Double.MAX_VALUE;
-			maxValue = 0;
-			zeroEnabled = false;
-			setToolTipText("Wert < 0");
-			break;
-		default:
-			minValue = -Double.MAX_VALUE;
-			maxValue = Double.MAX_VALUE;
-			zeroEnabled = true;
-			setToolTipText("Wert \u2208 {\u211D}");
-			break;
+			case ALL:
+				minValue = -Double.MAX_VALUE;
+				maxValue = Double.MAX_VALUE;
+				zeroEnabled = true;
+				setToolTipText("Wert \u2208 {\u211D}");
+				break;
+			case POS:
+				minValue = 0;
+				maxValue = Double.MAX_VALUE;
+				zeroEnabled = true;
+				setToolTipText("Wert \u2265 0");
+				break;
+			case NEG:
+				minValue = -Double.MAX_VALUE;
+				maxValue = 0;
+				zeroEnabled = true;
+				setToolTipText("Wert \u2264 0");
+				break;
+			case NOZERO:
+				minValue = -Double.MAX_VALUE;
+				maxValue = Double.MAX_VALUE;
+				zeroEnabled = false;
+				setToolTipText("Wert \u2208 {\u211D\\0}");
+				break;
+			case POSNOZERO:
+				minValue = 0;
+				maxValue = Double.MAX_VALUE;
+				zeroEnabled = false;
+				setToolTipText("Wert > 0");
+				break;
+			case NEGNOZERO:
+				minValue = -Double.MAX_VALUE;
+				maxValue = 0;
+				zeroEnabled = false;
+				setToolTipText("Wert < 0");
+				break;
+			default:
+				minValue = -Double.MAX_VALUE;
+				maxValue = Double.MAX_VALUE;
+				zeroEnabled = true;
+				setToolTipText("Wert \u2208 {\u211D}");
+				break;
 		}
 	}
 
@@ -548,22 +536,19 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 		popupMenu.add(menuOutput);
 		group = new ButtonGroup();
 		final JRadioButtonMenuItem rbmenuOutputEng = new JRadioButtonMenuItem("Engineering Notation");
-		if (outputMode == JEngineerField.ENG)
-			rbmenuOutputEng.setSelected(true);
+		if (outputMode == JEngineerField.ENG) rbmenuOutputEng.setSelected(true);
 		rbmenuOutputEng.addActionListener(this);
 		rbmenuOutputEng.setActionCommand("" + JEngineerField.ENG);
 		group.add(rbmenuOutputEng);
 		menuOutput.add(rbmenuOutputEng);
 		final JRadioButtonMenuItem rbmenuOutputUnit = new JRadioButtonMenuItem("Unit Prefixes");
-		if (outputMode == JEngineerField.UNIT)
-			rbmenuOutputUnit.setSelected(true);
+		if (outputMode == JEngineerField.UNIT) rbmenuOutputUnit.setSelected(true);
 		rbmenuOutputUnit.addActionListener(this);
 		rbmenuOutputUnit.setActionCommand("" + JEngineerField.UNIT);
 		menuOutput.add(rbmenuOutputUnit);
 		group.add(rbmenuOutputUnit);
 		final JRadioButtonMenuItem rbmenuOutputFloat = new JRadioButtonMenuItem("Floating Point Number");
-		if (outputMode == JEngineerField.FLOAT)
-			rbmenuOutputFloat.setSelected(true);
+		if (outputMode == JEngineerField.FLOAT) rbmenuOutputFloat.setSelected(true);
 		rbmenuOutputFloat.addActionListener(this);
 		rbmenuOutputFloat.setActionCommand("" + JEngineerField.FLOAT);
 		menuOutput.add(rbmenuOutputFloat);
@@ -591,8 +576,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 	}
 
 	private void errorMsg() {
-		if (errorDisplayed)
-			return;
+		if (errorDisplayed) return;
 		errorDisplayed = true;
 		final Color color = getForeground();
 		setForeground(Color.red);
@@ -653,8 +637,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar() != KeyEvent.VK_ENTER)
-					edited = true;
+				if (e.getKeyChar() != KeyEvent.VK_ENTER) edited = true;
 				char caracter = e.getKeyChar();
 
 				if (caracter == ' ' || caracter == 'd' || (!inputUNIT && caracter == 'f')) {
@@ -707,9 +690,7 @@ public class JEngineerField extends JTextField implements FocusListener, ActionL
 
 	@Override
 	protected void fireActionPerformed() {
-//		System.out.println("fireActionPerformed");
-		if (verifyer.verify(this))
-			super.fireActionPerformed();
+		if (verifyer.verify(this)) super.fireActionPerformed();
 	}
 
 }

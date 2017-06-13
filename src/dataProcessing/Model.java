@@ -51,7 +51,7 @@ public class Model extends Observable {
 
 		measurement = new Measurement();
 		measurement.setMeasurement(measurementList);
-		
+
 		if (doFilter) {
 			filtMeasurement();
 		}

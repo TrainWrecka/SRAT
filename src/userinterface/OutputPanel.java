@@ -135,7 +135,7 @@ public class OutputPanel extends JPanel implements ChangeListener {
 			}
 		}
 	}
-	
+
 	//================================================================================
 	// Events
 	//================================================================================
@@ -147,7 +147,6 @@ public class OutputPanel extends JPanel implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
 		int index = sourceTabbedPane.getSelectedIndex();
-		System.out.println("Tab changed to: " + sourceTabbedPane.getSelectedIndex());
 
 		switch (index) {
 			case 0:

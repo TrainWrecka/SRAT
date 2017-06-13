@@ -102,12 +102,12 @@ public class Approximation {
 	private double errorFunction(double[] timeAxis, double[] stepGoal, double[] poles, int order) {
 		double error = 0;
 
-		double[] stepCurrent = (double[]) generateStep(poles, timeAxis, order)[0];
+		double[] stepCurrent = generateStep(poles, timeAxis, order)[0];
 
 		for (int i = 0; i < stepGoal.length; i += 10) {
 			error += Math.pow(stepGoal[i] - stepCurrent[i], 2);
 		}
-		
+
 		return error;
 	}
 

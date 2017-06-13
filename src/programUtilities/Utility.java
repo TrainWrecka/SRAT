@@ -1,4 +1,4 @@
-package userinterface;
+package programUtilities;
 
 import java.awt.Container;
 import java.awt.Cursor;
@@ -61,7 +61,7 @@ public class Utility {
 
 	public static Image loadResourceImage(String strBild) {
 		MediaTracker tracker = new MediaTracker(p);
-		URL url = Utility.class.getClassLoader().getResource("userinterface/resources" + "/" + strBild);
+		URL url = Utility.class.getClassLoader().getResource("programUtilities/resources" + "/" + strBild);
 		Image img = (new ImageIcon(url)).getImage();
 		tracker.addImage(img, 0);
 		try {
@@ -90,7 +90,7 @@ public class Utility {
 		}
 		return txt;
 	}
-	
+
 	public static double[][] loadResourceCSVData(String datei) {
 		double[][] data = null;
 		int nLines = 0;
@@ -98,7 +98,7 @@ public class Utility {
 
 		String res = "resources" + "/" + datei;
 		URL url = Utility.class.getClassLoader().getResource(res);
-		
+
 		try {
 			// Anzahl Zeilen und Anzahl Kolonnen festlegen:
 			BufferedReader eingabeDatei = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -106,8 +106,7 @@ public class Utility {
 			nColumns = s.length;
 			String line;
 			while ((line = eingabeDatei.readLine()) != null) {
-				if (!line.isEmpty())
-					nLines++;
+				if (!line.isEmpty()) nLines++;
 			}
 			eingabeDatei.close();
 
@@ -131,13 +130,12 @@ public class Utility {
 		return data;
 	}
 
-
 	public static BufferedImage[] loadResourcePDF(String datei) {
 		BufferedImage[] bim = null;
 
 		// Looks like resources within jar want to be accessed with "/" and not
 		// with File.separator!
-		String res = "userinterface/resources" + "/" + datei;
+		String res = "programUtilities/resources" + "/" + datei;
 		URL url = Utility.class.getClassLoader().getResource(res);
 
 		try {

@@ -1,6 +1,5 @@
 package stepResponseApproximationTool;
 
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -17,10 +16,10 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
 import dataProcessing.Model;
+import programUtilities.Utility;
 import userinterface.Controller;
 import userinterface.MenuBar;
 import userinterface.StatusBar;
-import userinterface.Utility;
 import userinterface.View;
 
 /**
@@ -40,14 +39,12 @@ public class StepResponseApproximationTool extends JFrame {
 	private View view = new View(controller);
 	private MenuBar menuBar = new MenuBar(controller, this);
 	private StatusBar statusBar = new StatusBar();
-	Dimension screenSize= Toolkit.getDefaultToolkit().getScreenSize();	// ScreenSize Problem
-	int screenRes= Toolkit.getDefaultToolkit().getScreenResolution();	// ScreenSize Problem
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); // ScreenSize Problem
+	int screenRes = Toolkit.getDefaultToolkit().getScreenResolution(); // ScreenSize Problem
 	private Image icon = Utility.loadResourceImage("SRAT_LOGO.png");
 
-	int height =screenSize.height*10/11 ;		// ScreenSize Problem
-	int width = screenSize.width *2/4;			// ScreenSize Problem
-
-	
+	int height = screenSize.height * 10 / 11; // ScreenSize Problem
+	int width = screenSize.width * 2 / 4; // ScreenSize Problem
 
 	private static enum LAF {
 		METAL, OCEAN, SYSTEM, NIMROD, NAPKIN
@@ -56,25 +53,21 @@ public class StepResponseApproximationTool extends JFrame {
 	private static LAF laf = LAF.SYSTEM;
 
 	public void init() {
-		setPreferredSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width, height));
 		setTitle("SRAT - Step Response Approximation Tool");
 		setIconImage(icon);
-		
-		
+
 		model.addObserver(view);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(view, BorderLayout.CENTER);
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 		setJMenuBar(menuBar);
-		
-		System.out.println(width);
-
 		pack();
-		
+
 		synchronized (getTreeLock()) {
-			setAllFonts(getComponents(), getFont().deriveFont((float)Toolkit.getDefaultToolkit().getScreenSize().getHeight()/80));
+			setAllFonts(getComponents(),
+					getFont().deriveFont((float) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 80));
 		}
-		
 
 		// Center the window
 		switch (mode) {
@@ -99,7 +92,7 @@ public class StepResponseApproximationTool extends JFrame {
 				setResizable(true);
 				break;
 		}
-		
+
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = getSize();
 		if (frameSize.height > screenSize.height) {
@@ -122,11 +115,11 @@ public class StepResponseApproximationTool extends JFrame {
 
 	public static void main(String args[]) {
 
-
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
 				try {
+					UIManager.getDefaults().put("Button.showMnemonics", Boolean.TRUE);
 					switch (laf) {
 						case METAL:
 							UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");

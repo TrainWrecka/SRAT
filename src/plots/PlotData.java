@@ -8,24 +8,23 @@ import org.jfree.data.xy.XYSeries;
  *
  */
 public class PlotData {
-	
+
 	//================================================================================
 	// Properties
 	//================================================================================
-	
+
 	private XYSeries[] xySeries;
 	private double[] xData;
 	private int seriesCount;
 
-
 	//================================================================================
 	// Constructor
 	//================================================================================
-	
+
 	public PlotData() {
 		xySeries = new XYSeries[seriesCount + 1];
 	}
-	
+
 	//================================================================================
 	// Public Methods
 	//================================================================================
@@ -60,7 +59,7 @@ public class PlotData {
 			for (int i = 0; i < yData.length; i++) {
 				xySeries[seriesCount].add(xData[i], yData[i]);
 			}
-			
+
 			seriesCount++;
 		}
 	}

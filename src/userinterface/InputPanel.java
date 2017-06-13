@@ -7,11 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Observable;
 
@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.opencsv.CSVReader;
 
 import dataProcessing.Model;
-import programUtilities.JFormattedDoubleTextField;
+import programUtilities.JEngineerField;
 import programUtilities.MyBorderFactory;
 
 /**
@@ -56,12 +56,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 	private ButtonGroup groupAutoManual = new ButtonGroup();
 
 	// JCombobox
-	private String comboBoxList[] = { "" + 2, "" + 3, "" + 4, "" + 5, "" + 6, "" + 7, "" + 8, "" + 9, "" + 10 };
+	private String comboBoxList[] = { "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 	private JComboBox cbOrder = new JComboBox(comboBoxList);
-
-	DecimalFormat f = new DecimalFormat("##0.0#E0");
-
-	DecimalFormat fd = new DecimalFormat("##00.0#E0");
 
 	// Labels
 	private JLabel[] lbWp = new JLabel[5];
@@ -124,39 +120,38 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		lbK.setEnabled(false);
 		tfK.setEnabled(false);
 
-		// Array für wp Labels und Textfelder erzeugen & platzieren
+		// Array für wqp Labels und Textfelder erzeugen & platzieren
 		for (int i = 0; i < 5; i++) {
 
 			lbWp[i] = new JLabel("\u03C9p" + (i + 1) + ":");
-			tfWp[i] = new JEngineerField(4, 0);
-			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+			lbQp[i] = new JLabel("qp" + (i + 1) + ":");
 
+			tfWp[i] = new JEngineerField(4, 0);
+			tfQp[i] = new JEngineerField(4, 0);
+
+			add(lbWp[i], new GridBagConstraints(0, wpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
+			add(lbQp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
+
 			add(tfWp[i], new GridBagConstraints(1, wpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
+					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
+			add(tfQp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
 					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 
 			lbWp[i].setEnabled(false);
-			tfWp[i].setEnabled(false);
-			wpPlacement = wpPlacement + 2;
-			
-			tfWp[i].setRange(1e-30, 100e30);
-		}
-
-		// Array für qp Labels und Textfelder erzeugen & platzieren
-		for (int i = 0; i < 5; i++) {
-
-			lbQp[i] = new JLabel("qp" + (i + 1) + ":");
-			tfQp[i] = new JEngineerField(4, 0);
-			add(lbQp[i], new GridBagConstraints(0, qpPlacement, 1, 1, 0.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-
-					GridBagConstraints.NONE, new Insets(20, 0, 0, 0), 0, 0));
-			add(tfQp[i], new GridBagConstraints(1, qpPlacement, 1, 1, 1.0, 0.0, GridBagConstraints.FIRST_LINE_START,
-					GridBagConstraints.BOTH, new Insets(20, 0, 0, 0), 0, 0));
 			lbQp[i].setEnabled(false);
+			tfWp[i].setEnabled(false);
 			tfQp[i].setEnabled(false);
-			qpPlacement = qpPlacement + 2;
-			
+
+			wpPlacement += 2;
+			qpPlacement += 2;
+
+			tfWp[i].setRange(1e-30, 100e30);
 			tfQp[i].setRange(1e-30, 100e30);
+
+			tfWp[i].setValue(1.0);
+			tfQp[i].setValue(1.0);
 		}
 
 		lbSigma.setEnabled(false);
@@ -169,13 +164,11 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 				new Insets(20, 0, 0, 0), 0, 0));
 
 		// Combobox platzieren
-		add(cbOrder, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
+		add(cbOrder, new GridBagConstraints(1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHEAST, GridBagConstraints.NONE,
 				new Insets(10, 0, 0, 0), 0, 0));
 
 		//file chooser options
-		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "/Desktop/SignaleCSV"));
-		//fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV- and Text-Files", "csv", "txt"));
 
@@ -194,10 +187,21 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 		rbtAutomatically.setEnabled(false);
 		rbtManually.setEnabled(false);
 		cbOrder.setEnabled(false);
-		
-		tfK.setRange(1e-30, 100e30);		
-		tfSigma.setRange(-100e30, -1e-30);		
 
+		tfK.setRange(1e-30, 100e30);
+		tfSigma.setRange(-100e30, -1e-30);
+
+		tfK.setValue(1.0);
+		tfSigma.setValue(-1.0);
+		tfK.setText("-");
+
+		btLoad.setMnemonic(KeyEvent.VK_L);
+		;
+		btRun.setMnemonic(KeyEvent.VK_R);
+		btCancel.setMnemonic(KeyEvent.VK_C);
+
+		cbOrder.setSelectedIndex(1); //fire event
+		cbOrder.setSelectedIndex(0);
 	}
 
 	//================================================================================
@@ -221,8 +225,8 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					tfWp[i].setValue(model.getWqp()[0][i]);
 					tfQp[i].setValue(model.getWqp()[1][i]);
 				} else {
-					tfWp[i].setText("");
-					tfQp[i].setText("");
+					tfWp[i].setText("-");
+					tfQp[i].setText("-");
 				}
 			}
 
@@ -231,16 +235,16 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 			if (model.getOrder() % 2 == 1) {
 				tfSigma.setValue(model.getSigma());
 			} else {
-				tfSigma.setText("");
+				tfSigma.setText("-");
 			}
 		} else {
 			for (int i = 0; i < tfWp.length; i++) {
-				tfWp[i].setText("");
-				tfQp[i].setText("");
+				tfWp[i].setText("-");
+				tfQp[i].setText("-");
 			}
 
-			tfK.setText("");
-			tfSigma.setText("");
+			tfK.setText("-");
+			tfSigma.setText("-");
 		}
 	}
 
@@ -393,7 +397,6 @@ public class InputPanel extends JPanel implements ActionListener, ItemListener {
 					leave = true;
 					reader = new CSVReader(new FileReader(file), separator[i]);
 					measurementList = reader.readAll();
-					String text = measurementList.get(0)[0];
 					Double.parseDouble(measurementList.get(0)[0]);
 				} catch (NumberFormatException e) {
 					leave = false;

@@ -3,6 +3,7 @@ package userinterface;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,9 @@ import javax.swing.KeyStroke;
 
 import com.opencsv.CSVReader;
 
+import programUtilities.ImagePanel;
+import programUtilities.Utility;
+
 /**
  * 
  * @author Lukas Loosli
@@ -43,9 +47,10 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JDialog helpDialog = new JDialog();
 	public JFrame settingsFrame;
 	private SettingsPanel settingsPanel;
-	private double xPosition;
 	private int settingsFrameWidth;
 	private int settingsFrameHeight;
+
+	private Image icon = Utility.loadResourceImage("SRAT_LOGO.png");
 
 	int cnt = 0;
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -60,7 +65,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		this.frame = frame;
 		this.controller = controller;
 		menu = new JMenu("File");
-		menu.setMnemonic(KeyEvent.VK_D);
+		menu.setMnemonic(KeyEvent.VK_F);
 
 		menu.addSeparator();
 
@@ -70,8 +75,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		menuItemOnTop.addActionListener(this);
 		menu.add(menuItemOnTop);
 
-		JMenuItem menuItemResizable = new JMenuItem("Resizable", KeyEvent.VK_R);
-		menuItemResizable.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
+		JMenuItem menuItemResizable = new JMenuItem("Resizable", KeyEvent.VK_Z);
+		menuItemResizable.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.ALT_MASK));
 		menuItemResizable.setActionCommand("Resizable");
 		menuItemResizable.addActionListener(this);
 		menu.add(menuItemResizable);
@@ -110,11 +115,9 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		add(optionsmenu);
 
 		if (Toolkit.getDefaultToolkit().getScreenSize().getWidth() >= 3700) {
-			xPosition = 710;
 			settingsFrameWidth = 50;
 			settingsFrameHeight = 100;
 		} else {
-			xPosition = 350;
 			settingsFrameWidth = 0;
 			settingsFrameHeight = 50;
 		}
@@ -149,7 +152,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			frame.setSize(dim);
 		}
 		if (e.getActionCommand().equals("NotResizable")) {
-			frame.setSize((int) (screenSize.width * 2 / 4), (int) (screenSize.height * 10 / 11));
+			frame.setSize((screenSize.width * 2 / 4), (screenSize.height * 10 / 11));
 			frame.setLocation((screenSize.width - frame.getSize().width) / 2, (screenSize.height - frame.getSize().height) / 2);
 			frame.setResizable(false);
 			if (cnt != 0) {
@@ -172,13 +175,15 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			settingsDialog.setVisible(true);
 			settingsDialog.setResizable(false);
 			settingsDialog.setLayout(new GridBagLayout());
+			settingsDialog.setIconImage(icon);
 			settingsDialog.add(settingsPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
 					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 			settingsDialog.setPreferredSize(settingsPanel.getPreferredSize());
 			settingsDialog.setSize((int) (settingsDialog.getPreferredSize().getWidth()) + settingsFrameWidth,
 					(int) (settingsDialog.getPreferredSize().getHeight()) + settingsFrameHeight);
-			
-			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2, (screenSize.height - settingsDialog.getSize().height) / 3);
+
+			settingsDialog.setLocation((screenSize.width - settingsDialog.getSize().width) / 2,
+					(screenSize.height - settingsDialog.getSize().height) / 3);
 		}
 
 		if (e.getActionCommand().equals("Help")) {
@@ -189,7 +194,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			helpDialog.setSize((int) (screenSize.height / Math.sqrt(2)), screenSize.height);
 			helpDialog.setLocation((screenSize.width - helpDialog.getSize().width) / 2,
 					(screenSize.height - helpDialog.getSize().height) / 2);
-			BufferedImage[] bim = Utility.loadResourcePDF("USERGUIDE.pdf");
+			helpDialog.setIconImage(icon);
+			BufferedImage[] bim = Utility.loadResourcePDF("UserGuide.pdf");
 			ImagePanel bildPanel = new ImagePanel(bim[0]);
 			helpDialog.add(bildPanel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
 					GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));

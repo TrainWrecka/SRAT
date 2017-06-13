@@ -2,13 +2,15 @@ package mathUtilites;
 
 import java.util.ArrayList;
 
+//Source: https://github.com/hdw09/filtfilt/blob/master/filtfilt-java/src/com/iiphci/dsp/Filtfilt.java
+
 /**
- * 零相�?滤波函数
+ * 零相�?滤波函数
  * 
- * @author 黄大�?�,胡盼
+ * @author 黄大�?�,胡盼
  * @Email hhhdddwww@163.com
  * @version 1.0
- * @Time 2016年3月23日下�?�9:04:28
+ * @Time 2016年3月23日下�?�9:04:28
  * @Description 调用static方法：doFiltfilt执行滤波
  * @copyright 安徽大学 iiphci 实验室
  * 
@@ -19,12 +21,12 @@ public class Filtfilt {
 	/**
 	 * 
 	 * @param B
-	 *            滤波器�?�数B
+	 *            滤波器�?�数B
 	 * @param A
-	 *            滤波器�?�数A
+	 *            滤波器�?�数A
 	 * @param input
-	 *            �?滤波的数组 ： �?求是一维，长度�?大于B数组。
-	 * @return 滤波�?�的结果 返回double数组。
+	 *            �?滤波的数组 ： �?求是一维，长度�?大于B数组。
+	 * @return 滤波�?�的结果 返回double数组。
 	 */
 	public static ArrayList<Double> doFiltfilt(ArrayList<Double> B, ArrayList<Double> A, ArrayList<Double> X) {
 
@@ -166,10 +168,10 @@ public class Filtfilt {
 			}
 		}
 		if (flagA) {
-			throw new RuntimeException("A Êý×éÖ�?ÉÙÒªÓ�?Ò»¸öÊý²»Îª�?ã£¡");
+			throw new RuntimeException("A Êý×éÖ�?ÉÙÒªÓ�?Ò»¸öÊý²»Îª�?ã£¡");
 		}
 		if (A.get(0) == 0) {
-			throw new RuntimeException("A Êý×éµÚÒ»¸öÔªËØ²»ÄÜÎª�?ã£¡");
+			throw new RuntimeException("A Êý×éµÚÒ»¸öÔªËØ²»ÄÜÎª�?ã£¡");
 		}
 		changeArray(A, A.get(0));
 		changeArray(B, A.get(0));

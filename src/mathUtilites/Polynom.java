@@ -61,7 +61,7 @@ public class Polynom {
 	public Complex[] roots() {
 		return Matlab.roots(p);
 	}
-	
+
 	public Polynom subtract(Polynom b) {
 		double[] res;
 		double[] p1 = p, p2 = b.p;
@@ -109,11 +109,6 @@ public class Polynom {
 
 	public static void main(String[] args) {
 
-		// Test add()
-		Polynom b = new Polynom(new double[] { 1, 2, 3, 4, 5, 6 });
-		Polynom a = new Polynom(new double[] { 1, 2, 3 });
-		Polynom c = b.add(a);
-		System.out.println(c.toString());
 	}
 
 }

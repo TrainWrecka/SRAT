@@ -9,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 
 import javax.swing.ButtonGroup;
@@ -21,7 +22,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import programUtilities.JFormattedDoubleTextField;
+import programUtilities.JEngineerField;
 
 public class SettingsPanel extends JPanel implements ActionListener, ItemListener, ChangeListener, FocusListener {
 
@@ -39,9 +40,9 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JLabel lbFilterSignal = new JLabel("Filter Signal");
 	private JLabel lbShowFilteredSignal = new JLabel("Show filtered Signal");
 	private JLabel lbFill = new JLabel("");
-	private JLabel lbFilter = new JLabel();
+	private JLabel lbFilterPercentage = new JLabel();
 	private JLabel lbAutoFilter = new JLabel("Autofilter");
-	
+
 	DecimalFormat f = new DecimalFormat("####0");
 
 	private JEngineerField tfLaguerre = new JEngineerField(3, 0);
@@ -49,12 +50,6 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	private JEngineerField tfSimplexOptimizerAbsolute = new JEngineerField(3, 0);
 	private JEngineerField tfMaxEval = new JEngineerField(f, 0);
 	private JEngineerField tfNelderMeadSimplexSteps = new JEngineerField(3, 0);
-
-	//	private JFormattedDoubleTextField tfLaguerre = new JFormattedDoubleTextField(0);
-	//	private JFormattedDoubleTextField tfSimplexOptimizerRelative = new JFormattedDoubleTextField(0);
-	//	private JFormattedDoubleTextField tfSimplexOptimizerAbsolute = new JFormattedDoubleTextField(0);
-	//	private JFormattedDoubleTextField tfMaxEval = new JFormattedDoubleTextField(0);
-	//	private JFormattedDoubleTextField tfNelderMeadSimplexSteps = new JFormattedDoubleTextField(0);
 
 	private JRadioButton rbtFilterSignalYes = new JRadioButton("Yes");
 	private JRadioButton rbtFilterSignalNo = new JRadioButton("No");
@@ -88,7 +83,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		jsFilter.setPaintLabels(true);
 		jsFilter.setSnapToTicks(true);
 
-		lbFilter.setText("Filter accuracy in %    " + jsFilter.getValue());
+		lbFilterPercentage.setText("Filter accuracy in %    " + jsFilter.getValue());
 
 		groupFilterSignal.add(rbtFilterSignalYes);
 		groupFilterSignal.add(rbtFilterSignalNo);
@@ -131,14 +126,15 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 		add(rbtShowFilteredSignalNo, new GridBagConstraints(2, 9, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 0, 10), 0, 0));
 
-		add(lbAutoFilter, new GridBagConstraints(0, 10, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER,
+		add(lbAutoFilter, new GridBagConstraints(0, 10, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 20), 0, 0));
 		add(cbAutoFilter, new GridBagConstraints(1, 10, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 10, 0, 20), 0, 0));
 
-		add(lbFilter, new GridBagConstraints(0, 11, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		add(lbFilterPercentage,
+				new GridBagConstraints(0, 11, 1, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 
-				new Insets(10, 10, 0, 20), 0, 0));
+						new Insets(10, 10, 0, 20), 0, 0));
 		add(jsFilter, new GridBagConstraints(1, 11, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
 
@@ -146,27 +142,38 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 				new Insets(10, 0, 0, 10), 0, 0));
 		add(btDefaults, new GridBagConstraints(1, 12, 2, 1, 1.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(10, 0, 0, 10), 0, 0));
-		
-		tfLaguerre.setRange(1e-30,1);		
-		tfMaxEval.setRange(1, 1000e30);		
-		tfNelderMeadSimplexSteps.setRange(1e-30, 1);		
-		tfSimplexOptimizerAbsolute.setRange(1e-30, 1);		
+
+		lbLaguerre.setToolTipText(
+				"<html>Accuracy of the solver of the roots-method<br> (is used during the approximation, a value<br>smaller than 1e-5 is generally NOT recom-<br>mended because the calculation might get<br>stuck!</html>");
+		lbSimplexOptimizerRelative.setToolTipText("Relative threshold of the optimizer");
+		lbSimplexOptimizerAbsolute.setToolTipText("Absolute threshold of the optimizer");
+		lbNelderMeadSimplexSteps.setToolTipText("<html>Steps along the canonical axes<br>representing box edges</html>");
+		lbMaxEval.setToolTipText("Maximum evaluations of the optimizer");
+		lbFilterSignal.setToolTipText("Decides if the measurement gets filtered");
+		lbShowFilteredSignal.setToolTipText("Decides if the filtered measurement gets shown");
+		lbAutoFilter.setToolTipText("Decides if the filtering should occur automatically");
+		lbFilterPercentage.setToolTipText("Intensity of the manual filter");
+
+		tfLaguerre.setRange(1e-30, 1);
+		tfMaxEval.setRange(1, 1000e30);
+		tfNelderMeadSimplexSteps.setRange(1e-30, 1);
+		tfSimplexOptimizerAbsolute.setRange(1e-30, 1);
 		tfSimplexOptimizerRelative.setRange(1e-30, 1);
 
+		btDefaults.setMnemonic(KeyEvent.VK_D);
+
 		btDefaults.addActionListener(this);
-		cbAutoFilter.addActionListener(this);
+		cbAutoFilter.addItemListener(this);
 		rbtFilterSignalYes.addActionListener(this);
 		rbtFilterSignalNo.addActionListener(this);
 		rbtShowFilteredSignalYes.addActionListener(this);
 		rbtShowFilteredSignalNo.addActionListener(this);
-		cbAutoFilter.addActionListener(this);
 		tfLaguerre.addFocusListener(this);
 		tfMaxEval.addFocusListener(this);
 		tfNelderMeadSimplexSteps.addFocusListener(this);
 		tfSimplexOptimizerAbsolute.addFocusListener(this);
 		tfSimplexOptimizerRelative.addFocusListener(this);
 		jsFilter.setEnabled(false);
-		cbAutoFilter.addItemListener(this);
 		jsFilter.addChangeListener(this);
 
 		initFields();
@@ -205,7 +212,7 @@ public class SettingsPanel extends JPanel implements ActionListener, ItemListene
 	 * Wenn der Schieberegler für die Filtergenauigkeit verschoben wird, wird der Wert im Textfeld aktualisiert.
 	 */
 	public void stateChanged(ChangeEvent arg0) {
-		lbFilter.setText("Filter accuracy in %   " + jsFilter.getValue());
+		lbFilterPercentage.setText("Filter accuracy in %   " + jsFilter.getValue());
 		updateValues();
 	}
 
