@@ -69,7 +69,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
 		menu.addSeparator();
 
-		menuItemOnTop = new JMenuItem("Allways on Top", KeyEvent.VK_T);
+		menuItemOnTop = new JMenuItem("Always on Top", KeyEvent.VK_T);
 		menuItemOnTop.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.ALT_MASK));
 		menuItemOnTop.setActionCommand("OnTop");
 		menuItemOnTop.addActionListener(this);
@@ -134,8 +134,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	 * und Frame resizable setzen.
 	 * Wenn NotResizable gedrückt wird, aktuelle Grösse des Frames wieder auf Startgrösse und Position setzen
 	 * und Frame nicht resizable setzen.
-	 * Wenn Allways on top gedrückt wird, Frame allways on top true setzen und Text in Not allways on top ändern.
-	 * Wenn Not allways on top gedrückt wird, Frame allways on top false setzen und Text in Allways on top ändern.
+	 * Wenn Always on top gedrückt wird, Frame always on top true setzen und Text in Not always on top ändern.
+	 * Wenn Not always on top gedrückt wird, Frame always on top false setzen und Text in Always on top ändern.
 	 * Wenn Settings gedrückt wird, Settings-Dialog öffnen.
 	 * Wenn Help gedrückt wird, Help-Dialog öffnen.
 	 * Wenn Load example gedrückt wird, Beispiel laden.
@@ -163,11 +163,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			if (((JFrame) this.getTopLevelAncestor()).isAlwaysOnTop()) {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(false);
 				settingsDialog.setAlwaysOnTop(false);
-				menuItemOnTop.setText("Allways on Top");
+				menuItemOnTop.setText("Always on Top");
 			} else {
 				((JFrame) this.getTopLevelAncestor()).setAlwaysOnTop(true);
 				settingsDialog.setAlwaysOnTop(true);
-				menuItemOnTop.setText("Not allways on Top");
+				menuItemOnTop.setText("Not always on Top");
 			}
 		}
 		if (e.getActionCommand().equals("Settings")) {
